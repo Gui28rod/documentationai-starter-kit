@@ -1,135 +1,76 @@
 ---
 title: "Páginas de Conta (Dropdown do Topbar)"
-description: "Destacar Anúncio, Os meus anúncios, Os meus favoritos, Ajuda — páginas do menu do utilizador."
+description: "Lista dos itens do dropdown do avatar com link para a doc detalhada de cada um."
 ---
 
 # Páginas do Dropdown do Avatar
 
-Páginas acessíveis pelo dropdown do avatar (canto superior direito da topbar). Algumas já estão descritas noutras secções; aqui ficam as restantes.
+Itens do dropdown que abre ao clicar no avatar (canto superior direito da topbar). Esta página é o **índice** — cada item tem link para a doc detalhada.
 
-## Destacar Anúncio (`DestacaAnuncioPage`)
+## Itens do dropdown
 
-Ficheiro: `src/containers/DestacaAnuncioPage/DestacaAnuncioPage.js`
+| Item | URL | Visível para | Documentado em |
+|---|---|---|---|
+| **O meu perfil** | `/u/:id` | Logged-in | [Perfis](perfis) |
+| **Configurações de perfil** | `/profile-settings` | Logged-in | [Perfis](perfis) |
+| **Configurações de conta** | `/account` | Logged-in | [Account Pages](account-pages) |
+| **Destacar anúncio** | `/destaque-anuncio` | Logged-in com anúncio | [Account Pages](account-pages#destacaanunciopage) |
+| **Os seus anúncios** | `/your-listings` | Logged-in com anúncio | [Account Pages](account-pages#managelistingspage) |
+| **Os seus favoritos** | `/favoritos` | Logged-in | Ver abaixo |
+| **Pesquisas guardadas** | `/pesquisas-guardadas` | Logged-in | [Pesquisa](pesquisa) |
+| **A seguir** | `/a-seguir` | Logged-in | [Perfis](perfis) |
+| **Ajuda** | `/contact` | Todos | [Páginas Legais & Institucionais](paginas-footer) |
+| **Terminar sessão** | (ação) | Logged-in | [Autenticação](auth) |
 
-### O que faz
-Permite ao anfitrião **destacar manualmente** um dos seus anúncios para aparecer na homepage como "Highlighted Listing".
+## Os Seus Favoritos (FavoritesPage)
 
-### Funcionamento
-- Lista os anúncios do utilizador
-- Botão "Destacar" em cada um
-- Ao destacar, adiciona ao `localStorage` (`sharetribe_highlighted_listings`)
-- O anúncio destacado aparece logo após o hero na homepage
-- Estado gerido por `src/ducks/highlightedListings.duck.js`
+A única página listada aqui que não está aprofundada noutra doc.
 
-### Quem vê este item
-Só aparece no dropdown se o utilizador **tem pelo menos um anúncio publicado** (condicional).
-
-### CSS
-- `src/containers/DestacaAnuncioPage/DestacaAnuncioPage.module.css`
-
-## Os Seus Anúncios (`ManageListingsPage`)
-
-Ficheiro: `src/containers/ManageListingsPage/ManageListingsPage.js`
-
-### O que faz
-Lista todos os anúncios do utilizador (publicados + em rascunho + draft + pending approval + closed).
-
-### Funcionalidades
-- Lista com cards (foto + título + estado)
-- Botões por listing:
-  - **Editar** → abre o `EditListingWizard`
-  - **Fechar** → muda estado para `closed` (deixa de aparecer na pesquisa)
-  - **Abrir** → reabre listing fechado
-  - **Eliminar** (?) — Sharetribe geralmente não permite eliminação total
-- Estado visual com badges (Publicado / Pendente Aprovação / Fechado)
-
-### Quem vê
-Só aparece no dropdown se o utilizador tem pelo menos um anúncio (mesmo que em rascunho).
-
-## Os Seus Favoritos (`FavoritesPage`)
-
-Ficheiro: `src/containers/FavoritesPage/FavoritesPage.js`
-
-### O que faz
-Mostra todos os anúncios que o utilizador marcou com ❤️ (favoritos).
+**URL**: `/favoritos`
+**Ficheiro**: `src/containers/FavoritesPage/FavoritesPage.js`
 
 ### Funcionamento
-- Lista visualmente igual à da pesquisa (cards)
-- Botão coração já preenchido em cada card → click remove dos favoritos
-- Lista carregada de `currentUser.privateData.favorites` (Sharetribe)
-- Sincronizada via `src/ducks/favorites.duck.js`
+
+- Lista visual igual à da pesquisa (cards com foto + título + preço)
+- **Coração já preenchido** em cada card → click remove dos favoritos
+- Lista carregada de `currentUser.privateData.favorites`
+- Sincronizada via [`favorites.duck.js`](catalogo-ducks)
 
 ### Persistência
-- Logged-in: `currentUser.privateData.favorites` (server)
-- Guest: `localStorage` chave `marketplace_favorites_guest`
-- Migração automática ao fazer login
+
+| Estado do user | Storage |
+|---|---|
+| Logged-in | `currentUser.privateData.favorites` (server Sharetribe) |
+| Guest | `localStorage` chave `marketplace_favorites_guest` |
+| Login | Migração automática (guest → server) |
 
 ### Notificações relacionadas
-Quando o utilizador favorita um anúncio:
-- Server endpoint `POST /api/listing-like` regista
-- Throttle 24h por fã
-- Dispara toast no topo do anfitrião ("Alguém favoritou o teu anúncio")
-- Acumula para email diário de favoritos
 
-## Pesquisas Guardadas (`SavedSearchesPage`)
+Quando alguém favorita um anúncio:
+1. `POST /api/listing-like` regista
+2. Throttle 24h por (fã, anúncio)
+3. Se passar throttle → toast in-app no anfitrião
+4. Acumula em `dailyFavoriteDigest` para email às 08:00
 
-Ver [Pesquisa e Filtros](pesquisa) → secção "Save Search".
-
-## A Seguir (`FollowingPage`)
-
-Ficheiro: `src/containers/FollowingPage/FollowingPage.js`
-
-### O que faz
-Lista todos os utilizadores que sigo (apenas hosts, normalmente).
-
-### Funcionalidades
-- Cards com avatar + nome + bio breve
-- Botão "Deixar de seguir" em cada um
-- Click no nome → vai para o ProfilePage do user
-
-Ver [Perfis](perfis) → secção "Sistema de Seguidores" para o flow completo.
-
-## Ajuda (`ContactPage`)
-
-Ficheiro: `src/containers/ContactPage/ContactPage.js`
-
-### O que faz
-Formulário de contacto + FAQ (perguntas frequentes).
-
-### Form de contacto
-Campos:
-- Nome
-- Email
-- Assunto (dropdown ou texto)
-- Mensagem (textarea)
-
-Submit → `POST /api/contact` → email para `CONTACT_RECIPIENT` (configurado no `.env`, default `admin@venue1hub.com`).
-
-### FAQ
-Lista de perguntas com respostas expansíveis (accordion). Conteúdo gerido via PageBuilder (asset hosted Sharetribe Console).
-
-### Quando aparece no dropdown
-Sempre — qualquer utilizador pode aceder.
+Ver [Notificações](notificacoes-completas) + [Cron Jobs](cron-jobs).
 
 ## Terminar Sessão
 
-Não é página — é uma **ação**:
-1. Click → dispatch `logoutThunk()` do Redux
+Não é página — é **ação Redux**:
+
+1. Click → `dispatch(logoutThunk())`
 2. Limpa token Sharetribe
-3. Limpa `currentUser` do estado
-4. Redirect para homepage
+3. Limpa `currentUser` do Redux state
+4. Limpa caches (favorites, follow, etc.) que estavam em memória
+5. Redirect para homepage (`/`)
 
-## Quando cada item aparece
+## Condicionais
 
-| Item | Visível para |
+Alguns itens só aparecem se condições forem cumpridas:
+
+| Item | Condição |
 |---|---|
-| O meu perfil | Todos os logged-in |
-| Configurações de perfil | Todos os logged-in |
-| Configurações de conta | Todos os logged-in |
-| Destacar Anúncio | Logged-in **com anúncios publicados** |
-| Os seus anúncios | Logged-in **com anúncios** (mesmo rascunho) |
-| Os seus favoritos | Todos os logged-in |
-| Pesquisas guardadas | Todos os logged-in |
-| A seguir | Todos os logged-in |
-| Ajuda | Todos (mesmo guest tem link via help icon) |
-| Terminar sessão | Logged-in |
+| Destacar Anúncio | Tem pelo menos 1 listing **publicado** |
+| Os seus anúncios | Tem pelo menos 1 listing (mesmo em rascunho) |
+| Pesquisas guardadas | Sempre (mas vazia se ainda não guardou nenhuma) |
+| A seguir | Sempre (mas vazia se ainda não segue ninguém) |
