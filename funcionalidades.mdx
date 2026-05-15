@@ -1,77 +1,126 @@
-# Funcionalidades Implementadas
+---
+title: "Funcionalidades — Índice"
+description: "Resumo de alto nível de todas as funcionalidades, com links para a documentação detalhada de cada uma."
+---
 
-## Anúncios (Listings)
+# Funcionalidades — Índice
+
+Esta página é um **índice rápido**. Cada secção tem link para a página detalhada onde a funcionalidade é explicada a fundo.
+
+## 📋 Anúncios (Listings)
+
 - Criação/edição com fotos, descrição, preço, categoria, comodidades, disponibilidade
-- Drag-to-reorder das fotos no Edit Listing (mouse + touch)
+- Drag-to-reorder das fotos (mouse + touch)
 - URL do YouTube como último slide da galeria
-- Badge da categoria sobre a imagem (clicável)
-- Botão de favorito (coração) sobre cada card
-- Tradução automática da descrição via MyMemory API
+- Badge da categoria sobre a imagem
+- Tradução automática da descrição
 
-## Pesquisa
-- Por localização, categoria, keyword, preço, capacidade, comodidades
-- Pesquisas guardadas (sync com Sharetribe)
-- Dedup por chave canónica + auto-cleanup
-- Email automático e toast in-app para novos resultados
+👉 Detalhe em: [Página de um Anúncio](listing-page) · [Edit Listing Wizard](edit-listing-wizard)
 
-## Reservas
-- Reserva única, múltiplas reservas (auto-aceitação), longo-prazo
-- "Adicionar ao calendário", lista de espera, partilha de orçamento
-- Aviso de indisponibilidade do anfitrião
-- Dashboard do anfitrião com stats
+## 🔎 Pesquisa
 
-## Perfis de Utilizador
-- Avatar, bio, localização, redes sociais
-- Línguas faladas (com bandeiras)
-- Tempo de resposta (auto-tracking)
+- Filtros (localização, categoria, keyword, preço, capacidade, comodidades, datas)
+- Vista mapa vs grid
+- Pesquisas guardadas com dedup canónico + email + toast
+
+👉 Detalhe em: [Pesquisa e Filtros](pesquisa)
+
+## 📅 Reservas
+
+- Reserva única, múltiplas (auto-aceitação), longo-prazo
+- "Adicionar ao calendário" Google
+- Lista de espera, partilha de orçamento
+- Dashboard do anfitrião
+
+👉 Detalhe em: [Reservas e Inbox](reservas)
+
+## 👤 Perfis
+
+- Avatar, bio, línguas faladas (bandeiras), social links, response time
 - Avaliação só lado cliente
 - Sistema de seguidores, último online
 
-## Avaliações
+👉 Detalhe em: [Perfis de Utilizador](perfis)
+
+## ⭐ Avaliações
+
 - Sistema nativo Sharetribe
-- Rating médio por listing e por utilizador
+- Rating por listing e por utilizador
 - Botão "Traduzir" em cada review
 
-## Notificações
+👉 Detalhe em: [Avaliações (Reviews)](avaliacoes)
 
-### In-app (toasts)
-- Favoritou o teu anúncio
-- Começou a seguir-te
-- Nova pesquisa guardada com resultados
-- Anúncio novo de quem segues
-- Anúncio que segues foi editado
-- Anúncio favoritado foi editado
-- Recebeste avaliação
-- Anúncio que segues recebeu avaliação
+## 🔔 Notificações
 
-### Emails
-- Resumo diário de favoritos
-- Pesquisa guardada com novos resultados
-- Recebeste avaliação (imediato)
-- Começaram a seguir-te (imediato)
-- Emails nativos Sharetribe
+8 tipos de toasts + badge inbox + 4 cron jobs de email
 
-### Topbar
-- Badge de notificações (sales + orders + DM)
+👉 Detalhe em: [Notificações (completo)](notificacoes-completas)
 
-## Internacionalização
-- PT/EN toggle no topbar
-- Strings via react-intl
-- Tradução de conteúdo gerado pelo utilizador
+## 🌐 Internacionalização
 
-## UI/UX
+- Toggle PT/EN no topbar
+- Strings via `react-intl`
+- Tradução de conteúdo do utilizador via MyMemory
+
+👉 Detalhe em: [Tradução (i18n + MyMemory)](traducao)
+
+## 🎨 UI/UX
+
 - Modo escuro
 - Cookie consent GDPR
-- PWA
-- Recently viewed, highlighted, similar, map listings
+- PWA com install prompt
+- Recently viewed, highlighted, similar listings
 - Mobile category ticker
 
-## Segurança e Denúncias
-- Reportar anúncio (rate limiting)
-- Reportar utilizador (cooldowns)
-- Limited Access Banner para admin
+👉 Detalhe em: [Modo Escuro & Theming](modo-escuro) · [Mobile & PWA](mobile-pwa) · [Cookies & Privacidade](cookies-privacidade) · [Recentemente Vistos](recently-viewed)
 
-## Admin/Operador
+## 💳 Pagamentos
+
+- Stripe Connect
+- Comissão V1H configurável
+- Onboarding hosted Stripe para anfitriões
+
+👉 Detalhe em: [Pagamentos (Stripe)](pagamentos)
+
+## 🛡️ Segurança e Denúncias
+
+- Reportar anúncio com rate limiting
+- Reportar utilizador com cooldowns 60s/5dia/30d
+- Limited Access Banner quando admin entra como outro user
+
+👉 Detalhe em: [Catálogo de Containers](catalogo-containers) (ReportListingModal/ReportUserModal nos Componentes)
+
+## 🔧 Admin / Operador
+
 - Login-as user
 - Host stats endpoint
 - Recompute listing rating
+
+👉 Detalhe em: [Endpoints](endpoints)
+
+## 🏗️ Páginas e Footer
+
+- 41 containers (homepage, search, listing, profile, edit, inbox, …)
+- Footer com 3 colunas + newsletter + social + PWA install
+- 6 páginas legais e institucionais (Termos, Privacidade, Cookies, About, Como Funciona, Contacto)
+
+👉 Detalhe em: [Catálogo de Containers](catalogo-containers) · [Footer](footer) · [Páginas do Footer](paginas-footer)
+
+## 📊 Referência técnica
+
+- 16 endpoints customizados (`/api/*`)
+- 3 cron jobs (`server/jobs/*`)
+- 26 Redux ducks
+- ~110 componentes reutilizáveis
+- 35 utilitários (`src/util/*`)
+
+👉 Detalhe em: [Endpoints](endpoints) · [Cron Jobs](cron-jobs) · [Catálogo de Redux Ducks](catalogo-ducks) · [Catálogo de Componentes](catalogo-componentes) · [Server, Config, Routing, Assets](server-config-routing)
+
+## 🚩 Estado do projeto
+
+- Pendências para go-live (legal, Stripe live, etc.)
+- Problemas conhecidos
+- Decisões tomadas registadas
+- Próximas tarefas sugeridas
+
+👉 Detalhe em: [Pendências para Go-Live](pendencias-para-go-live) · [Problemas Conhecidos](problemas-conhecidos) · [Decisões Importantes](decisoes-importantes) · [Próximas Tarefas](proximas-tarefas)

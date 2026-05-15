@@ -1,27 +1,163 @@
 ---
 title: "Endpoints"
-description: "Endpoints customizados servidos pelo servidor Express."
+description: "Endpoints HTTP customizados do servidor Express com body e response."
 ---
 
 # Endpoints Customizados
 
-Endpoints servidos pelo servidor Express, na pasta `server/api/`.
+Servidos pelo servidor Express em `server/api/`. Registados no `server/apiRouter.js`.
 
-| Endpoint | Função |
-|---|---|
-| `POST /api/contact` | Formulário de contacto → email |
-| `POST /api/newsletter` | Subscrever newsletter |
-| `POST /api/report-listing` | Reportar anúncio |
-| `POST /api/report-user` | Reportar utilizador |
-| `POST /api/feedback` | NPS pós-review |
-| `POST /api/recompute-listing-rating` | Admin manual |
-| `GET /api/pwa-counter` | Contador instalações PWA |
-| `POST /api/pwa-counter/increment` | Incrementar contador |
-| `POST /api/waitlist` | Lista de espera de reserva |
-| `GET /api/host-stats` | Stats do dashboard de anfitrião |
-| `POST /api/listing-like` | Registar favorito + throttle |
-| `POST /api/dismiss-favorite-alerts` | Fechar alerta de favorito |
-| `POST /api/user-follow` | Registar follow + throttle + email |
-| `POST /api/dismiss-follow-alerts` | Fechar alerta de seguidor |
-| `POST /api/dismiss-extra-alert` | Fechar alerta extra |
-| `POST /api/translate` | Tradução via MyMemory |
+## 📋 Lista resumida
+
+| Endpoint | Método | Função |
+|---|---|---|
+| `/api/contact` | POST | Formulário de contacto → email |
+| `/api/newsletter` | POST | Subscrever newsletter |
+| `/api/report-listing` | POST | Reportar anúncio |
+| `/api/report-listing-status` | GET | Status de reports (admin) |
+| `/api/report-user` | POST | Reportar utilizador |
+| `/api/report-user-status` | GET | Status de reports user |
+| `/api/feedback` | POST | NPS pós-review |
+| `/api/recompute-listing-rating` | POST | Admin recalcula rating |
+| `/api/pwa-counter` | GET | Lê contador PWA installs |
+| `/api/pwa-counter/increment` | POST | Incrementa contador |
+| `/api/waitlist` | POST | Junta utilizador à waitlist |
+| `/api/host-stats` | GET | Stats do dashboard de host |
+| `/api/listing-like` | POST | Regista favorito + throttle |
+| `/api/dismiss-favorite-alerts` | POST | Fecha alerta favorito |
+| `/api/user-follow` | POST | Regista follow + throttle + email |
+| `/api/dismiss-follow-alerts` | POST | Fecha alerta follow |
+| `/api/dismiss-extra-alert` | POST | Fecha alerta extra |
+| `/api/translate` | POST | Tradução via MyMemory |
+| `/api/initiate-login-as` | GET | Inicia login-as (admin) |
+| `/api/login-as` | GET | Completa login-as (callback) |
+| `/api/transaction-line-items` | POST | Calcula line items de transação |
+| `/api/initiate-privileged` | POST | Inicia transação privileged |
+| `/api/transition-privileged` | POST | Transita estado privileged |
+| `/api/delete-account` | POST | Apaga conta do utilizador |
+| `/api/auth/facebook`, `/api/auth/facebook/callback` | GET | OAuth Facebook |
+| `/api/auth/google`, `/api/auth/google/callback` | GET | OAuth Google |
+
+## 📨 Endpoints custom V1H (detalhados)
+
+### `POST /api/contact`
+**Body**: `{ name, email, phone?, country?, subject, message }`
+**Função**: envia email para `CONTACT_RECIPIENT` (default `admin@venue1hub.com`).
+**Response**: `{ ok: true }` ou `{ error }`.
+
+### `POST /api/newsletter`
+**Body**: `{ email }`
+**Função**: subscreve email à newsletter.
+**Response**: `{ ok: true }` (success), `{ error: 'invalid-email' | 'already-subscribed' }`.
+
+### `POST /api/report-listing`
+**Body**: `{ listingId, reason, description?, attachments?: string[] }` (URLs ou base64)
+**Função**: envia email ao admin + confirmação ao reporter (bilíngue PT/EN).
+**Rate limit**: implementado server-side.
+
+### `POST /api/report-user`
+**Body**: `{ userId, reason, description? }`
+**Throttle**: 1 report por user/30 dias + 5/dia + 60s cooldown global.
+**Função**: idêntica ao report-listing mas para utilizadores.
+
+### `POST /api/feedback`
+**Body**: `{ satisfaction: 1-5, npsRating: 1-5, comment? }`
+**Trigger**: após submissão de review (flag em localStorage).
+**Função**: envia email ao admin com NPS + satisfaction.
+
+### `POST /api/recompute-listing-rating`
+**Body**: `{ listingId }`
+**Auth**: requer admin/operator scope.
+**Função**: recalcula média de reviews + count, atualiza `metadata.averageRating` + `reviewCount`.
+
+### `GET /api/pwa-counter`
+**Response**: `{ count: number }`
+**Função**: lê `server/data/pwa-counter.json`.
+
+### `POST /api/pwa-counter/increment`
+**Função**: incrementa contador em 1.
+**Bug conhecido**: ficheiro reseta em git pull (ver [Problemas Conhecidos](problemas-conhecidos)).
+
+### `POST /api/waitlist`
+**Body**: `{ email, listingId, date? }`
+**Função**: junta email à waitlist + envia confirmação + aviso ao admin.
+
+### `GET /api/host-stats`
+**Query**: `?userId=...`
+**Auth**: o próprio user ou admin.
+**Response**: `{ totalBookings, revenue, pendingPayouts, ratings: {avg, count}, recentReviews: [...] }`.
+**Função**: stats para o dashboard do anfitrião.
+
+### `POST /api/listing-like`
+**Body**: `{ listingId, action: 'like' | 'unlike' }`
+**Throttle**: 24h por (fã, listing) — só cria alerta server-side se passar o throttle.
+**Função**:
+1. Atualiza counter de favoritos do listing
+2. Se passar throttle → adiciona alerta a `metadata.unseenFavoriteAlerts` do owner
+3. Acumula para email diário (`dailyFavoriteDigest`)
+
+### `POST /api/dismiss-favorite-alerts`
+**Body**: `{ listingId }` (per-entry) ou `{}` (clear all)
+**Função**: remove esse listing dos `unseenFavoriteAlerts` do current user.
+
+### `POST /api/user-follow`
+**Body**: `{ targetUserId, action: 'follow' | 'unfollow' }`
+**Throttle**: 24h por (fã, target).
+**Função**:
+1. Atualiza followers count do target
+2. Se passar throttle → adiciona alerta a `metadata.unseenFollowAlerts` + envia email imediato (via Resend)
+
+### `POST /api/dismiss-follow-alerts`
+**Body**: `{ fanUserId }` (per-entry) ou `{}` (clear all)
+
+### `POST /api/dismiss-extra-alert`
+**Body**: `{ id }` (per-entry) ou `{}` (clear all)
+**Função**: remove esse alerta de `metadata.unseenExtraAlerts`.
+
+### `POST /api/translate`
+**Body**: `{ text, target: 'pt' | 'en', source?: string }`
+**Limite**: 1500 chars/request, 50.000 chars/dia/IP (MyMemory).
+**Response**: `{ translated, detectedSource, sameAsTarget? }`.
+**Função**: proxy para MyMemory API. Trata caso "PLEASE SELECT TWO DISTINCT LANGUAGES" devolvendo original.
+
+## 🔐 Endpoints de auth e privileged
+
+### `GET /api/initiate-login-as` + `GET /api/login-as`
+**Função**: permite a admin entrar como outro user (suporte). Cria sessão com escopo limitado. Mostra `LimitedAccessBanner` à pessoa logada.
+
+### `POST /api/transaction-line-items`
+**Body**: `{ orderData, listingId, processAlias }`
+**Função**: calcula line items (preço, comissão, total) server-side com a chave privileged. Necessário para preços dinâmicos.
+
+### `POST /api/initiate-privileged`
+**Função**: inicia transação Sharetribe com chave privileged (preço dinâmico ou descontos).
+
+### `POST /api/transition-privileged`
+**Função**: transita uma transação com chave privileged (aceitar/recusar com lógica custom).
+
+### `POST /api/delete-account`
+**Função**: elimina permanentemente a conta do utilizador autenticado.
+
+## 🌐 OAuth providers
+
+### Facebook
+- `GET /api/auth/facebook` — inicia OAuth
+- `GET /api/auth/facebook/callback` — recebe callback do Facebook
+
+**Estado**: ❌ desativado (`REACT_APP_FACEBOOK_APP_ID` vazio).
+
+### Google
+- `GET /api/auth/google` — inicia OAuth
+- `GET /api/auth/google/callback` — recebe callback
+
+**Estado**: ✅ ativo.
+
+## Padrão de resposta de erro
+
+Todos os endpoints custom devolvem:
+
+```json
+{ "error": "code-or-message" }
+```
+
+Com status HTTP apropriado (400 bad request, 401 unauthorized, 429 rate limit, 500 internal).

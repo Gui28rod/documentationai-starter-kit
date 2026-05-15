@@ -1,16 +1,157 @@
 ---
 title: "Cron Jobs"
-description: "Tarefas automáticas executadas pelo servidor."
+description: "Tarefas automáticas executadas pelo servidor — schedule, função, throttle e envvars."
 ---
 
 # Cron Jobs
 
-Tarefas automáticas executadas pelo servidor (`node-cron` dentro do processo Express).
+Tarefas automáticas executadas pelo servidor (`node-cron` dentro do processo Express). Arrancam no `server/index.js` no final do boot.
 
-| Job | Frequência | Função |
-|---|---|---|
-| `notifySavedSearchesJob` | A cada 5 min | Email "novos resultados na pesquisa guardada" |
-| `notifyFavoritesJob` | Diário às 08:00 | Resumo diário de favoritos |
-| `notifyExtraAlertsJob` | A cada 5 min | Detecta edições + reviews → 4 tipos de alerta |
+## 📋 Tabela resumida
 
-Todos os jobs podem ser desativados via variável de ambiente (`DISABLE_*`) e re-agendados com `*_CRON`.
+| Job | Schedule | Função | Disable env | Override env |
+|---|---|---|---|---|
+| `notifyFavoritesJob` | `0 8 * * *` (diário 08:00) | Email resumo diário de favoritos | `DISABLE_FAVORITE_DIGEST=true` | `FAVORITE_DIGEST_CRON` |
+| `notifySavedSearchesJob` | `*/5 * * * *` (cada 5 min) | Email "novos resultados na pesquisa" | `DISABLE_SAVED_SEARCH_NOTIFIER=true` | `SAVED_SEARCH_NOTIFY_CRON` |
+| `notifyExtraAlertsJob` | `*/5 * * * *` (cada 5 min) | Detecta edits + reviews → 4 alertas + email de review | `DISABLE_EXTRA_ALERTS=true` | `EXTRA_ALERTS_CRON` |
+
+## 1. `notifyFavoritesJob`
+
+**Ficheiro**: `server/jobs/notifyFavoritesJob.js`
+
+### O que faz
+Envia 1 email por anfitrião por dia (08:00) com resumo dos favoritos novos do dia anterior. Top 10 listings.
+
+### Lógica
+1. Query Sharetribe (Integration SDK) para todos os utilizadores
+2. Filtra os que têm `metadata.dailyFavoriteDigest.listings` não vazio
+3. Para cada, monta email HTML bilíngue (PT/EN consoante `publicData.locale`)
+4. Envia via **Resend**
+5. Após sucesso → limpa o `dailyFavoriteDigest` (reset para o próximo dia)
+6. Se falhar → deixa intocado, tenta amanhã
+
+### O `dailyFavoriteDigest` é populado por
+`POST /api/listing-like` cada vez que alguém favorita um listing (após passar throttle 24h).
+
+### Email contém
+- Saudação personalizada
+- Total de novos favoritos
+- Top 10 listings com título + count
+- Link para "Ver os teus anúncios"
+
+### Dependências
+- `RESEND_API_KEY` configurada
+- Integration SDK configurado
+
+## 2. `notifySavedSearchesJob`
+
+**Ficheiro**: `server/jobs/notifySavedSearchesJob.js`
+
+### O que faz
+A cada 5 min, verifica se as pesquisas guardadas dos utilizadores têm **novos matches** (anúncios criados após a última verificação) e envia email.
+
+### Lógica
+1. Query users com `privateData.savedSearches` não vazio
+2. Para cada saved search:
+   - Lê last-check timestamp de `metadata.savedSearchesNotified[searchId]` (ou `savedAt` se primeira vez)
+   - Query listings com `createdAtStart` = timestamp + filtros da pesquisa
+   - Exclui anúncios do próprio user (não notifica sobre os próprios)
+3. Se há novos → envia email
+4. Atualiza `metadata.savedSearchesNotified[searchId]` para `now`
+
+### Email contém
+- Label da pesquisa
+- Top 6 anúncios novos com título + preço + link
+- Botão "Ver todos os resultados"
+
+### Anti-spam
+- Mesma pesquisa só notifica se houver mesmo anúncio novo (timestamp)
+- Não envia se 0 matches novos
+
+## 3. `notifyExtraAlertsJob` ⭐ V1H
+
+**Ficheiro**: `server/jobs/notifyExtraAlertsJob.js`
+
+### O que faz
+A cada 5 min, detecta:
+- **Listings editados** → notifica seguidores do autor + quem favoritou
+- **Reviews novas** → notifica subject (in-app + email) + seguidores do subject
+
+### Tipos de alerta criados
+- `followed-listing-edit` — anúncio de quem sigo foi editado
+- `favorite-listing-edit` — anúncio que favoritei foi editado
+- `review-received` ⭐ — recebi avaliação (+ email)
+- `followed-listing-review` — anúncio de quem sigo recebeu review (excluindo se review for minha)
+
+### Lógica
+1. Fetch all users (paginado, MAX 50 páginas = 5000 users — proteção rate limit)
+2. Indexa em `byId`, `followersOf`, `favouritersOf`
+3. **EDITS**:
+   - Fetch listings ordenados por `-createdAt` com early-break em `updatedAt > cursor`
+   - Para cada listing editado:
+     - Para cada follower do autor → push `followed-listing-edit`
+     - Para cada user que favoritou o listing → push `favorite-listing-edit`
+4. **REVIEWS**:
+   - Fetch reviews `state=public` com early-break em `createdAt > cursor`
+   - Para cada review nova:
+     - Push `review-received` para o subject + envia **email imediato** via Resend
+     - Para cada follower do subject (excluindo o autor da review) → push `followed-listing-review`
+5. **Throttle 1h** por combinação `(user, kind, targetId)` em `metadata.extraAlertsThrottle`
+6. Flush updates: 1 `updateProfile` por user afetado (não 1 por alerta)
+
+### Cap de alertas
+- Máximo `MAX_ALERTS_PER_USER = 50` no `metadata.unseenExtraAlerts`
+- Se chegar ao cap, alertas antigos são removidos (LRU)
+
+### Cursores
+- `editsCursor` e `reviewsCursor` em memória do processo
+- Reset no restart → perde eventos durante downtime (aceitável)
+
+### Email de review
+Template HTML rico:
+- Saudação
+- Quem deixou + listing
+- Estrelas visuais (★★★★☆)
+- Blockquote com texto da review
+- Link "Ver o teu perfil"
+
+## Configuração comum
+
+Todos os jobs:
+1. Lêem env vars no boot
+2. Loggam ao arrancar: `[jobName] scheduled (cron: "...")` ou `[jobName] disabled via env`
+3. Loggam cada tick: `[jobName] tick done. sent=X skipped=Y`
+4. Falhas isoladas (1 user falhar não bloqueia os outros)
+5. Não retry imediato — esperam próximo tick
+
+## Notificações in-app sem cron
+
+Algumas notificações funcionam **server-side instantaneamente** (não via cron):
+
+- **`POST /api/listing-like`** — adiciona alerta imediato ao owner
+- **`POST /api/user-follow`** — adiciona alerta + envia email imediato
+
+O cron `notifyExtraAlertsJob` é o único que detecta eventos passivos (edits + reviews) que não disparam endpoint próprio.
+
+## Override de schedule
+
+Para personalizar (ex: produção quer email às 09:00 em vez de 08:00):
+
+```bash
+FAVORITE_DIGEST_CRON="0 9 * * *"
+SAVED_SEARCH_NOTIFY_CRON="*/10 * * * *"
+EXTRA_ALERTS_CRON="*/5 * * * *"
+```
+
+Formato cron padrão (5 fields): minute, hour, day-of-month, month, day-of-week.
+
+## Desativar em dev
+
+No `.env.development`:
+```
+DISABLE_FAVORITE_DIGEST=true
+DISABLE_SAVED_SEARCH_NOTIFIER=true
+DISABLE_EXTRA_ALERTS=true
+```
+
+Útil para não enviar emails de teste durante desenvolvimento.

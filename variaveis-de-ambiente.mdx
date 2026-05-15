@@ -1,25 +1,150 @@
 ---
-title: Variáveis de Ambiente
-description: Configuração da aplicação por variáveis de ambiente.
+title: "Variáveis de Ambiente"
+description: "Todas as variáveis de ambiente — descrição, exemplo e onde se usam."
 ---
 
 # Variáveis de Ambiente
 
-Definidas em `.env`.
+Configuração da aplicação via `.env` (em dev) ou variáveis no servidor (Heroku/AWS em produção).
 
-## Configuradas em teste
+## Ficheiros .env
 
-- `REACT_APP_SHARETRIBE_SDK_CLIENT_ID` / `SHARETRIBE_SDK_CLIENT_SECRET`
-- `SHARETRIBE_INTEGRATION_CLIENT_ID` / `SHARETRIBE_INTEGRATION_CLIENT_SECRET`
-- `REACT_APP_STRIPE_PUBLISHABLE_KEY` (test mode)
-- `REACT_APP_MAPBOX_ACCESS_TOKEN`
-- `REACT_APP_GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET`
-- `RESEND_API_KEY`
-- `REPORTS_TO_EMAIL` / `CONTACT_RECIPIENT`
-- `REACT_APP_MARKETPLACE_ROOT_URL`
+| Ficheiro | Quando se aplica |
+|---|---|
+| `.env` | Base, sempre carregado |
+| `.env.development` | Quando `REACT_APP_ENV=development` |
+| `.env.test` | Quando `REACT_APP_ENV=test` (npm test) |
+| `.env-template` | Template para copy → não usado em runtime |
 
-## Pendentes para produção
+## 🔑 Sharetribe Marketplace SDK
 
-- Stripe keys **live** (atualmente em test mode)
-- Integration SDK creds para o ambiente **Live** da Sharetribe
-- `REACT_APP_GOOGLE_ANALYTICS_ID` (GA4 `G-CE4QX3X8RV` configurado, pendente "Copy to live")
+| Variável | Exemplo | Onde se usa |
+|---|---|---|
+| `REACT_APP_SHARETRIBE_SDK_CLIENT_ID` | `7196197a-...` | Frontend SDK + SSR |
+| `SHARETRIBE_SDK_CLIENT_SECRET` | `75279c4a59ca...` | Server-side privileged calls |
+| `REACT_APP_SHARETRIBE_SDK_BASE_URL` | `https://flex-api.sharetribe.com` | API base URL |
+
+**Obrigatórias**. Sem estas o site não arranca.
+
+## 🔧 Sharetribe Integration SDK (operator)
+
+| Variável | Exemplo |
+|---|---|
+| `SHARETRIBE_INTEGRATION_CLIENT_ID` | `2d3712aa-...` |
+| `SHARETRIBE_INTEGRATION_CLIENT_SECRET` | `57b822a30973...` |
+
+**Usadas por**: cron jobs (`notify*Job.js`), endpoints que precisam de acesso operator (recompute-listing-rating, dismiss-alerts).
+
+⚠️ **Pendente troca para Live em produção** (atualmente são creds do test env).
+
+## 💳 Stripe
+
+| Variável | Exemplo |
+|---|---|
+| `REACT_APP_STRIPE_PUBLISHABLE_KEY` | `pk_test_51IDRRz...` (test mode) |
+
+**Para produção**: trocar por `pk_live_...`. Stripe Secret Key fica configurada **no Sharetribe Console**, não no `.env`.
+
+## 🗺️ Mapas
+
+| Variável | Exemplo |
+|---|---|
+| `REACT_APP_MAPBOX_ACCESS_TOKEN` | `pk.eyJ1Ijoidj...` |
+
+**Alternativa**: `REACT_APP_GOOGLE_MAPS_API_KEY` (comentada, não usada).
+
+## 🔐 OAuth (Social Logins)
+
+| Variável | Exemplo | Estado |
+|---|---|---|
+| `REACT_APP_GOOGLE_CLIENT_ID` | `923132772527-...apps.googleusercontent.com` | ✅ Ativo |
+| `GOOGLE_CLIENT_SECRET` | `GOCSPX-...` | ✅ Ativo |
+| `REACT_APP_FACEBOOK_APP_ID` | (vazio) | ❌ Desativado |
+| `FACEBOOK_APP_SECRET` | (vazio) | ❌ Desativado |
+
+## 📧 Email (Resend)
+
+| Variável | Exemplo |
+|---|---|
+| `RESEND_API_KEY` | `re_bovRcrKz_...` |
+| `REPORTS_TO_EMAIL` | `admin@venue1hub.com` |
+| `CONTACT_RECIPIENT` | `admin@venue1hub.com` |
+
+**Para emails do cron + contacto + reports** funcionarem.
+
+## 🏪 Marketplace
+
+| Variável | Exemplo |
+|---|---|
+| `REACT_APP_MARKETPLACE_NAME` | `v1h` |
+| `REACT_APP_MARKETPLACE_ROOT_URL` | `http://localhost:3000` |
+
+⚠️ **Atualizar `MARKETPLACE_ROOT_URL` para produção**: `https://venue1hub.com` ou similar.
+
+## 📊 Analytics
+
+| Variável | Exemplo | Estado |
+|---|---|---|
+| `REACT_APP_GOOGLE_ANALYTICS_ID` | `G-CE4QX3X8RV` | Configurado em test, pendente "Copy to live" |
+| `REACT_APP_PLAUSIBLE_DOMAINS` | (comentada) | Não usado |
+
+## 🚀 Server / Deploy
+
+| Variável | Exemplo |
+|---|---|
+| `PORT` | `3000` |
+| `REACT_APP_ENV` | `production` / `development` / `test` |
+| `BASIC_AUTH_USERNAME` | `sharetribe` (opcional, staging) |
+| `BASIC_AUTH_PASSWORD` | `secret` (opcional, staging) |
+| `REACT_APP_SHARETRIBE_USING_SSL` | `true` em produção |
+| `SERVER_SHARETRIBE_TRUST_PROXY` | `true` em Heroku |
+| `REACT_APP_SHARETRIBE_REDIRECT_SSL` | `true` em produção |
+| `REACT_APP_CSP` | `report` ou `block` |
+| `REACT_APP_SENTRY_DSN` | (opcional para error tracking) |
+
+## ⏰ Cron Jobs (override)
+
+| Variável | Default | Função |
+|---|---|---|
+| `FAVORITE_DIGEST_CRON` | `0 8 * * *` | Schedule do digest de favoritos |
+| `SAVED_SEARCH_NOTIFY_CRON` | `*/5 * * * *` | Schedule notificador pesquisas |
+| `EXTRA_ALERTS_CRON` | `*/5 * * * *` | Schedule extra alerts |
+| `DISABLE_FAVORITE_DIGEST` | (não definida) | `true` para desativar |
+| `DISABLE_SAVED_SEARCH_NOTIFIER` | (não definida) | `true` para desativar |
+| `DISABLE_EXTRA_ALERTS` | (não definida) | `true` para desativar |
+
+## 🛠️ Cache e Performance
+
+| Variável | Exemplo |
+|---|---|
+| `TTL` | `60` (cache geral) |
+| `TTL_ASSETS_BY_VERSION` | `86400` (1 dia) |
+| `VERBOSE` | `true` para logging detalhado |
+| `PREVENT_DATA_LOADING_IN_SSR` | `true` para desativar SSR data loading |
+
+## ⚠️ Pendências de produção
+
+Ver [Pendências para Go-Live](pendencias-para-go-live).
+
+| O quê | Estado atual | Para go-live |
+|---|---|---|
+| Stripe keys | `pk_test_*` | `pk_live_*` |
+| Integration SDK | test env | Live env |
+| GA4 | configurado em test | "Copy to live" no Console |
+| MARKETPLACE_ROOT_URL | `localhost:3000` | domínio real |
+| Stripe Secret Key | no Sharetribe Console (test) | Console (live) |
+
+## Mandatory check no boot
+
+`server/index.js` verifica no arranque:
+
+```js
+const MANDATORY_ENV_VARIABLES = [
+  'REACT_APP_SHARETRIBE_SDK_CLIENT_ID',
+  'SHARETRIBE_SDK_CLIENT_SECRET',
+  'REACT_APP_MARKETPLACE_NAME',
+  'REACT_APP_MARKETPLACE_ROOT_URL',
+];
+```
+
+Se alguma faltar → `process.exit(9)`. As outras são opcionais (com fallback ou feature flag).
