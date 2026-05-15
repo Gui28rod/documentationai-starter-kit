@@ -1,0 +1,191 @@
+---
+title: "Catálogo de Componentes"
+description: "Lista de ~110 componentes reutilizáveis em src/components/ organizados por categoria."
+---
+
+# Catálogo de Componentes
+
+Componentes em `src/components/`. ~110 ficheiros agrupados por função.
+
+## 🎨 Layout & Estrutura
+
+| Componente | Função |
+|---|---|
+| `Page` | Wrapper de página com SEO, scroll behavior, scrollingDisabled |
+| `LayoutComposer` | Composer de layouts (side nav / single column / etc.) |
+| `LayoutSideNavigation` | Layout com sidebar (account pages) |
+| `LayoutSingleColumn` | Layout simples de uma coluna |
+| `AspectRatioWrapper` | Wrapper que mantém aspect ratio (fotos, vídeos) |
+| `ResponsiveBackgroundImageContainer` | Background image responsivo com srcset |
+| `ResponsiveImage` | `<img>` com srcset e variantes scaled |
+| `Heading`, `H1`–`H6` | Headings semânticos com style |
+| `OutsideClickHandler` | Fecha popup ao clicar fora |
+| `KeyboardListener` | Captura teclado (Esc, setas) |
+
+## 🔘 Botões & Navigation
+
+| Componente | Função |
+|---|---|
+| `Button`, `PrimaryButton`, `SecondaryButton`, `InlineTextButton` | Botões com estilos |
+| `NamedLink` | `<Link>` com nome de rota (não path raw) |
+| `NamedRedirect` | Redirect server-side com nome de rota |
+| `TabNav`, `TabNavHorizontal`, `Tabs` | Sistema de tabs |
+| `UserNav` | Nav lateral do perfil/conta |
+| `PaginationLinks` | Paginação 1, 2, 3, … |
+| `ScrollToTopButton` | Botão flutuante "voltar ao topo" |
+| `AddToCalendarButton` | Adicionar reserva ao Google Calendar |
+| `PwaInstallButton` | Trigger do install prompt PWA |
+
+## 📋 Form Fields (Final Form)
+
+| Componente | Função |
+|---|---|
+| `Form` | Wrapper do form `<form>` |
+| `FieldTextInput` | Input de texto + validação |
+| `FieldNumber` | Input numérico |
+| `FieldBoolean` | Toggle yes/no |
+| `FieldCheckbox` | Checkbox individual |
+| `FieldCheckboxGroup` | Grupo de checkboxes |
+| `FieldRadioButton` | Radio button |
+| `FieldSelect` | Dropdown select |
+| `FieldSelectTree` | Select hierárquico (categorias) |
+| `FieldRangeSlider` | Slider de range (preço, etc.) |
+| `RangeSlider` | Slider standalone |
+| `FieldCurrencyInput` | Input com formatação de moeda |
+| `FieldPhoneNumberInput` | Phone input com seletor de país |
+| `FieldReviewRating` | Estrelas para review |
+| `ExpandingTextarea` | Textarea que cresce com o texto |
+| `LanguagesField` | Multi-select de línguas com flag-icons |
+| `SocialLinksField` | Array de links sociais |
+| `LocationAutocompleteInput` | Input com autocomplete Mapbox |
+| `CustomExtendedDataField` | Campo dinâmico (enum/text/long/bool) |
+| `CustomExtendedDataSection` | Secção de custom fields |
+| `HelpText` | Texto de ajuda abaixo de field |
+| `ValidationError` | Mensagem de erro de validação |
+| `ErrorMessage` | Mensagem de erro genérica |
+
+## 🎭 Modais & Overlays
+
+| Componente | Função |
+|---|---|
+| `Modal` | Modal genérico com backdrop |
+| `ModalInMobile` | Modal cheio em mobile, normal em desktop |
+| `ModalMissingInformation` | Modal "preenche os teus dados" para completar perfil |
+| `CookieConsent` | Banner + modal de consentimento GDPR |
+| `ReportListingModal` | Modal reportar anúncio |
+| `ReportUserModal` | Modal reportar utilizador |
+| `FeedbackPromptModal` | Modal NPS pós-review |
+| `WelcomeModal` | Modal de boas-vindas pós-signup |
+
+## 🔔 Toasts & Banners
+
+| Componente | Função |
+|---|---|
+| `FavoriteAlert` | Toast "favoritaram o teu anúncio" |
+| `FollowAlert` | Toast "começaram a seguir-te" |
+| `SavedSearchAlert` | Toast "tua pesquisa tem novos resultados" |
+| `NewListingNotification` | Toast "novo anúncio de quem segues" |
+| `ExtraAlerts` | 4 tipos (edits + reviews) unificados |
+| `NotificationBadge` | Badge vermelho do topbar |
+| `LimitedAccessBanner` | Banner permanente quando admin login-as |
+| `MaintenanceMode` | Página de manutenção |
+
+## 🖼️ Cards & Listings
+
+| Componente | Função |
+|---|---|
+| `ListingCard` | Card de anúncio na pesquisa/grid |
+| `ListingCardThumbnail` | Card pequeno (recently viewed, similar) |
+| `ListingLink` | Link wrapper para um listing |
+| `SimilarListingsSection` | Secção "anúncios similares" |
+| `RecentlyViewedSection` | Carrossel de recentemente vistos |
+| `OrderPanel` | Painel direito do listing (reserva) |
+| `OrderBreakdown` | Detalhe de preço (preço + comissão + total) |
+
+## 👤 Utilizador / Avatar
+
+| Componente | Função |
+|---|---|
+| `Avatar`, `AvatarSmall`, `AvatarMedium`, `AvatarLarge` | Avatars circulares |
+| `UserDisplayName` | Nome formatado (display name ou first+last) |
+| `FavoriteButton` | Coração para favoritar |
+| `Reviews` | Lista de reviews |
+| `ReviewRating` | Estrelas de rating |
+
+## 💳 Stripe
+
+| Componente | Função |
+|---|---|
+| `StripeConnectAccountForm` | Form de onboarding Stripe |
+| `StripeConnectAccountStatusBox` | Status do Stripe Connect |
+| `StripePaymentAddress` | Form de morada de pagamento |
+| `SavedCardDetails` | Detalhe do cartão guardado |
+
+## 🌍 Mapas
+
+| Componente | Função |
+|---|---|
+| `Map` | Wrapper de mapa (Mapbox ou Google) |
+| `LocationAutocompleteInput` | Input com autocomplete |
+
+## ⏰ Datas & Tempo
+
+| Componente | Função |
+|---|---|
+| `DatePicker` (root) | Date picker base |
+| `DatePickers` | Múltiplos pickers |
+| `FieldDateRangeController` | Controller de range |
+| `FieldDateRangePicker` | Picker de range para form |
+| `FieldSingleDatePicker` | Single date picker |
+| `TimeRange` | Display de range de horas |
+
+## 📤 Sharing & External
+
+| Componente | Função |
+|---|---|
+| `ShareButtons` | Botões partilhar (Facebook, WhatsApp, copy link) |
+| `ExternalLink` | `<a>` com target=_blank + segurança |
+| `Logo` | Logo V1H |
+| `ImageFromFile` | Preview de imagem antes de upload |
+| `Promised` | Wrapper para Promise pending state |
+| `PropertyGroup` | Group de chips (amenities) |
+
+## 🎨 Ícones (40+ ícones SVG)
+
+| Categoria | Ícones |
+|---|---|
+| **Ações** | IconAdd, IconClose, IconDelete, IconEdit, IconCheckmark |
+| **Comunicação** | IconEmailAttention, IconEmailSent, IconEmailSuccess, IconInquiry |
+| **Reviews/Rating** | IconReviewStar, IconReviewUser |
+| **UI** | IconAlert, IconArrowHead, IconSpinner, IconSuccess, IconSynchronize, IconSearch, IconDate, IconLocation |
+| **Account** | IconKeys, IconKeysSuccess, IconBannedUser |
+| **Heart** | IconHeart (favoritos) |
+| **Disputes** | IconDisputeOrder |
+| **Social** | IconSocialMediaFacebook, IconSocialMediaInstagram, IconSocialMediaTwitter |
+| **Custom V1H** | `CategoryIcons/` — 9 ícones (Cultura, Trabalho, Eventos, etc.) |
+
+## 🆕 Componentes V1H (não vinham do Sharetribe)
+
+Estes foram criados especificamente para a V1H:
+
+- `ExtraAlerts` — 4 novos tipos de toast (edits + reviews)
+- `FavoriteAlert`, `FollowAlert`, `SavedSearchAlert`, `NewListingNotification`
+- `FavoriteButton` — heart para favoritos
+- `LanguagesField` — multi-select com bandeiras
+- `SocialLinksField` — array de links sociais com normalização
+- `RecentlyViewedSection` — carrossel
+- `SimilarListingsSection` — secção bottom da listing
+- `PwaInstallButton` — install PWA
+- `CookieConsent` — banner GDPR custom
+- `ReportListingModal`, `ReportUserModal` — denúncia
+- `FeedbackPromptModal` — NPS pós-review
+- `WelcomeModal` — boas-vindas
+- `AddToCalendarButton` — Google Calendar
+- `TranslateButton` — tradução MyMemory
+- `CategoryIcons/` — 9 ícones V1H
+
+## Total
+
+- **~110 componentes** únicos
+- **27 ícones** comuns + **9 ícones V1H** = 36 ícones totais
+- **~30 componentes novos** criados especificamente para V1H

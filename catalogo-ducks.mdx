@@ -1,0 +1,111 @@
+---
+title: "Catálogo de Redux Ducks"
+description: "Lista dos 26 ducks Redux com estado, actions principais e notas."
+---
+
+# Catálogo de Redux Ducks
+
+Estado global da aplicação dividido em 26 "ducks" (Redux Toolkit / `createSlice`).
+
+## Tabela completa
+
+| Duck | Estado | Actions/Thunks principais | Notas |
+|---|---|---|---|
+| **auth** | Autenticação, escopos, erros de login/logout/signup | `loginThunk`, `logoutThunk`, `signupThunk`, `signupWithIdpThunk`, `authInfoThunk` | Integra SDK; suporta IDP (Google/Facebook) e flow pós-signup |
+| **emailVerification** | Estado de verificação de email | `verifyEmail` | Faz `fetchCurrentUser` após verificação |
+| **extraAlerts** ⭐ V1H | 4 tipos de toasts novos | `setExtraAlerts`, `dismissExtraAlert`, `pollExtraAlerts` | Sincroniza com `user.metadata.unseenExtraAlerts`; poll 60s |
+| **favoriteAlerts** ⭐ V1H | Toasts "alguém favoritou" | `setAlerts`, `dismissFavoriteAlerts`, `pollFavoriteAlerts` | Source `user.metadata.unseenFavoriteAlerts` |
+| **favorites** ⭐ V1H | Lista de favoritos + contagens otimistas | `addToFavorites`, `removeFromFavorites`, `toggleFavoriteAndSync` | localStorage + server; chama `/api/listing-like` |
+| **featuredListings** | Anúncios destaque por secção | `fetchFeaturedListings` | Suporta `newest` ou `queryString`; cache por sectionId |
+| **follow** ⭐ V1H | Following list + contagens followers | `toggleFollowLocal`, `toggleFollowAndSync`, `updateLastOnline` | localStorage + server; chama `/api/user-follow` |
+| **followAlerts** ⭐ V1H | Toasts "alguém te seguiu" | `setFollowAlerts`, `dismissFollowAlerts`, `pollFollowAlerts` | Padrão idêntico ao favoriteAlerts |
+| **highlightedListings** ⭐ V1H | Anúncios destacados pelo utilizador | `addHighlightedListing`, `clearHighlightedListings` | localStorage; reducer estilo antigo |
+| **hostedAssets** | Assets do Sharetribe CDN (configs, traduções, footer, pages) | `fetchAppAssets`, `fetchPageAssets`, `setCurrentPageAssets` | Versioning com alias "latest" |
+| **mapListings** ⭐ V1H | Anúncios geolocalizados em Portugal | `fetchMapListings` | Query bbox para PT continental + Madeira + Açores |
+| **marketplaceData** | Base de dados normalizada (listings, users, etc.) | `addMarketplaceEntities` | Storage central; suporta sanitização |
+| **notifications** ⭐ V1H | Novos anúncios de utilizadores seguidos | `checkNewListingsFromFollowed`, `setNewListings` | Cutoff per-user em localStorage; throttle 5min |
+| **paymentMethods** | Métodos de pagamento Stripe | `createStripeCustomer`, `addPaymentMethod`, `deletePaymentMethod` | Wrapper `savePaymentMethod` escolhe a operação |
+| **ratings** ⭐ V1H | Ratings de listings e de utilizadores | `fetchListingRating`, `fetchUserRating`, `setListingRating`, `setUserRating` | User rating só `type=ofCustomer`; dedup automática |
+| **recentlyViewed** ⭐ V1H | Anúncios visualizados (MAX 20) | `addToRecentlyViewed`, `addToRecentlyViewedAndSync`, `fetchRecentlyViewedListings` | localStorage (auth) / sessionStorage (guest); expira 30 dias |
+| **routing** | Localização atual + canonical path | `locationChanged` | Simples — só rastreia navegação |
+| **savedSearchAlerts** ⭐ V1H | Matches novos para saved searches | `checkSavedSearchMatches`, `setMatches` | Poll 5min; filtra anúncios próprios |
+| **savedSearches** ⭐ V1H | Pesquisas guardadas no `privateData` | `toggleSavedSearchAndSync`, `dedupeSavedSearchesAndSync`, `removeSavedSearchAndSync` | MAX 25; dedup por canonical key |
+| **similarListings** ⭐ V1H | Anúncios similares por categoria | `fetchSimilarListings`, `setSimilarListings` | Retry exponencial em 429; MAX 20 |
+| **stripe** | Pagamentos (intents) | `confirmCardPaymentThunk`, `handleCardSetupThunk`, `retrievePaymentIntentThunk` | Integração Stripe.js; cache de intent |
+| **stripeConnectAccount** | Conta Stripe Connect | `createStripeAccountThunk`, `updateStripeAccountThunk`, `fetchStripeAccountThunk`, `getStripeConnectAccountLinkThunk` | Account tokens; collection_options |
+| **ui** | Estado de scroll global | `disableScrolling`, `manageDisableScrolling` | Vários componentes podem pedir disable em simultâneo |
+| **user** | currentUser + notifications counts + tem listings | `fetchCurrentUser`, `fetchCurrentUserHasListings`, `fetchCurrentUserNotifications` | Sincroniza favorites/follow/recently viewed/saved searches; cache notifications 5s TTL |
+
+⭐ = adicionado/customizado pela V1H. **15 dos 26 ducks** são customizações V1H.
+
+## Padrão dos ducks de notificação
+
+`favoriteAlerts`, `followAlerts`, `extraAlerts` seguem o mesmo padrão:
+
+1. Source de verdade: `user.metadata.unseen*Alerts` (server)
+2. Poll a cada 60s (`fetchCurrentUser` + extract alerts)
+3. State session-level com `dismissedIds` (anti-flicker)
+4. Cap visual `MAX_VISIBLE = 6`
+5. Dismiss per-entry sincroniza via `/api/dismiss-*-alerts`
+
+## Padrão dos ducks de favoritos/follow
+
+`favorites`, `follow`:
+
+1. Source: `user.privateData.favorites` / `user.privateData.following`
+2. localStorage para guests
+3. Migração automática ao login
+4. Optimistic update no Redux + sync server em background
+5. POST endpoints registam para alertas/throttle
+
+## Util folder (`src/util/`)
+
+35 ficheiros de utilitários. Highlights:
+
+| Ficheiro | Propósito |
+|---|---|
+| `api.js` | Helpers para rotas API server (não SDK); typeHandlers Decimal |
+| `common.js` | Utilities genéricas |
+| `configHelpers.js` | Process config (listing types, transaction processes) |
+| `currency.js` | Manipulação de moedas (Decimal.js) |
+| `data.js` | Normalização JSON:API; sanitização |
+| `dates.js` | Moment.js + timezone; booking time units |
+| `deletedListings.js` | Tracking de anúncios apagados |
+| `emailVerificationGate.js` | Gate de verificação de email |
+| `errors.js` | Checkers de erros API; `storableError` |
+| `fieldHelpers.js` | Helpers Final Form |
+| `generators.js` | UUID, payment intent IDs |
+| `googleMaps.js` | Google Maps integration |
+| `includeScripts.js` | Carregamento de scripts (GA, Stripe) |
+| `log.js` | Logging + Sentry |
+| `maps.js` | Bounds, geohash, polygon |
+| `messagesApi.js` | Latest message times |
+| `polyfills.js` | Browser polyfills |
+| `reactIntl.js` | i18n integration |
+| `responseTime.js` | Auto-tracking response time |
+| `richText.js` | Parsing rich text (mentions, links) |
+| `routes.js` | Constants e path builders |
+| `sanitize.js` | Sanitização para segurança |
+| `search.js` | Helpers de query params |
+| `seenTransactions.js` | Tracking de transações vistas |
+| `seo.js` | Meta tags + structured data |
+| `sdkLoader.js` | Sharetribe SDK loader; image variants |
+| `string.js` | Slug, YouTube ID extract |
+| `style.js` | Dynamic CSS classes |
+| `testData.js`, `testHelpers.js` | Helpers de testes |
+| `types.js` | Constants (listing states, errors, processes) |
+| `urlHelpers.js` | Parsing/building URLs + query strings |
+| `userAgent.js` | Detecção browser/device |
+| `userHelpers.js` | Checkers user (authorized, pending) |
+| `validators.js` | Validators Final Form |
+
+## Padrão de organização
+
+```
+ducks/X.duck.js          → Redux slice + thunks
+util/X.js                → helpers stateless
+components/X/X.js        → componente React
+components/X/X.module.css → estilo scoped
+containers/X/X.js        → página completa
+containers/X/X.duck.js   → estado específico da página (se necessário)
+```

@@ -1,0 +1,95 @@
+---
+title: "Catálogo de Containers (Páginas)"
+description: "Lista completa dos 41 containers/páginas com URL e função."
+---
+
+# Catálogo de Containers / Páginas
+
+Todos os containers em `src/containers/`. Container = página completa ou wrapper de alto nível.
+
+| Container | Rota / Tipo | O que faz |
+|---|---|---|
+| **AboutPage** | `/sobre-nos` | Página "Sobre nós" — missão, visão, valores, equipa, CTA. |
+| **AuthenticationPage** | `/login`, `/signup` | Autenticação — login, signup, social (Google), confirmação IDP. |
+| **CMSPage** | `/p/:pageId` | Páginas dinâmicas via PageBuilder + assets hospedados Sharetribe. |
+| **CheckoutPage** | `/checkout` | Checkout com Stripe — pagamento, inquiry, negotiation. |
+| **ComoFuncionaPage** | `/como-funciona` | Como funciona o site — steps por audiência (host/guest), FAQ. |
+| **ContactDetailsPage** | `/account/contact-details` | Editar email/telemóvel; verificação email; reset password. |
+| **ContactPage** | `/contact` | Formulário de contacto com seletor de país; envia `/api/contact`. |
+| **CookiePolicyPage** | `/cookie-policy` | Política cookies em PT/EN com tabela detalhada. |
+| **DestacaAnuncioPage** | `/destaque-anuncio` | Destacar anúncio na homepage; pré-visualização + pagamento. |
+| **DirectMessagePage** | `/mensagens/:id` | Chat direto entre utilizadores (texto + imagens). |
+| **EditListingPage** | `/l/:slug/:id/edit/...` | Wizard de criação/edição de anúncios. |
+| **EmailVerificationPage** | `/email-verification` | Confirma email via token URL → redirect. |
+| **FavoritesPage** | `/favoritos` | Lista de anúncios favoritados. |
+| **FollowingPage** | `/a-seguir` | Lista de utilizadores seguidos com follow/unfollow. |
+| **FooterContainer** | wrapper | Renderiza footer via SectionBuilder com asset hosted. |
+| **InboxPage** | `/inbox` | Inbox de transações — Sales / Orders, filtros, paginação. |
+| **LandingPage** | `/` | Homepage — hero, secções, mapa, feedback. |
+| **ListingPage** | `/l/:slug/:id` | Página do anúncio — galeria, descrição, reservas, reviews. |
+| **MakeOfferPage** | `/l/:slug/:id/make-offer` | Submeter oferta numa negotiation. |
+| **ManageAccountPage** | `/account` | Painel de conta — edita perfil, user type fields, eliminar conta. |
+| **ManageListingsPage** | `/your-listings` | Gestão dos anúncios do utilizador (lista + ações). |
+| **NoAccessPage** | `/no-access` | Acesso negado (pending approval, falta permissões). |
+| **NotFoundPage** | `/404` | Página 404 com link para voltar. |
+| **PageBuilder** | wrapper | Motor universal de renderização de páginas via Sharetribe assets. |
+| **PasswordChangePage** | `/account/password-change` | Alterar password com validação de força. |
+| **PasswordRecoveryPage** | `/password-recovery` | Pede email para recuperação. |
+| **PasswordResetPage** | `/password-reset` | Redefine password com token de email. |
+| **PaymentMethodsPage** | `/account/payment-methods` | Gestão de cartões Stripe — adicionar/remover. |
+| **PreviewResolverPage** | resolver | Redireciona asset paths CMS (`content/pages/about`) para rotas reais. |
+| **PrivacyPolicyPage** | `/privacy-policy` | Política de privacidade RGPD em PT/EN. |
+| **ProfilePage** | `/u/:id` | Perfil público — avatar, bio, listings, reviews, follow. |
+| **ProfileSettingsPage** | `/profile-settings` | Edição do próprio perfil (avatar, bio, línguas, social). |
+| **RecentlyViewedPage** | `/vistos-recentemente` | Lista de anúncios visualizados recentemente. |
+| **RequestQuotePage** | `/l/:slug/:id/request-quote` | Pedir orçamento numa negotiation. |
+| **SavedSearchesPage** | `/pesquisas-guardadas` | Pesquisas guardadas com gestão (remover, repetir). |
+| **SearchPage** | `/s` | Pesquisa de anúncios — filtros, mapa, sort. |
+| **StripePayoutPage** | `/account/payments` | Stripe Connect onboarding para receber pagamentos. |
+| **StyleguidePage** | `/styleguide` | Showcase de componentes para devs (cores, ícones, tipografia). |
+| **TermsOfServicePage** | `/terms-of-service` | Termos de serviço em PT/EN. |
+| **TopbarContainer** | wrapper | Topbar conectado a Redux (auth, notifications, profile menu). |
+| **TransactionPage** | `/sale/:id`, `/order/:id` | Detalhe de uma transação — mensagens, timeline, ações. |
+
+## Detalhes especiais
+
+### PageBuilder (não tem rota própria)
+Motor universal que renderiza páginas via assets hospedados no Sharetribe Console:
+- Lê asset (`pageAsset.{name}`)
+- Mapeia secções (`SectionHero`, `SectionCarousel`, etc.) para componentes
+- Suporta SEO schema + layouts customizados
+- Usado por `LandingPage`, `CMSPage`, `FooterContainer`
+
+### PreviewResolverPage
+Quando um asset CMS aponta para `content/pages/about`, esta página redireciona para `/sobre-nos`. Útil para preview de mudanças antes de publicar.
+
+### StyleguidePage
+Página oculta de desenvolvedor — `localhost:3000/styleguide`. Mostra todos os componentes, ícones, cores, tipografia. Útil para designers e devs verem o sistema visual.
+
+### Wrappers (não têm rota)
+- **TopbarContainer** — renderiza Topbar em todas as páginas
+- **FooterContainer** — renderiza Footer em todas as páginas
+- **PageBuilder** — usado dentro de outros containers
+
+## Por origem
+
+### Vindos do Sharetribe (base do template)
+- AuthenticationPage, CMSPage, CheckoutPage, ContactDetailsPage
+- EditListingPage, EmailVerificationPage, InboxPage, LandingPage
+- ListingPage, MakeOfferPage, ManageAccountPage, ManageListingsPage
+- NoAccessPage, NotFoundPage, PageBuilder, PasswordChangePage
+- PasswordRecoveryPage, PasswordResetPage, PaymentMethodsPage
+- PreviewResolverPage, ProfilePage, ProfileSettingsPage
+- RequestQuotePage, SearchPage, StripePayoutPage, StyleguidePage
+- TransactionPage
+
+### Customizados pela V1H
+- **AboutPage** — página própria sobre nós
+- **ComoFuncionaPage** — como funciona com FAQ
+- **ContactPage** — formulário V1H
+- **CookiePolicyPage**, **PrivacyPolicyPage**, **TermsOfServicePage** — atualizados PT/EN
+- **DestacaAnuncioPage** — destacar anúncio
+- **DirectMessagePage** — chat direto melhorado
+- **FavoritesPage**, **FollowingPage**, **SavedSearchesPage**, **RecentlyViewedPage** — novas features V1H
+
+Total: **27 vindos do Sharetribe** + **14 customizados pela V1H** = 41 containers.

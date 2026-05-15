@@ -1,0 +1,202 @@
+---
+title: "Server, Config, Routing, Assets"
+description: "Estrutura completa do servidor Express, ficheiros de configuração, rotas e assets."
+---
+
+# Server, Config, Routing & Assets
+
+Detalhe técnico das fundações do projeto.
+
+## 🖥️ Server (`server/`)
+
+### Entry point
+
+| Ficheiro | Função |
+|---|---|
+| `index.js` | Entry principal. Configura Express com middlewares (Helmet, compression, SSL enforce), carrega env, inicia Passport (auth), SSR renderer, mapeia rotas. Arranca cron jobs no final. |
+| `apiRouter.js` | Express router com **~23 endpoints** prefixados `/api/*`. Tudo no [Endpoints](endpoints). |
+| `auth.js` | Middleware basic auth (username/password) para staging |
+| `csp.js` | Content Security Policy com **nonce por request**; whitelist Sharetribe + Mapbox + Stripe + Google CDN |
+| `dataLoader.js` | Carrega dados server-side para SSR (Redux store, translations, hosted config) |
+| `renderer.js` | Renderiza app com Helmet (SSR); injeta assets dinâmicos no HTML template |
+| `log.js` | Logging com integração Sentry |
+| `env.js` | Configura env vars a partir de ficheiros `.env.*` |
+| `importer.js` | Loadable extractors para code-splitting (node + web builds) |
+| `wellKnownRouter.js` | Rotas `/.well-known/*` (OAuth challenge, autenticação) |
+| `metricsServer.js` | Servidor de métricas (Prometheus/observabilidade) |
+
+### `server/api/` — 23 endpoints
+
+Ver [Endpoints](endpoints) para a lista detalhada. Resumo:
+
+- **Sharetribe Auth bridges**: login-as, transaction-line-items, initiate-privileged, transition-privileged, delete-account
+- **Forms**: contact, newsletter, report-listing, report-user, feedback, waitlist
+- **PWA**: pwa-counter (get + increment)
+- **Sistemas custom V1H**: listing-like, dismiss-favorite-alerts, user-follow, dismiss-follow-alerts, dismiss-extra-alert, translate, recompute-listing-rating, host-stats
+- **Auth providers**: auth/facebook, auth/google (callback)
+
+### `server/jobs/` — 3 cron jobs
+
+| Job | Schedule | Função |
+|---|---|---|
+| `notifyFavoritesJob` | `0 8 * * *` (diário 08:00) | Email resumo diário de favoritos |
+| `notifySavedSearchesJob` | `*/5 * * * *` (cada 5min) | Email "novos resultados na pesquisa guardada" |
+| `notifyExtraAlertsJob` | `*/5 * * * *` (cada 5min) | Detecta edits + reviews → 4 alertas + email de review |
+
+### `server/api-util/` — 18 helpers
+
+Helpers internos do servidor:
+- Cache com TTL
+- Currency (Decimal.js)
+- Dates (moment)
+- SDK proxy (Marketplace + Integration)
+- Negotiation helpers
+- Line items computation
+- ID tokens
+- Types (constants)
+
+### `server/resources/` — rotas de recursos
+
+| Ficheiro | Função |
+|---|---|
+| `sitemap.js` | Gera 3 sitemaps XML (index, listings, pages) |
+| `robotsTxt.js` | Gera `robots.txt` |
+| `webmanifest.js` | Gera `manifest.json` PWA |
+
+### `server/data/`
+
+- `pwa-counter.json` — contador de instalações PWA (⚠️ bug git: ver [Problemas Conhecidos](problemas-conhecidos))
+
+## ⚙️ Config (`src/config/`)
+
+| Ficheiro | Propósito |
+|---|---|
+| `configDefault.js` | Raiz de config — agrega todos os outros + marketplaceName, URL, currency, Stripe |
+| `configBranding.js` | Logo (24/36/48px), brand image, FB sharing (1200x630), Twitter (600x314), cor `#BAA38A` |
+| `configLayout.js` | Variant SearchPage (map/grid), variant ListingPage (carousel/coverPhoto), aspect ratio fotos |
+| `configListing.js` | **Custom fields** (enum/multi-enum/text/long/boolean), filter config, show/save labels |
+| `configMaps.js` | Mapbox/Google Maps keys, provider, location defaults, geolocation |
+| `configSearch.js` | Main search (keywords/location), filters, search modes |
+| `configStripe.js` | Stripe publishable key, MCC (5734), max 730 dias bookings, países suportados |
+| `configUser.js` | User custom fields (línguas, etc.), public/protected/private scope |
+| `configAnalytics.js` | GA4, etc. |
+| `configHelpers.js` | Helpers para processar config |
+| `settings.js` | Definições gerais |
+| `settingsCurrency.js` | Mapeamento de moedas (EUR, USD, etc.) |
+| `landingPageConfigExamples.js` | Exemplos de config landing |
+| `configDefaultLocationSearches.js` | Localizações padrão no mapa |
+
+## 🛣️ Routing (`src/routing/`)
+
+| Ficheiro | Conteúdo |
+|---|---|
+| `routeConfiguration.js` | **57 rotas** configuradas. Cada uma tem: `name`, `path`, `component` (lazy-loaded), `loadData` (SSR), `auth` (true/false), `authPage` (redirect) |
+| `Routes.js` | Renderizador (React Router) |
+| `redirectsConfig.js` | Mapa de redirects 301 |
+
+### Rotas principais
+
+| Path | Component |
+|---|---|
+| `/` | LandingPage |
+| `/s` | SearchPage |
+| `/l/:slug/:id` | ListingPage |
+| `/u/:id` | ProfilePage |
+| `/login`, `/signup` | AuthenticationPage |
+| `/contact`, `/privacy-policy`, `/terms-of-service`, `/cookie-policy`, `/sobre-nos`, `/como-funciona` | Páginas estáticas |
+| `/inbox` | InboxPage |
+| `/sale/:id`, `/order/:id` | TransactionPage |
+| `/manage-listings`, `/your-listings` | ManageListingsPage |
+| `/manage-account`, `/account/*` | ManageAccountPage e sub-pages |
+| `/payment-methods` | PaymentMethodsPage |
+| `/favoritos`, `/pesquisas-guardadas`, `/a-seguir`, `/vistos-recentemente` | Páginas V1H |
+| `/checkout`, `/make-offer`, `/request-quote` | Flows de transação |
+| `/l/:slug/:id/edit/...` | EditListingPage (com sub-rotas para cada tab) |
+| `/p/:pageId` | CMSPage (páginas hosted Sharetribe) |
+
+## 🎨 Assets (`src/assets/`)
+
+### Fontes (3 famílias)
+
+| Fonte | Localização | Uso |
+|---|---|---|
+| **Britannic Bold** | `fonts/britannic-bold-regular-font/` | Headings (h1, h2 dos hero) |
+| **Century Gothic** | `fonts/century-gothic-similar-fonts/` (várias variantes: Dominik, OPTI-DemiBold, SansSerifFLF, WeezerFont) | Body, UI |
+| **Red Hat Text** | `fonts/Red_Hat_Text/` (variável + 11 weights estáticas) | Fallback / texto longo |
+
+### Imagens
+
+Localização: `src/assets/images/`
+
+| Categoria | Conteúdo |
+|---|---|
+| **Logo V1H** | Versões preto/branco, vários tamanhos, manual de identidade |
+| **Brand images** | 1500px JPGs para hero |
+| **Sharing** | FB (1200x630), Twitter (600x314) para meta tags |
+| **Equipa** | 7 fotos (Beatriz, Lídia, Clara, Teresa, Marta, Alexandre, Anabela) usadas em AboutPage |
+| **Categorias** | 9 SVGs (Trabalho, Cultura, Gastronomia, Eventos, Criatividade, Saúde, Desporto, Ar Livre, Inusitados) |
+| **Social** | 5 redes × 3 versões = 15 ícones (Facebook, Instagram, LinkedIn, TikTok, YouTube) |
+| **Figma elements** | 6 rectangles + 3 buttons (designs originais) |
+
+### CSS
+
+- `assets/css/sanitize.css` — CSS reset
+- `styles/customMediaQueries.css` — media queries reutilizáveis
+- `styles/landingDark.css` — overrides modo escuro
+- `styles/marketplaceDefaults.css` — CSS variables (colors, spacing)
+- `styles/normalize.css` — normalização
+
+## .env (configuração de ambiente)
+
+Lista resumida das vars principais:
+
+```
+# Sharetribe
+REACT_APP_SHARETRIBE_SDK_CLIENT_ID
+SHARETRIBE_SDK_CLIENT_SECRET
+SHARETRIBE_INTEGRATION_CLIENT_ID
+SHARETRIBE_INTEGRATION_CLIENT_SECRET
+
+# Pagamentos
+REACT_APP_STRIPE_PUBLISHABLE_KEY
+
+# Mapas
+REACT_APP_MAPBOX_ACCESS_TOKEN
+
+# OAuth
+REACT_APP_GOOGLE_CLIENT_ID
+GOOGLE_CLIENT_SECRET
+REACT_APP_FACEBOOK_APP_ID
+FACEBOOK_APP_SECRET
+
+# Email transacional
+RESEND_API_KEY
+REPORTS_TO_EMAIL
+CONTACT_RECIPIENT
+
+# Marketplace
+REACT_APP_MARKETPLACE_NAME=v1h
+REACT_APP_MARKETPLACE_ROOT_URL
+
+# Analytics
+REACT_APP_GOOGLE_ANALYTICS_ID
+
+# Server
+PORT
+REACT_APP_ENV
+BASIC_AUTH_USERNAME
+BASIC_AUTH_PASSWORD
+```
+
+Ver [Variáveis de Ambiente](variaveis-de-ambiente) para detalhe completo.
+
+## Outras pastas relevantes
+
+| Pasta | Conteúdo |
+|---|---|
+| `src/transactions/` | Definições dos processos Sharetribe (default-booking, purchase, inquiry, negotiation) + variants V1H (multi-booking, long-term) |
+| `src/translations/` | `pt.json` (~1.383 strings), `en.json` (~1.764), fr/es/de.json (herdados, não usados) |
+| `src/context/` | React Contexts: `localeContext`, `darkModeContext`, `configurationContext`, `routeConfigurationContext` |
+| `src/analytics/` | Google Analytics + Plausible integrations |
+| `scripts/` | Scripts auxiliares (backfill-response-times.js, etc.) |
+| `public/` | Static files servidos diretamente: favicon, manifest, service-worker, robots |
