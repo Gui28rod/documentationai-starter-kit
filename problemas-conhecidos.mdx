@@ -1,8 +1,27 @@
 ---
 title: "Problemas Conhecidos"
-description: "Em construção. Conteúdo a chegar."
+description: "Issues identificados e workarounds atuais."
 ---
 
 # Problemas Conhecidos
 
-Em construção. Conteúdo a chegar.
+## Sharetribe 429 (rate limit)
+
+A conta Sharetribe da V1H tropeça facilmente em rate limits. O polling de notificações usa cache e throttle para mitigar, mas pode acontecer em períodos de carga elevada.
+
+**Workaround atual**: padrões específicos de polling com throttle 60s e cache server-side. Para resolução definitiva seria preciso upgrade do plano Sharetribe.
+
+## PWA Counter — git issue
+
+O ficheiro `server/data/pwa-counter.json` está trackeado pelo git e reseta a cada `git pull`. Isto faz com que o contador de instalações PWA fique inconsistente entre ambientes.
+
+**Soluções propostas**:
+
+- Adicionar ao `.gitignore` (mais simples)
+- Migrar o contador para `metadata` Sharetribe (mais robusto)
+
+## Email i18n incompleto
+
+O locale escolhido no topbar nem sempre é persistido no servidor de forma fiável. Emails podem chegar no idioma errado dependendo do timing.
+
+**Resolução completa**: requer upgrade para Sharetribe Plus, que expõe melhor a configuração de locale do utilizador.

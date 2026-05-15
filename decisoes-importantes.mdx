@@ -1,8 +1,40 @@
 ---
 title: "Decisões Importantes"
-description: "Em construção. Conteúdo a chegar."
+description: "Decisões tomadas durante o desenvolvimento do projeto V1H."
 ---
 
 # Decisões Importantes
 
-Em construção. Conteúdo a chegar.
+Registo de decisões relevantes tomadas durante o desenvolvimento. Documentadas aqui para evitar reverter ou repetir trabalho.
+
+## User rating só lado cliente
+
+A "user rating" mostrada na sidebar do perfil e no card do anfitrião agrega **apenas reviews recebidas como cliente** (tipo `ofCustomer`).
+
+**Razão**: as chefes da V1H reviram a primeira implementação (que combinava reviews como anfitrião e como cliente, estilo Wallapop) e consideraram que misturar os dois distorce a média visível. Querem que o número reflita só comportamento como guest.
+
+**Implementação**: filtragem client-side em [`ratings.duck.js`](https://github.com/Gui28rod/v1h---testes-dev) na função `fetchUserRating`.
+
+## Multi-booking auto-accept (process v10)
+
+O fluxo de múltiplas reservas usa o process v10 no ambiente `v1h4-test` com auto-aceitação por parte do anfitrião configurada.
+
+## Long-term booking
+
+Fluxo de reserva longo-prazo totalmente testado e pronto. Inclui validações de datas, preço e disponibilidade.
+
+## Cookie consent GDPR-ready
+
+Banner + modal com 4 categorias separadas (essential, preferences, analytics, marketing) e gating no Google Analytics quando o utilizador recusa "analytics".
+
+## Email i18n deferido
+
+A internacionalização completa dos emails (PT/EN consistente em todos os fluxos) requer upgrade Sharetribe Plus. Decisão: deferir até esse upgrade.
+
+## Mobile app pendente
+
+A decisão entre PWA (sem custo) e Capacitor (€124 + Apple Developer + Google Play Stores) ainda está pendente das chefes.
+
+## PWA counter git issue
+
+O contador de instalações PWA está num ficheiro trackeado pelo git, o que causa resets. Solução pendente de decisão.
