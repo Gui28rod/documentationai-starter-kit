@@ -1,0 +1,100 @@
+---
+title: "Reservas e Inbox"
+description: "Processos de transação, estados, Inbox e gestão de mensagens."
+---
+
+# Reservas e Inbox
+
+A V1H suporta 4 processos de transação Sharetribe, cada um com estados e transições próprias.
+
+## Processos suportados
+
+Ficheiros: `src/transactions/`
+
+| Processo | Quando usar |
+|---|---|
+| `default-booking` | Reservas com data/hora (day, night, hour, fixed) |
+| `default-purchase` | Compras de items físicos com stock |
+| `default-inquiry` | Consultas simples sem pagamento |
+| `default-negotiation` | Negociação de orçamento (offer/request) |
+
+Na V1H o **`default-booking`** é o principal. Variantes customizadas:
+- `default-multi-booking-v10` — múltiplas datas/horas num único pedido + auto-aceitação
+- `default-long-term-booking-v10` — reservas de meses/anos
+
+## InboxPage
+
+Ficheiro: `src/containers/InboxPage/`
+
+### Tabs
+- **Sales** — transações onde o utilizador é **provider/anfitrião** (recebe reservas)
+- **Orders** — transações onde o utilizador é **customer/cliente** (faz reservas)
+
+### Funcionalidades
+- Lista filtrável + ordenada (`InboxSearchForm`, `InboxSortBy`)
+- Mensagens integradas (chat entre cliente e anfitrião)
+- Botão de ação contextual (Aceitar/Recusar/Pagar/Cancelar conforme estado)
+
+## Estados de Booking
+
+Ficheiro: `src/containers/InboxPage/InboxPage.stateDataBooking.js`
+
+| Estado | Quem age | Descrição |
+|---|---|---|
+| `INQUIRY` | Customer/Provider | Pedido inicial sem pagamento ainda |
+| `PENDING_PAYMENT` | Customer | À espera de pagamento |
+| `PAYMENT_WINDOW_OPEN` | Customer | Janela de pagamento aberta |
+| `PREAUTHORIZED` | Provider | Pagamento pré-autorizado, à espera de aceitação do host |
+| `ACCEPTED` | — | Aceite, à espera da data da reserva |
+| `DECLINED` | Provider | Recusado pelo anfitrião |
+| `COMPLETED` | — | Reserva concluída, pode rever |
+| `CANCELED` | Customer/Provider | Cancelado |
+
+### Long-term booking states adicionais
+- `LONG_TERM_PENDING_APPROVAL` — provider aprova
+- `LONG_TERM_RESERVED` — em espera no timer 90 dias
+- `LONG_TERM_DECLINED`
+- `LONG_TERM_EXPIRED`
+- `LONG_TERM_CANCELLED`
+
+## TransactionPage
+
+Ficheiro: `src/containers/TransactionPage/`
+
+Página de uma transação individual.
+
+### Componentes
+- **ActivityFeed** — histórico de transições (auditável)
+- **ReviewForm** — formulário de avaliação após `COMPLETED`
+- **SendMessageForm** — chat entre as duas partes
+- **RequestQuote / Offer / MakeCounterOfferModal** — específicos do processo `negotiation`
+
+## Lista de espera (Waitlist)
+
+Quando um listing está esgotado/indisponível, aparece botão **"Juntar à lista de espera"**:
+- Componente: `src/components/OrderPanel/WaitlistButton/`
+- Endpoint: `POST /api/waitlist` com email do interessado
+- Envia confirmação ao utilizador + aviso ao admin
+- Quando o anfitrião disponibiliza de novo, manda email aos waitlisted
+
+## Multi-booking auto-accept
+
+Configurado no `v1h4-test` para o processo v10:
+- Customer escolhe múltiplas datas/horas no `OrderPanel`
+- Cria múltiplas transactions simultaneamente
+- Anfitrião configurado com **auto-accept** — não precisa aprovar
+- Cliente recebe confirmação imediata
+
+## Calendar export
+
+Após reserva confirmada, botão **"Adicionar ao calendário"**:
+- **Google Calendar** ✅ ativo
+- Apple Calendar + Outlook ocultos via flag `SHOW_APPLE_OUTLOOK=false` (memória [calendar button done](decisoes-importantes))
+
+## Partilha de orçamento
+
+Botão "Partilhar orçamento" envia link público com:
+- Preço calculado
+- Datas
+- Detalhes do espaço
+- Útil para o cliente partilhar com colegas antes de fechar

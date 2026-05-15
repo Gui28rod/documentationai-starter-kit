@@ -1,0 +1,87 @@
+---
+title: "Topbar"
+description: "Barra superior — logo, busca, idioma, modo escuro, perfil, notificações."
+---
+
+# Topbar
+
+Barra superior fixa presente em todas as páginas (exceto algumas legais/auth).
+
+## Ficheiros principais
+
+- `src/containers/TopbarContainer/TopbarContainer.js` — connector Redux
+- `src/containers/TopbarContainer/Topbar/Topbar.js` — renderização condicional mobile/desktop
+- `src/containers/TopbarContainer/Topbar/TopbarDesktop/TopbarDesktop.js` — layout desktop
+- `src/containers/TopbarContainer/Topbar/TopbarMobileNav/TopbarMobileNav.js` — nav mobile
+
+**Breakpoint**: `MAX_MOBILE_SCREEN_WIDTH = 1024px`.
+
+## Topbar Desktop
+
+Layout horizontal (flex), da esquerda para a direita:
+
+1. **Logo** — `V1H-LOGO-BLACK.png`, clicável para a homepage
+2. **TopbarSearchForm** — campo de busca com autocomplete
+3. **Language Switcher (PT/EN)** — dropdown que preserva query params
+4. **Dark Mode Toggle** — ícones sol ☀️ / lua 🌙 contextualizados
+5. **Help Link** — ícone (?) → `ContactPage`
+6. **Inbox Link** — ícone com **badge vermelho** (mostra "4+" se contagem > 4)
+7. **Publish Button** — "Publicar Anúncio" → `NewListingPage`
+8. **Profile Menu Dropdown** — avatar clicável
+
+## Profile Menu Dropdown
+
+Items disponíveis (variam consoante o estado do utilizador):
+
+| Item | Página |
+|---|---|
+| O meu perfil | `ProfilePage` (pública) |
+| Configurações de Perfil | `ProfileSettingsPage` |
+| Definições de Conta | `AccountSettingsPage` |
+| Destacar Anúncio | `DestacaAnuncioPage` *(só se tem anúncios)* |
+| Os meus anúncios | `ManageListingsPage` *(só se tem anúncios)* |
+| Favoritos | `FavoritesPage` |
+| Pesquisas guardadas | `SavedSearchesPage` |
+| A seguir | `FollowingPage` |
+| Ajuda | `ContactPage` |
+| Terminar sessão | logout |
+
+## Topbar Mobile
+
+Diferenças do desktop:
+- **Menu hambúrguer** (`TopbarMobileMenu`) — abre side panel com mesmos itens do profile dropdown
+- **Bottom action bar** — botões fixos no fundo do ecrã
+- **MobileCategoryTicker** — carrossel horizontal de categorias (Cultura, Trabalho, etc.) acima da topbar
+- **Search card modal** — modal cheio que abre quando carregas no ícone de busca
+
+## Inbox badge
+
+Lógica:
+- Soma de:
+  - `currentUserSaleNotificationCount` (vendas/reservas novas como anfitrião)
+  - `currentUserOrderNotificationCount` (pedidos novos como cliente)
+  - `currentUserDMNotificationCount` (mensagens diretas não lidas)
+- Visual: número vermelho redondo no canto superior direito do ícone
+- **Cap "4+"** se contagem > 4 (não enche o ecrã com números grandes)
+- Fetch via `fetchCurrentUserNotifications()` na [`user.duck.js`](https://github.com/Gui28rod/v1h---testes-dev)
+
+## Language Switcher
+
+Dropdown PT / EN com persistência via `localeContext` + `localStorage`. Ao mudar:
+- Re-renderiza todas as strings da UI (via `react-intl`)
+- Persiste no servidor (em curso — ver pendência email i18n)
+- Preserva URL e query params
+
+## Dark Mode Toggle
+
+Componente `DarkModeToggle`. Ao alternar:
+- Adiciona/remove `data-dark-mode="true"` e `data-landing-dark="true"` no `<body>`
+- CSS global em [`src/styles/landingDark.css`](https://github.com/Gui28rod/v1h---testes-dev) reage e aplica tema escuro
+- Persiste preferência via `localStorage` (apenas se cookie consent "preferences" estiver dado)
+
+## CSS principal
+
+- `src/containers/TopbarContainer/Topbar/Topbar.module.css` — root, container, skip-to-main link
+- `src/containers/TopbarContainer/Topbar/TopbarDesktop/TopbarDesktop.module.css`
+- `src/containers/TopbarContainer/Topbar/TopbarMobileNav/TopbarMobileNav.module.css`
+- `src/containers/TopbarContainer/Topbar/MobileCategoryTicker/MobileCategoryTicker.module.css`

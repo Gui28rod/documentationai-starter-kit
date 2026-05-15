@@ -1,0 +1,105 @@
+---
+title: "Autenticação"
+description: "Login, signup, recuperação de password e logins sociais."
+---
+
+# Autenticação
+
+Sistema de login, signup, recuperação de password e logins sociais (Google).
+
+## Ficheiros principais
+
+- `src/containers/AuthenticationPage/` — páginas e forms
+  - `LoginForm/` — login tradicional
+  - `SignupForm/` — registo de novo utilizador
+  - `ConfirmSignupForm/` — confirmação após signup
+  - `EmailVerificationInfo/` — info sobre verificação de email
+  - `TermsAndConditions/` — modal de Termos + Privacidade
+- `src/ducks/auth.duck.js` — Redux state + thunks
+
+## Login tradicional
+
+- Campos: **email** + **password**
+- Opção "Remember me" → guarda token mais tempo via `localStorage`
+- Link "Recuperar password" → flow de password reset (email com token)
+- Errors: `loginError` no Redux state
+
+## Signup
+
+Campos pedidos:
+- **Nome** (validação: só letras + acentos + apóstrofos + hífens, máx 50 chars)
+- **Apelido** (mesma validação)
+- **Display name** (máx 60 chars, alfanumérico + símbolos)
+- **Email**
+- **Password** + confirmação
+- **User type** (dropdown) — define se é Cliente ou Anfitrião
+- **Termos e Privacidade** — checkbox obrigatório
+
+Após submeter:
+- Cria conta via Sharetribe SDK
+- Envia email de confirmação automaticamente
+- Redireciona para `EmailVerificationInfo`
+
+## Email Verification
+
+Após signup, o utilizador recebe email com link. Clicar no link confirma email.
+
+Antes de confirmar, certas ações estão bloqueadas (criar listing, fazer reserva, etc.) — Sharetribe gere isto nativamente.
+
+## Password Reset
+
+1. Utilizador carrega "Esqueci a password" na LoginForm
+2. Pede email
+3. Envia email com link contendo token
+4. Link abre página `/recuperar-password?t=<token>&e=<email>`
+5. Form de nova password
+6. Sharetribe valida o token e atualiza password
+
+## Social Logins
+
+### Google ✅ Configurado
+- `REACT_APP_GOOGLE_CLIENT_ID=923132772527-o0bnhjm5bn5pdkvjr7p48af64jto7e5f...`
+- `GOOGLE_CLIENT_SECRET=...` (no `.env`)
+- Endpoint server: `/api/auth/google` + callback
+- Botão "Continuar com Google" aparece nas páginas Login + Signup
+
+### Facebook ❌ Desativado
+- `REACT_APP_FACEBOOK_APP_ID=` (vazio)
+- Botão não aparece quando o ID não está configurado
+- Para ativar: pedir App ID ao Facebook Developers, preencher `.env`
+
+### Outros
+- Apple Sign-In, GitHub, etc. não estão configurados
+
+## SSO Flow
+
+1. Carrega botão "Continuar com Google"
+2. Redirect para `/api/auth/google` (servidor)
+3. OAuth dance com Google
+4. Servidor cria utilizador via Sharetribe Identity Provider
+5. Redirect de volta com sessão iniciada
+
+**Bridge**: durante o redirect, entries "recently viewed" guest são salvas em `rv_prelogin` para não se perderem.
+
+## Redux Duck (`auth.duck.js`)
+
+### Thunks principais
+- `authInfoThunk` — fetch info de auth (chamado no boot)
+- `loginThunk(email, password)` — login tradicional
+- `logoutThunk()` — limpa sessão local + server
+- `signup(payload)` — signup tradicional
+- `signupWithIdp(idpToken, payload)` — signup via SSO
+
+### Estado
+- `isAuthenticated: boolean`
+- `authScopes: string[]` — escopos do token atual
+- `loginError`, `signupError`, `confirmError` — para mostrar feedback
+
+## TermsAndConditions modal
+
+Modal acessível durante signup. Mostra:
+- **Termos de Serviço** (página)
+- **Política de Privacidade** (página)
+- Checkbox obrigatório para avançar com signup
+
+Atenção: **pendente** atualizar Termos+Privacidade com dados completos da empresa antes de go-live (NIF, capital, registo, DPO). Ver [Pendências para Go-Live](pendencias-para-go-live).

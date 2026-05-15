@@ -1,0 +1,93 @@
+---
+title: "Pesquisa e Filtros"
+description: "Search page com filtros, mapa, sort, paginação e save search."
+---
+
+# Pesquisa e Filtros
+
+Página de busca de anúncios (`/s`) com filtros avançados, mapa interativo e gravação de pesquisas.
+
+## Ficheiros principais
+
+Diretório: `src/containers/SearchPage/` — **60+ ficheiros**, arquitetura modular.
+
+Principais:
+- `SearchPageWithMap.js` — layout com mapa lateral
+- `SearchPageWithGrid.js` — layout grid (sem mapa)
+- `SearchResultsPanel.js` — painel de resultados
+- `NoSearchResultsMaybe.js` — placeholder quando 0 resultados
+- `MainPanelHeader.js` — header com contagem + sort + save button
+
+## Filtros disponíveis
+
+Cada filtro em ficheiro próprio:
+
+| Filtro | Componente | Descrição |
+|---|---|---|
+| Keyword | `KeywordFilter` | Texto livre (procura no título e descrição) |
+| Preço | `PriceFilter` | Range slider min-max |
+| Datas | `BookingDateRangeFilter` | Date picker (check-in/check-out) |
+| Lugares (capacidade) | `SeatsFilter` | Número mínimo de pessoas |
+| Rating mínimo | `StarRatingFilter` | ★★★★☆ |
+| Categoria | `CategoryMultiFilter` | Multi-select de 9 categorias |
+| Single select | `SelectSingleFilter` | Filtros enum (ex: tipo de espaço) |
+| Multi select | `SelectMultipleFilter` | Filtros multi-enum (ex: comodidades) |
+| Unit type | `UnitTypeFilter` | Day, hour, night, fixed |
+
+### Camadas de abstração
+- `FilterForm.js` — wrapper genérico
+- `FilterPopup.js` — render desktop (dropdown popup)
+- `FilterPlain.js` — render mobile/sidebar (sempre visível)
+
+## Vista Mapa vs Grid
+
+### Mapa (`SearchPageWithMap`)
+- Mapa Mapbox/Google na metade direita
+- Pins agrupados (`SearchMapGroupLabel`)
+- Pins de preço individuais (`SearchMapPriceLabel`)
+- Click no pin → `SearchMapInfoCard` (mini-card com foto e preço)
+
+### Grid (`SearchPageWithGrid`)
+- Sem mapa
+- Layout 3-4 colunas
+
+Toggle entre os dois (botão "Ver mapa" / "Ver lista").
+
+## Sort e paginação
+
+- `SortBy.js` — opções: relevância, mais recentes, preço asc/desc, rating
+- Paginação tradicional (página 1, 2, 3…) ou infinite scroll consoante config
+
+## Save Search
+
+Componente `SaveSearchButton.js` (botão coração ao lado da contagem de resultados):
+- Carregar → guarda os filtros atuais via `savedSearches.duck.js`
+- Re-clicar → remove dos guardados
+- Visual heart preenchido vs vazio
+- Sincroniza com `currentUser.privateData.savedSearches` (server)
+
+Detecção de duplicados por **chave canónica** (params normalizados sem URL-only params como `page`, `sort`, `mapSearch`, `bounds`). Ver [Decisões Importantes](decisoes-importantes).
+
+## Mobile Filters
+
+Componente `SearchFiltersMobile.js`:
+- Botão "Filtros" abre modal cheio
+- Filtros em lista vertical
+- Botão "Aplicar" no fundo
+- Contagem ao vivo de resultados a aplicar
+
+## Categorias
+
+Configuradas em `src/config/configListing.js`. As 9 categorias V1H:
+
+1. Trabalho & Reuniões
+2. Educação & Cultura
+3. Gastronomia & Convívio
+4. Eventos & Festas
+5. Criatividade & Produção
+6. Saúde & Bem-estar
+7. Desporto & Atividade Física
+8. Espaços ao Ar Livre
+9. Espaços Inusitados & Alternativos
+
+Cada categoria tem ícone próprio em `src/components/CategoryIcons/`.

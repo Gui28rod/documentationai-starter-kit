@@ -1,0 +1,116 @@
+---
+title: "Tradução (i18n + MyMemory)"
+description: "Sistema de internacionalização — PT/EN UI + tradução de conteúdo do utilizador."
+---
+
+# Tradução
+
+A V1H suporta **2 idiomas de UI** (Português europeu + English) e **tradução automática de conteúdo gerado pelo utilizador**.
+
+## 3 camadas de tradução
+
+### 1. Strings de UI (react-intl)
+Ficheiros:
+- `src/translations/pt.json` — **~1.383 strings**
+- `src/translations/en.json` — **~1.764 strings**
+- `src/translations/fr.json`, `es.json`, `de.json` — herdados Sharetribe (não usados ativamente)
+
+Usadas via:
+- `<FormattedMessage id="..." />` — componente
+- `useIntl().formatMessage({id: '...'})` — hook
+
+### 2. Configuração estática (translateConfig.js)
+Ficheiro: `src/util/translateConfig.js` (~312 linhas)
+
+Mapas PT→EN para:
+- Nomes de categorias
+- Tipos de listing
+- Comodidades
+- Outros enums hardcoded
+
+Usado quando a string vem da configuração Sharetribe (não do CMS, não traduzível via react-intl).
+
+### 3. Conteúdo gerado pelo utilizador
+Descrições de listings, reviews, etc. — tradução **on-demand** via MyMemory API.
+
+## Locale context
+
+Ficheiro: `src/context/localeContext.js`
+
+```js
+const { locale, setLocale } = useLocale();
+```
+
+`locale` é `'pt'` ou `'en'`. Persistido em `localStorage` (se cookie "preferences" aceite).
+
+## Topbar Language Switcher
+
+Componente no `TopbarDesktop`. Ao clicar:
+1. `setLocale('en')` ou `setLocale('pt')`
+2. React-intl re-renderiza todas as strings
+3. Persiste em localStorage
+4. URL preservada (incluindo query params)
+
+Ver [Topbar](topbar) para detalhe.
+
+## TranslateButton
+
+Ficheiro: `src/components/TranslateButton/TranslateButton.js`
+
+Componente reutilizável para traduzir conteúdo do utilizador:
+
+**Props**:
+- `text` — string original
+- `onResult(translatedString | null)` — callback
+- `isShowingOriginal` — estado parent (toggle)
+
+**Comportamento**:
+- Carrega "Traduzir" → fetch `/api/translate` → mostra tradução, botão muda para "Ver original"
+- Carrega "Ver original" → reverte ao texto original
+- **Cache local** — segundo toggle não re-hit a API
+
+**Usado em**:
+- Descrição do listing (desktop + mobile)
+- Cada review individualmente
+
+## Endpoint `/api/translate`
+
+Ficheiro: `server/api/translate.js` (~77 linhas)
+
+```
+POST /api/translate
+Body: { text, target: 'pt' | 'en', source?: string }
+Response: { translated, detectedSource, sameAsTarget? }
+```
+
+### Provider: MyMemory
+- API gratuita: `https://api.mymemory.translated.net/get?q=...&langpair=...|...`
+- Sem registo, sem API key, sem cartão
+- Limites: **50.000 caracteres/dia por IP** + **1.500 chars por request**
+
+### Tratamento especial
+- Se o MyMemory devolve `"PLEASE SELECT TWO DISTINCT LANGUAGES"` (source = target) → server devolve o texto original como `translated`, sem warning
+- O cliente trata como tradução bem-sucedida → botão muda para "Ver original"
+- Sem mensagens de erro vermelhas
+
+## Emails — i18n parcial
+
+Os emails respeitam `user.publicData.locale`:
+- Templates PT e EN em cada cron job
+- Escolha baseada no locale guardado no perfil do utilizador
+
+**Limitação**: o locale do topbar nem sempre é persistido no servidor de forma fiável. Resolução completa requer **Sharetribe Plus**. Ver [Problemas Conhecidos](problemas-conhecidos).
+
+## Tradução para outros idiomas
+
+A V1H só suporta **PT e EN na UI**. Para um utilizador espanhol:
+- A UI fica em PT ou EN (escolha dele)
+- Pode carregar "Traduzir" na descrição → MyMemory traduz para PT/EN consoante o toggle do topbar
+- Para Espanhol completo seria preciso adicionar `es.json` na UI (trabalho moderado)
+
+## Cache & performance
+
+- `translateConfig.js` carregado uma vez no boot
+- `react-intl` cache strings em memória
+- `TranslateButton` cache por instância (Map por texto)
+- MyMemory tem cache server-side próprio (mesmo texto = resposta rápida)

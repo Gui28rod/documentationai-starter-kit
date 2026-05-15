@@ -1,0 +1,110 @@
+---
+title: "Perfis de Utilizador"
+description: "Páginas de perfil público, edição de perfil próprio, e sistema de seguidores."
+---
+
+# Perfis de Utilizador
+
+A V1H tem 2 páginas de perfil + sistema de seguidores.
+
+## Perfil público (`ProfilePage`)
+
+Ficheiro: `src/containers/ProfilePage/`
+
+Aparece quando outro utilizador clica no nome/avatar de alguém.
+
+### AsideContent (sidebar esquerda)
+
+- **AvatarLarge** (foto de perfil grande, redonda)
+- **Botão Seguir / A seguir** (toggle, ver [Follow](#sistema-de-seguidores))
+- **Rating ⭐ + review count** — só conta reviews recebidas como **cliente** (`type: ofCustomer`). Decisão das chefes em 2026-05 — ver [Decisões Importantes](decisoes-importantes)
+- **Followers count** (com override server-side)
+- **Línguas faladas** (com bandeiras flag-icons, via `LanguagesField`)
+- **Social links** (Facebook, Instagram, etc.) via `SocialLinksField`
+- **Response time** formatado (ex: "Responde em ~2h")
+- **Last online** relativo:
+  - "Online agora"
+  - "há X minutos"
+  - "há X horas"
+  - "há X dias"
+- **Localização** (endereço)
+
+### Main content
+- Lista dos anúncios deste utilizador (com `ProfileListingsSearchBar` para filtrar)
+- Reviews recebidas
+- Bio
+
+## Edição de perfil próprio (`ProfileSettingsPage`)
+
+Ficheiro: `src/containers/ProfileSettingsPage/`
+
+### Form: `ProfileSettingsForm`
+
+Campos com validação:
+
+| Campo | Validação |
+|---|---|
+| `firstName` / `lastName` | Letras + acentos + apóstrofos + hífens, máx 50 chars |
+| `displayName` | Alfanumérico + símbolos, máx 60 chars |
+| `bio` | Textarea, máx 500 chars |
+| `profileLocation` | Autocomplete Mapbox |
+| `avatar` | Upload com transient state |
+| **Línguas faladas** | Multi-select via `LanguagesField` |
+| **Social links** | Array via `SocialLinksField` (URL normalization) |
+| Custom user fields | Configurados em `userFields` |
+
+### LanguagesField
+Componente custom com lista de idiomas + bandeiras (biblioteca `flag-icons`):
+- Português 🇵🇹
+- English 🇬🇧
+- Español 🇪🇸
+- Français 🇫🇷
+- Italiano 🇮🇹
+- Deutsch 🇩🇪
+- etc.
+
+### SocialLinksField
+Lista editável de redes sociais. Plataformas suportadas:
+- Facebook
+- Instagram
+- Twitter
+- LinkedIn
+- TikTok
+- YouTube
+- Pinterest
+
+URL normalization automática (ex: `@user` → `https://instagram.com/user`).
+
+## AccountSettingsPage
+
+Página separada (`/account-settings`) para:
+- Mudar email
+- Mudar password
+- Configurações de privacidade
+- Eliminar conta (via `/api/delete-account`)
+
+## Sistema de Seguidores
+
+Ficheiros:
+- `src/ducks/follow.duck.js` — Redux state + thunks
+- `server/api/user-follow.js` — endpoint para registar follow + throttle 24h + email
+- `src/components/FollowAlert/FollowAlert.js` — toast in-app
+
+### Onde se vê
+- **Lista pública de seguidores** no perfil
+- **Página `/a-seguir` (FollowingPage)** — lista de quem o utilizador segue
+- **Sidebar do ProfilePage** — botão Seguir / A seguir
+- **UserCard na ListingPage** — botão Seguir
+
+### Funcionamento
+1. Carrega "Seguir"
+2. `toggleFollowAndSync(targetUserId)` no Redux
+3. POST `/api/user-follow` → servidor adiciona entry em `metadata` do target + envia email + cria toast
+4. Throttle: mesmo fã só notifica 1x por 24h
+
+## Custom user fields
+
+Configurados via `userFields` no `src/config/configUser.js`. Filtros aplicados:
+- `pub_Location` — excluído da edição para evitar duplicação com `profileLocation`
+
+Cada campo pode aparecer no perfil público e/ou na edição.

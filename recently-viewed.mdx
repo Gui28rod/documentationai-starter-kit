@@ -1,0 +1,68 @@
+---
+title: "Recentemente Vistos"
+description: "Carrossel de últimos anúncios visitados pelo utilizador."
+---
+
+# Recentemente Vistos
+
+Carrossel que mostra os últimos anúncios que o utilizador visitou. Persistido entre sessões.
+
+## Ficheiros
+
+- `src/ducks/recentlyViewed.duck.js` — Redux slice (Redux Toolkit)
+- `src/components/RecentlyViewedSection/RecentlyViewedSection.js` — componente visual
+- `src/containers/RecentlyViewedPage/RecentlyViewedPage.js` — página dedicada com lista completa
+
+## Onde aparece
+
+- **Carrossel próprio** (`RecentlyViewedSection`) com scroll horizontal e setas left/right
+- Renderizado em vários contextos (e.g. abaixo da ListingPage, possível na homepage)
+- **Página dedicada** `/vistos-recentemente` (ou similar) com lista completa
+
+## Persistência
+
+| Estado do utilizador | Onde guarda |
+|---|---|
+| **Guest (não logado)** | `sessionStorage` chave `rv_session` — sobrevive a refresh mas limpa ao fechar a aba |
+| **Logged-in** | Server-side em `currentUser.privateData.recentlyViewed` via SDK |
+
+### OAuth bridge
+Para não perder histórico durante o login: chave temporária `rv_prelogin` salva entries pré-login. Após login bem-sucedido, o conteúdo é puxado para o servidor e a chave é limpa.
+
+## Limites e expiração
+
+- **`MAX_RECENTLY_VIEWED = 20`** — máximo de entries guardadas
+- **`EXPIRY_MS = 30 dias`** — entries mais antigas são purgadas
+
+## Lógica de adição
+
+Quando o utilizador abre uma `ListingPage`:
+
+```
+addToRecentlyViewedAndSync(listingId)
+  → adiciona à lista local (Redux)
+  → se logged-in: syncRecentlyViewedToServer()
+  → se guest: persiste em sessionStorage
+```
+
+## Merge cross-device
+
+Quando o utilizador faz login num novo dispositivo:
+- Carrega do servidor
+- Faz merge com entries pré-login (se houver)
+- Resolve duplicados por `listingId`, mantendo o timestamp **mais recente**
+
+## CSS
+
+- `src/components/RecentlyViewedSection/RecentlyViewedSection.module.css`
+- Setas left/right desativadas quando chega ao limite do scroll
+- Card wrapper: flex dinâmico
+  - Mobile: ~1.8 cards visíveis
+  - Desktop: até 6 cards
+- Scroll suave (`scroll-behavior: smooth`)
+
+## Bug conhecido
+
+Há uma memória [`project_recently_viewed_fix`](../../../memory/project_recently_viewed_fix.md) que documenta:
+- O fetch é **incondicional ao mount**
+- Timing do Redux: gating em `recentlyViewedIds.length` quebrou em momento — não fazer isso de novo

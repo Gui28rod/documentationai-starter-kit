@@ -1,0 +1,94 @@
+---
+title: "Avaliações (Reviews)"
+description: "Sistema de reviews — rating por listing, por utilizador, e tradução."
+---
+
+# Avaliações (Reviews)
+
+A V1H usa o sistema nativo de reviews do Sharetribe, com adições próprias.
+
+## Quando aparecem
+
+Depois de uma transação chegar ao estado `COMPLETED`, **ambas as partes** podem deixar review:
+- **Customer → Provider** (tipo `ofProvider`) — review do anfitrião/serviço
+- **Provider → Customer** (tipo `ofCustomer`) — review do guest
+
+Período: até X dias após a transação terminar (configurado no Sharetribe Console).
+
+## Rating por listing
+
+Mostrado em:
+- **ListingCard** (carrossel, search results)
+- **ListingPage** (topo do OrderPanel, secção de reviews)
+
+Cálculo: média de todas as reviews `ofProvider` desse listing. Ficheiro: `src/ducks/ratings.duck.js`, função `fetchListingRating`.
+
+## Rating por utilizador
+
+Mostrado em:
+- **Sidebar do ProfilePage** (formato ★ 3.1 (7 avaliações))
+- **UserCard na ListingPage** (inline meta line)
+
+### IMPORTANTE — só lado cliente
+A média do utilizador agrega **apenas reviews `type: 'ofCustomer'`** — i.e. reviews recebidas como **guest**, não como anfitrião.
+
+**Razão**: as chefes V1H decidiram em 2026-05 que misturar host + customer distorce a média. Querem que o número reflita só comportamento como guest. Ver [Decisões Importantes](decisoes-importantes).
+
+Implementação: filtro client-side em `fetchUserRating` ([`ratings.duck.js`](https://github.com/Gui28rod/v1h---testes-dev)):
+
+```js
+const customerReviews = all.filter(
+  r => r?.attributes?.type === 'ofCustomer'
+);
+```
+
+## Componente Reviews
+
+Ficheiro: `src/components/Reviews/Reviews.js`
+
+Renderiza lista. Cada review:
+- **Avatar** + **displayName** do autor
+- **Rating** em estrelas (⭐)
+- **Data** formatada (ex: "abril de 2026")
+- **Texto** do comentário
+- **Botão "Traduzir"** integrado (`TranslateButton`)
+
+### Tradução por review
+Cada review tem o seu próprio toggle "Traduzir / Ver original":
+- Aproveita o componente `TranslateButton` (igual à descrição)
+- Cache local — toggle back-and-forth sem re-hit API
+- Idioma alvo = locale do topbar (PT ou EN)
+
+## ReviewForm
+
+Ficheiro: `src/containers/TransactionPage/ReviewForm/ReviewForm.js`
+
+Aparece quando uma transação chega a `COMPLETED`:
+- **Rating** (1-5 estrelas)
+- **Comentário** (textarea)
+- Submit → Sharetribe SDK `reviews.create`
+
+## Pedido automático de review
+
+Após `COMPLETED`, ambas as partes recebem:
+- **Email automático** do Sharetribe (configurado no Console)
+- **Notificação no inbox**
+
+Após review enviado, o **FeedbackPromptModal** abre opcionalmente (NPS interno V1H, não relacionado com Sharetribe).
+
+## Cron de notificação de reviews
+
+[`notifyExtraAlertsJob`](cron-jobs) deteta reviews novas e:
+- Cria toast in-app `review-received` para o subject
+- **Envia email imediato** para o subject (via Resend)
+- Cria toast `followed-listing-review` para os seguidores do subject (excluindo o autor da review)
+
+## Recompute rating endpoint
+
+Existe endpoint admin: `POST /api/recompute-listing-rating` — recalcula a média de um listing manualmente (útil se algum dado inconsistente). Ficheiro: `server/api/recompute-listing-rating.js`.
+
+## Limitações
+
+- **Não há rating de host** separado — o rating "de host" foi rejeitado pelas chefes
+- **Não se pode editar review** depois de submetido
+- **Não se pode apagar review** sem ir ao Sharetribe Console (admin)

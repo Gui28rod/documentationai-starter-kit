@@ -1,11 +1,11 @@
 {
-  "name": "Starter Kit",
+  "name": "Venue1Hub",
   "colors": {
     "light": {
-      "brand": "#F97316"
+      "brand": "#BAA38A"
     },
     "dark": {
-      "brand": "#FDBA74"
+      "brand": "#BAA38A"
     }
   },
   "navigation": {
@@ -15,8 +15,8 @@
         "icon": "book",
         "groups": [
           {
-            "group": "V1H",
-            "icon": "rocket",
+            "group": "Sobre o Projeto",
+            "icon": "info",
             "pages": [
               {
                 "title": "Introdução",
@@ -27,7 +27,99 @@
                 "title": "Tecnologia",
                 "path": "quickstart",
                 "icon": "zap"
+              }
+            ]
+          },
+          {
+            "group": "Páginas do Site",
+            "icon": "layout",
+            "pages": [
+              {
+                "title": "Homepage",
+                "path": "homepage"
               },
+              {
+                "title": "Topbar",
+                "path": "topbar"
+              },
+              {
+                "title": "Footer",
+                "path": "footer"
+              },
+              {
+                "title": "Página de um Anúncio",
+                "path": "listing-page"
+              },
+              {
+                "title": "Pesquisa e Filtros",
+                "path": "pesquisa"
+              },
+              {
+                "title": "Perfis de Utilizador",
+                "path": "perfis"
+              },
+              {
+                "title": "Recentemente Vistos",
+                "path": "recently-viewed"
+              }
+            ]
+          },
+          {
+            "group": "Flows Principais",
+            "icon": "git-branch",
+            "pages": [
+              {
+                "title": "Autenticação",
+                "path": "auth"
+              },
+              {
+                "title": "Edit Listing Wizard",
+                "path": "edit-listing-wizard"
+              },
+              {
+                "title": "Reservas e Inbox",
+                "path": "reservas"
+              },
+              {
+                "title": "Pagamentos (Stripe)",
+                "path": "pagamentos"
+              },
+              {
+                "title": "Avaliações (Reviews)",
+                "path": "avaliacoes"
+              }
+            ]
+          },
+          {
+            "group": "Sistemas Transversais",
+            "icon": "layers",
+            "pages": [
+              {
+                "title": "Notificações (completo)",
+                "path": "notificacoes-completas"
+              },
+              {
+                "title": "Cookies & Privacidade",
+                "path": "cookies-privacidade"
+              },
+              {
+                "title": "Tradução (i18n + MyMemory)",
+                "path": "traducao"
+              },
+              {
+                "title": "Modo Escuro & Theming",
+                "path": "modo-escuro"
+              },
+              {
+                "title": "Mobile & PWA",
+                "path": "mobile-pwa"
+              }
+            ]
+          },
+          {
+            "group": "Referência Técnica",
+            "icon": "code",
+            "pages": [
               {
                 "title": "Funcionalidades",
                 "path": "funcionalidades"
@@ -43,7 +135,13 @@
               {
                 "title": "Variáveis de Ambiente",
                 "path": "variaveis-de-ambiente"
-              },
+              }
+            ]
+          },
+          {
+            "group": "Estado do Projeto",
+            "icon": "flag",
+            "pages": [
               {
                 "title": "Pendências para Go-Live",
                 "path": "pendencias-para-go-live"
@@ -61,82 +159,6 @@
                 "path": "proximas-tarefas"
               }
             ]
-          }
-        ]
-      },
-      {
-        "tab": "API Reference",
-        "icon": "code",
-        "groups": [
-          {
-            "group": "Overview",
-            "icon": "file-text",
-            "pages": [
-              {
-                "title": "Authentication",
-                "path": "authentication",
-                "icon": "lock"
-              }
-            ]
-          },
-          {
-            "group": "Sample Endpoints",
-            "openapi": "openapi.yaml"
-          }
-        ]
-      },
-      {
-        "tab": "Help Center",
-        "icon": "help-circle",
-        "pages": [
-          {
-            "title": "Help Center",
-            "path": "help-center",
-            "icon": "home"
-          },
-          {
-            "group": "FAQs",
-            "icon": "help-circle",
-            "expandable": false,
-            "pages": [
-              {
-                "title": "Documentation Source",
-                "path": "help-center/faq/getting-started"
-              }
-            ]
-          },
-          {
-            "group": "Troubleshooting",
-            "icon": "alert-triangle",
-            "expandable": false,
-            "pages": [
-              {
-                "title": "Page Missing in Sidebar",
-                "path": "help-center/troubleshooting/install-error"
-              }
-            ]
-          },
-          {
-            "group": "Guides",
-            "icon": "book-open",
-            "expandable": false,
-            "pages": [
-              {
-                "title": "Create Your First Page",
-                "path": "help-center/guides/setup-project"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Changelog",
-        "icon": "clock",
-        "pages": [
-          {
-            "title": "Changelog",
-            "path": "changelog",
-            "icon": "history"
           }
         ]
       }

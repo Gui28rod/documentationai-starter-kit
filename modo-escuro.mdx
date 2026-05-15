@@ -1,0 +1,109 @@
+---
+title: "Modo Escuro e Theming"
+description: "Sistema de modo escuro, cores e padrões visuais."
+---
+
+# Modo Escuro & Theming
+
+A V1H tem **modo claro** (default) + **modo escuro** alternável pelo topbar.
+
+## Ficheiro principal
+
+`src/styles/landingDark.css` (~200+ linhas) — overrides globais para modo escuro.
+
+## Toggle
+
+Componente `DarkModeToggle` no `TopbarDesktop`. Ao clicar:
+1. Alterna estado em `useDarkMode()` context
+2. Adiciona/remove **2 atributos** no `<body>`:
+   - `data-landing-dark="true"` — overrides de **CSS variables**
+   - `data-dark-mode="true"` — overrides **hardcoded patches**
+3. Persiste preferência via `localStorage` (se consent "preferences" dado)
+
+## Estratégia dual-attribute
+
+### `data-landing-dark` (variáveis CSS)
+Para componentes que usam **variáveis** (`var(--colorWhite)`, etc.):
+- Em modo escuro, `--colorWhite` passa a ser `#1e1e1e`
+- Todos os componentes que herdam reagem automaticamente
+
+### `data-dark-mode` (patches hardcoded)
+Para componentes que têm **cores hardcoded** (`background-color: #ffffff` literal):
+- Selector `body[data-dark-mode] [class*="X"] { ... !important }`
+- Override manual por componente
+
+## Cores principais
+
+### Modo claro
+| Uso | Cor | Hex |
+|---|---|---|
+| Texto principal | Castanho escuro | `#5C3317` |
+| Texto secundário | Castanho médio | `#7C6350` |
+| Acento | Castanho dourado | `#BAA38A` |
+| Fundo cards | Cream claro | `#f0ece6` |
+| Texto preto | Cinza muito escuro | `#2E2E2E` |
+
+### Modo escuro
+| Uso | Cor | Hex |
+|---|---|---|
+| Fundo principal | Cinza muito escuro | `#1e1e1e` |
+| Texto principal | Cream claro | `#f0ece6` |
+| Hover/acento | Castanho dourado | `#BAA38A` |
+| Bordas/separadores | Cinza médio | `#3a3a3a` |
+| Dropdowns/cards | Cinza escuro | `#2a2a2a` |
+
+## Componentes patched
+
+Lista resumida de componentes com overrides em `landingDark.css`:
+
+- **Topbar** (background + links + language switcher + dark toggle)
+- **Footer** (mantém escuro em ambos os modos)
+- **CookieConsent** (banner + modal)
+- **SearchPage** (filters, list, map controls)
+- **ListingPage** (description, sidebar)
+- **OrderPanel** (form, buttons)
+- **ProfilePage** (sidebar)
+- **Notifications** (badges, dots)
+- **FeedbackPromptModal**
+- **WhyUs cards** (mantêm look polaroid)
+- **TranslateButton** (cor + hover)
+
+## Hero search bar
+
+**Exceção**: a barra de busca do hero **mantém inputs brancos** em modo escuro (decisão visual — fica mais legível sobre o background).
+
+## Logo em modo escuro
+
+Logo PNG preto é invertido via CSS filter:
+```css
+body[data-dark-mode] [class*="logoImage"] {
+  filter: invert(1) !important;
+}
+```
+
+Resultado: logo branco em modo escuro automaticamente.
+
+## CSS Modules vs landingDark.css
+
+A maioria dos componentes usa **CSS Modules** (`*.module.css`) com classes hashed (`MyComponent_root__abc123`).
+
+Para o `landingDark.css` (global) referenciar essas classes, usa o seletor `[class*="MyComponent_root"]` (matches qualquer hash).
+
+Cuidado: `[class*="X"]` matches **substring** — pode apanhar classes não desejadas. Para precisão, usa `[class*="X__"]` (com duplo underscore antes do hash) ou `[class*="X_root"]`.
+
+## Adicionar suporte dark a um novo componente
+
+1. Identifica as cores hardcoded
+2. Adiciona override em `landingDark.css`:
+   ```css
+   body[data-dark-mode] [class*="MyComponent_root"] {
+     background: #1e1e1e !important;
+     color: #f0ece6 !important;
+   }
+   ```
+3. Testa o componente em ambos os modos
+4. Para hovers, adiciona `:hover` no selector
+
+## Pendência
+
+Há vários componentes que ainda não foram patched para modo escuro — visíveis ao testar página por página. Pode ser melhorado iterativamente.

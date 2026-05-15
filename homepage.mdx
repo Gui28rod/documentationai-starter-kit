@@ -1,0 +1,59 @@
+---
+title: "Homepage / Landing Page"
+description: "Estrutura, secções e funcionamento da página principal da V1H."
+---
+
+# Homepage / Landing Page
+
+A página principal do v1h.com renderizada via **PageBuilder** (sistema universal de páginas do Sharetribe).
+
+## Ficheiros principais
+
+- `src/containers/LandingPage/LandingPage.js` — container que orquestra a página (Redux, assets)
+- `src/containers/PageBuilder/PageBuilder.js` — motor universal de renderização
+- `src/config/landingPageConfigExamples.js` — exemplos de secções
+
+## Sistema PageBuilder
+
+O conteúdo da homepage **não é hardcoded** no código — vem do **Sharetribe Console** ("hosted assets"). Lá as chefes podem editar texto, imagens, secções sem programador.
+
+Cada **section** tem um `sectionType` (hero, carousel, listings, etc.) mapeado para um componente React em `src/containers/PageBuilder/SectionBuilder/`. Blocos dentro de cada secção renderizam via Field + Primitives (heading, paragraph, image, link, CTA).
+
+Se o asset falhar a carregar → fallback page.
+
+## Secções principais
+
+| Secção | Tipo | O que faz |
+|---|---|---|
+| **Hero** | `SectionHero` | Carrossel com múltiplos backgrounds + barra de busca rápida (`HeroSearchBar`) |
+| **Carousel Categorias** | `SectionCarousel` | Layout 3-4 colunas, scroll horizontal com setas, 9 categorias |
+| **Highlighted Listing** | `SectionHighlightedListing` | Destaque de um anúncio específico com rating; **injetado programaticamente** logo após o hero |
+| **Why Us** | `SectionWhyUs` | Cards com benefícios da plataforma |
+| **Listings grid** | `SectionListings` | Grelha dinâmica com filtros (3-4 colunas conforme viewport) |
+| **Landing Map** | `SectionLandingMap` | Mapa interativo de localizações |
+| **Slideshow / Mobile Promo** | `SectionSlideshow`, `SectionMobilePromo` | Banners promocionais |
+
+## Funcionalidades especiais
+
+- **Busca rápida** (`HeroSearchBar`) integrada no hero
+- **Overlay de modo escuro** (contexto global)
+- **Normalização de PT** — converte ortografia pré-1990 para moderna nos textos vindos do CMS
+- **Em-dash cleanup** — substitui `" — "` por `", "` em textos do CMS para leitura mais limpa
+- **Injeção programática** do "Highlighted Listing" logo após o hero (não vem do CMS)
+- **Scroll automático** para âncoras `#espacos-disponiveis` e CTAs para `/inbox`
+
+## Highlighted vs Featured Listings
+
+| | Highlighted | Featured |
+|---|---|---|
+| **Onde** | Logo após o hero, **único** | Carrossel/grid em qualquer secção |
+| **Seleção** | Ação manual do utilizador "Destacar Anúncio" (página própria) | `listingSelection: newest / queryString / manual admin` |
+| **Persistência** | `localStorage` chave `sharetribe_highlighted_listings` (JSON array) | Server-side via SDK query |
+| **Duck** | `src/ducks/highlightedListings.duck.js` | `src/ducks/featuredListings.duck.js` |
+
+## CSS principais
+
+- `src/containers/PageBuilder/SectionBuilder/SectionHero/SectionHero.module.css`
+- `src/containers/PageBuilder/SectionBuilder/SectionListings/SectionListings.module.css`
+- `src/containers/PageBuilder/SectionBuilder/SectionHighlightedListing/SectionHighlightedListing.module.css`
+- `src/containers/PageBuilder/PageBuilder.module.css` (wrapper universal)

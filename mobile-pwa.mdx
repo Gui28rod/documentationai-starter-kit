@@ -1,0 +1,131 @@
+---
+title: "Mobile & PWA"
+description: "Design responsivo, mobile category ticker, service worker e install prompt."
+---
+
+# Mobile & PWA
+
+## Design responsivo
+
+A V1H usa **CSS Modules** com media queries para adaptar entre desktop e mobile.
+
+### Breakpoints principais
+
+| Breakpoint | Limite | Onde |
+|---|---|---|
+| Mobile | `< 768px` | `@media (--viewportMedium)` aplica a partir daqui |
+| Small | `< 480px` | `@media (max-width: 480px)` em alguns componentes |
+| Topbar mobile | `< 1024px` | `MAX_MOBILE_SCREEN_WIDTH` (TopbarMobileNav vs TopbarDesktop) |
+
+### Padrões usados
+
+- **Mobile-first** em alguns componentes (CSS base aplica a mobile, media query adiciona desktop)
+- **Desktop-first** noutros (CSS base aplica a desktop, media query reduce para mobile)
+- Inconsistente — herdado do Sharetribe Web Template
+
+## Mobile Category Ticker
+
+Ficheiro: `src/containers/TopbarContainer/Topbar/MobileCategoryTicker/`
+
+**O que é**: carrossel horizontal acima da topbar mobile com as 9 categorias.
+
+**Funcionalidades**:
+- Drag horizontal + momentum scroll
+- Ícones de categorias dinâmicos
+- Mapas PT/EN embutidos (`PT_LABELS`, `EN_LABELS`)
+- Click em categoria → search page filtrada
+
+## TopbarMobileNav
+
+Ficheiro: `src/containers/TopbarContainer/Topbar/TopbarMobileNav/`
+
+Substitui `TopbarDesktop` em telas pequenas. Tem:
+- Logo centrado
+- Botão menu hambúrguer (esquerda)
+- Botão de procurar (direita)
+- Avatar pequeno
+
+Menu hambúrguer abre `TopbarMobileMenu` (side panel) com todos os links do profile dropdown.
+
+## PWA (Progressive Web App)
+
+### Service Worker
+
+Ficheiro: `public/service-worker.js` (~31 linhas)
+
+```js
+const CACHE_NAME = 'v1hub-pwa-shell-v1';
+```
+
+**Handlers**:
+- `install` — cria cache
+- `activate` — limpa caches antigos (de versões anteriores)
+- `fetch` — **network-first** (não pre-cache, porque assets mudam frequentemente em dev)
+
+**Razão de ser**: o service worker é **requisito para o browser permitir "Install App"**. Não tem grandes funcionalidades offline ainda — pode ser estendido no futuro.
+
+### Web Manifest
+
+Ficheiro: `public/manifest.json` (gerado dinamicamente via `webmanifestResourceRoute`)
+
+Define:
+- Nome ("Venue1Hub")
+- Ícones (192px, 512px, etc.)
+- Theme color
+- Display mode (`standalone` — abre sem chrome do browser)
+- Start URL
+
+### Install Prompt
+
+Componente `PwaInstallButton` no footer. Comportamento:
+- Escuta `beforeinstallprompt` event do browser
+- Quando disparado, mostra botão "Instalar App"
+- Click → mostra prompt nativo do browser
+- Após instalação, incrementa contador `/api/pwa-counter/increment`
+
+## PWA Counter
+
+Ficheiro: `server/data/pwa-counter.json`
+```json
+{"count": 1}
+```
+
+Endpoint:
+- `GET /api/pwa-counter` — devolve o número
+- `POST /api/pwa-counter/increment` — soma 1
+
+### Bug conhecido
+Este ficheiro está **trackeado pelo git** → reseta a cada `git pull`. Soluções propostas:
+- Adicionar ao `.gitignore`
+- Migrar para `metadata` Sharetribe
+
+Ver [Problemas Conhecidos](problemas-conhecidos).
+
+## Decisão Mobile App nativa
+
+Pendente: usar **PWA** ou desenvolver app nativa com **Capacitor**?
+
+| | PWA | Capacitor |
+|---|---|---|
+| **Custo** | €0 | €124 + Apple Developer + Google Play |
+| **Distribuição** | Browser ("Install App") | App Stores (mais visibilidade) |
+| **Funcionalidades nativas** | Limitadas | Acesso a camera, push notifications, etc. |
+| **Manutenção** | 1 codebase (web) | 1 codebase (Capacitor) + 2 reviews stores |
+
+Decisão: pendente das chefes. Ver [Pendências para Go-Live](pendencias-para-go-live).
+
+## Optimizações mobile aplicadas
+
+- Imagens responsivas com `srcset` (variantes scaled-small/medium/large)
+- Lazy load de iframes (YouTube, Mapbox)
+- Toggle de filtros em modal cheio (em vez de sidebar)
+- Bottom action bar fixa no fundo
+- Touch events em vez de mouse para drag (Edit Listing Photos)
+- Carrossel horizontal swipeable
+
+## Performance
+
+- **First Contentful Paint** target < 1.5s
+- **Largest Contentful Paint** target < 2.5s
+- Imagens otimizadas pelo Sharetribe Image Variants
+- Code splitting via `loadable-components` (route-based)

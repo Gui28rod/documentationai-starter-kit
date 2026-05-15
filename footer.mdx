@@ -1,0 +1,75 @@
+---
+title: "Footer"
+description: "Rodapé do site — links, newsletter, social, PWA install."
+---
+
+# Footer
+
+Rodapé fixo no fundo de todas as páginas.
+
+## Ficheiros principais
+
+- `src/containers/FooterContainer/FooterContainer.js` — lazy-loads o SectionBuilder com asset `pageAsset.footer`
+- `src/containers/PageBuilder/SectionBuilder/SectionFooter/SectionFooter.js` — renderização real
+
+## Estrutura
+
+### Brand (esquerda)
+- **Logo branco** V1H
+- Tagline: "Venue1Hub - O seu principal parceiro de eventos"
+
+### Links em 3 colunas
+
+| Coluna | Links |
+|---|---|
+| **Plataforma** | Como funciona, Procurar anúncios, Publicar anúncio, FAQ (perguntas frequentes) |
+| **Empresa** | Sobre nós, Contacto *(pendente: Imprensa, Trust & Safety, Carreiras — chefes decidirem)* |
+| **Suporte** | Termos de serviço, Política de privacidade, Política de cookies, **Definições de cookies** *(abre o modal cookie consent)* |
+
+### Newsletter Signup
+
+- Input de email + botão "Subscrever" / "Subscribe"
+- Estados visuais: idle → loading → success / error
+- Endpoint: `POST /api/newsletter` com `{email}` em JSON
+- Success: mostra ✓ "Subscrito com sucesso! Obrigado."
+
+### Social Media Links
+
+Ícones com **hover effect** (troca de imagem normal/hover):
+- Facebook (`@venue1hub`)
+- Instagram (`@venue1hub`)
+- LinkedIn
+- TikTok
+- YouTube
+
+### Botão "Instalar App" (PWA)
+
+Componente `<PwaInstallButton />`. Posicionado no bottom, ao lado do copyright. Só aparece quando o browser suporta installation prompt e ainda não está instalada.
+
+### Botão "Voltar ao topo"
+
+Aparece no canto inferior direito após scroll. Comportamento `scroll-to-top`.
+
+## Newsletter externa — Substack
+
+Em paralelo à newsletter integrada, a V1H tem **conta Substack** em `venue1hub.substack.com`. Pendente: adicionar link no footer apontando para lá.
+
+## Configurações de cookies
+
+O link **"Definições de cookies"** abre o modal `CookieConsent` em modo modal (`window.__v1hOpenCookiePrefs()`), permitindo ao utilizador rever/alterar consentimento por categoria.
+
+## CSS
+
+- `src/containers/PageBuilder/SectionBuilder/SectionFooter/SectionFooter.module.css`
+- Background: `#2E2E2E` (sempre escuro, mesmo em modo claro)
+- Texto: `#f5f0eb` (cream claro)
+- Grid layout:
+  - Mobile: 1 coluna
+  - Desktop: 2 colunas (520px brand + 1fr para links)
+- Newsletter em secção separada com styling próprio
+
+## Variabilidade via PageBuilder
+
+O footer é renderizado via PageBuilder com asset hosted no Sharetribe Console. As chefes podem **mudar texto e links sem programador** indo ao Console → Pages → footer.
+
+A estrutura visual (3 colunas, newsletter, social, PWA) é fixa no código mas os textos vêm do CMS.

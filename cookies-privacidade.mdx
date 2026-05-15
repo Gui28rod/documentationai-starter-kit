@@ -1,0 +1,104 @@
+---
+title: "Cookies & Privacidade"
+description: "Banner GDPR, modal de preferências, e gating de trackers."
+---
+
+# Cookies & Privacidade
+
+A V1H tem banner + modal GDPR-ready com 4 categorias separadas.
+
+## Ficheiro principal
+
+`src/components/CookieConsent/CookieConsent.js` (~320 linhas).
+
+## 4 categorias
+
+| Categoria | Descrição | Pode recusar? |
+|---|---|---|
+| **Essential** | Sessão, login, segurança | ❌ Sempre ativo (necessário) |
+| **Preferences** | Locale (PT/EN), modo escuro, recently viewed | ✅ |
+| **Analytics** | Google Analytics 4 (tráfego, comportamento) | ✅ |
+| **Marketing** | Pixels Meta / Google Ads (remarketing) | ✅ |
+
+## Banner inicial
+
+Aparece na **1ª visita** ou quando o utilizador faz reset de versão. Posição: bottom slide-in.
+
+Conteúdo:
+- Texto resumido em PT ou EN (`TEXT.pt` / `TEXT.en`)
+- Botões: **"Aceitar tudo"**, **"Recusar tudo"**, **"Personalizar"**
+
+## Modal de preferências
+
+Aparece quando o utilizador carrega "Personalizar" no banner, ou pelo footer ("Definições de cookies").
+
+Conteúdo:
+- Lista das 4 categorias
+- Toggle por categoria (custom `<Toggle>` component com `aria-checked` acessível)
+- Texto explicativo de cada uma
+- Botão "Guardar preferências"
+
+## Storage
+
+- `localStorage.v1h_cookie_consent` — JSON com versão + timestamp + escolhas
+- Não usa cookie real (ironia: a configuração de cookies guarda-se em localStorage)
+
+## Versioning
+
+```js
+const CONSENT_VERSION = 1;
+```
+
+Quando se adiciona um novo tracker ou se muda a tabela de cookies, incrementa-se este número. Resultado: todos os utilizadores são forçados a re-consentir.
+
+## Gating do Google Analytics
+
+Ao **aceitar analytics**:
+- Se `!window.gtag` (GA não injetado) → recarrega a página para injetar
+- Se já injetado → ativa eventos
+
+Ao **recusar analytics**:
+- GA script não é injetado de todo
+- Eventos não são enviados
+
+## Hook global
+
+```js
+window.__v1hOpenCookiePrefs()
+```
+
+Permite a qualquer componente (especialmente o footer) abrir o modal de cookies.
+
+## Event dispatch
+
+Quando o utilizador muda consentimento:
+```js
+window.dispatchEvent(new CustomEvent('v1h:consentChanged'))
+```
+
+Outros scripts podem escutar este event e reagir (ex: ativar/desativar pixels Meta).
+
+## Pendências GDPR (antes do go-live)
+
+Ver [Pendências para Go-Live](pendencias-para-go-live):
+
+- ✏️ Atualizar Termos de Serviço com:
+  - NIF da empresa
+  - Capital social
+  - Número de registo na conservatória
+  - Percentagem de comissão V1H
+  - DPO nomeado e morada/contacto
+- ✏️ Atualizar Política de Privacidade com mesma info
+- ✏️ Confirmar morada oficial da empresa
+- ✏️ Atualizar **tabela de cookies** se forem adicionados novos trackers (Meta Pixel, etc.)
+
+**Atenção**: DL 7/2004 implica multa se Termos/Privacidade estiverem desatualizados quando o site for público. **Bloqueante** de go-live.
+
+## Estrutura visual
+
+Banner: slide-in bottom, fundo escuro com texto branco, botões à direita.
+Modal: centrado, fundo branco/escuro consoante modo, lista vertical de categorias.
+
+## CSS
+
+`src/components/CookieConsent/CookieConsent.module.css` — animações slide-in, modal overlay, toggles.

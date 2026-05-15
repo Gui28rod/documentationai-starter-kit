@@ -1,0 +1,117 @@
+---
+title: "Notificações (completo)"
+description: "Sistema de notificações in-app, emails e badge — todos os 5+ tipos."
+---
+
+# Notificações — Sistema Completo
+
+A V1H tem 3 camadas de notificações: **toasts in-app**, **badge no topbar** e **emails**.
+
+## Toasts in-app (5 tipos)
+
+Todos no canto inferior direito. Cap visual de **6 banners simultâneos**; o resto fica em fila e desliza ao serem dispensados.
+
+| Tipo | Ficheiro Duck | Trigger | Throttle |
+|---|---|---|---|
+| Favoritou anúncio ❤️ | `favoriteAlerts.duck.js` | Alguém adiciona o teu anúncio aos favoritos | 24h por fã/listing |
+| Começou a seguir-te 👤+ | `followAlerts.duck.js` | Alguém te segue | 24h por fã |
+| Nova pesquisa guardada 🔍 | `savedSearchAlerts.duck.js` | Nova listing matched | Check 5min |
+| Anúncio novo de quem segues 📢 | `notifications.duck.js` | Alguém que segues publica | Check 5min |
+| Extra alerts (4 sub-tipos) | `extraAlerts.duck.js` | Edits + reviews (ver abaixo) | 1h |
+
+### Extra Alerts — 4 sub-tipos
+
+Adicionados em 2026-05 via `extraAlerts.duck.js` + cron `notifyExtraAlertsJob`:
+
+1. **followed-listing-edit** — anúncio de quem sigo foi editado
+2. **favorite-listing-edit** — anúncio que favoritei foi editado
+3. **review-received** ⭐ — recebi avaliação (também envia **email imediato**)
+4. **followed-listing-review** — anúncio de quem sigo recebeu avaliação (excluindo se a review for minha)
+
+## Componentes visuais
+
+- `src/components/FavoriteAlert/`
+- `src/components/FollowAlert/`
+- `src/components/SavedSearchAlert/`
+- `src/components/NewListingNotification/`
+- `src/components/ExtraAlerts/` — unificado para os 4 sub-tipos
+
+Todos têm:
+- Ícone + texto bilingue (PT/EN consoante `useLocale()`)
+- Botão `×` para dismiss individual
+- Click no banner → navega para o listing/perfil
+- `MAX_VISIBLE = 6` — extras ficam em fila
+
+## Dismiss per-entry (sincronização)
+
+Cada toast tem dismiss próprio que sincroniza entre dispositivos:
+
+| Endpoint | Body | Função |
+|---|---|---|
+| `POST /api/dismiss-favorite-alerts` | `{listingId}` | Remove só esse listing dos alerts |
+| `POST /api/dismiss-follow-alerts` | `{fanUserId}` | Remove só esse fã dos alerts |
+| `POST /api/dismiss-extra-alert` | `{id}` | Remove uma entrada específica |
+
+Sem body → "limpar tudo" (legacy fallback).
+
+## Polling client-side
+
+Cada duck:
+- Fetch `currentUser` a cada **60 segundos**
+- Lê `metadata.unseen*Alerts`
+- Filtra contra `dismissedIds` da sessão (anti-flicker)
+- Dispatcha para Redux → componente re-render
+
+## Badge no Topbar
+
+Não é toast — é o **número vermelho** no ícone Inbox.
+
+Conta:
+- `currentUserSaleNotificationCount` (reservas novas como host)
+- `currentUserOrderNotificationCount` (pedidos novos como customer)
+- `currentUserDMNotificationCount` (mensagens diretas)
+
+Cap visual "4+" se > 4. Logic em [`user.duck.js`](https://github.com/Gui28rod/v1h---testes-dev).
+
+## Emails (cron jobs)
+
+3 jobs em `server/jobs/`:
+
+### `notifyFavoritesJob`
+- Cron: `0 8 * * *` (diário às 08:00)
+- Envia email "Resumo diário de favoritos" — top 10 listings que tiveram favoritos no dia anterior
+- Para: anfitriões
+
+### `notifySavedSearchesJob`
+- Cron: `*/5 * * * *` (cada 5 min)
+- Envia email "X novos resultados para a tua pesquisa Y"
+- Para: customers com saved searches
+
+### `notifyExtraAlertsJob` (novo, 2026-05)
+- Cron: `*/5 * * * *` (cada 5 min)
+- Detecta:
+  - Listings editados → cria alerts para seguidores + quem favoritou
+  - Reviews novas → cria alerts para subject + seguidores do subject
+- **Envia email imediato para `review-received`** (não acumula em digest)
+- Throttle 1h por (utilizador, kind, targetId)
+
+## Emails nativos Sharetribe
+
+Para além dos crons custom, o Sharetribe Console envia emails nativos para:
+- Nova reserva pendente
+- Reserva aceite/recusada
+- Mensagem nova
+- Review solicitado
+- Etc.
+
+Configurados em **Sharetribe Console → Email notifications** (não no nosso código).
+
+## Anti-spam (throttle)
+
+Todos os toasts in-app têm throttle 24h por combinação `(fã, alvo)` ou 1h para edits/reviews:
+- Mesma pessoa não dispara 2 vezes pela mesma ação em pouco tempo
+- Implementado server-side via `metadata.extraAlertsThrottle`
+
+## Email i18n (parcial)
+
+Os emails atualmente respeitam `user.publicData.locale` (PT ou EN). Pendência: persistência fiável do locale do topbar → requer upgrade Sharetribe Plus. Ver [Problemas Conhecidos](problemas-conhecidos).

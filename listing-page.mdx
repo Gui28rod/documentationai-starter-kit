@@ -1,0 +1,131 @@
+---
+title: "Página de um Anúncio"
+description: "Estrutura, secções e funcionalidades da página de um listing individual."
+---
+
+# Página de um Anúncio (Listing Page)
+
+A página apresentada quando o utilizador carrega num anúncio. Ficheiro principal: [`src/containers/ListingPage/ListingPageCarousel.js`](https://github.com/Gui28rod/v1h---testes-dev) (~960 linhas).
+
+## Layout geral
+
+### Desktop
+- **Coluna esquerda**: galeria de fotos/vídeo
+- **Coluna direita**: OrderPanel (preço, reserva, descrição com "Ver mais"/Traduzir)
+- Rating + localização aparecem no topo do OrderPanel
+
+### Mobile
+- Galeria em cima
+- Título, preço e localização logo a seguir
+- Botões CTA: "Enviar mensagem" + "Reservar/Comprar"
+- Descrição truncada com toggle "Ver mais" + botão "Traduzir"
+
+## Galeria de Imagens
+
+Componente: `ListingImageGallery`. Características:
+
+- **Carrossel responsivo** com suporte a vídeo YouTube como último slide (se o host preencheu `publicData.youtubeUrl`)
+- **Thumbnails em carrossel** abaixo com scroll automático
+- **Modal fullscreen** com grid de thumbnails à direita (estilo eBay)
+- **Navegação**: clique nas thumbs, setas laterais, teclas ←/→, Esc para fechar
+- **Lazy-load do iframe YouTube** — só monta quando o slide está ativo (evita som a tocar em background)
+- **Aspect ratio dinâmico**: 16:9 para vídeos, calculado para fotos (máx 2:1 landscape, 4:3 portrait)
+- **Drag-to-reorder** disponível no Edit Listing, não no view público
+
+## Secções da página
+
+### SectionGallery
+Wrapper da `ListingImageGallery`. Passa as imagens com variantes `scaled-small/medium/large/xlarge`.
+
+### SectionMapMaybe
+- Mapa **Mapbox** com coordenadas
+- Coordenadas **obfuscadas** se `fuzzy.enabled` (raio aleatório à volta do real)
+- Começa estático (clicável); ao clicar ativa modo interativo (pan/zoom)
+- Mostra endereço completo + nome do edifício
+
+### SectionAuthorMaybe
+Secção "Sobre o autor" — contém o `UserCard` + modal de inquiry (mensagem ao host).
+
+### SectionReviews
+Lista de reviews com contagem. Mensagens fallback para "sem avaliações" ou erro de fetch.
+
+## OrderPanel (painel direito)
+
+Ficheiro: [`src/components/OrderPanel/OrderPanel.js`](https://github.com/Gui28rod/v1h---testes-dev) (~500+ linhas).
+
+### Mostra
+- Preço formatado + unitType ("por dia", "por hora", "fixo")
+- Tabs **"Reserva única"** vs **"Múltiplas reservas"** (quando aplicável)
+- Form dinâmico (escolhido conforme `transactionProcessAlias`):
+  - `BookingDatesForm` — datas
+  - `BookingTimeForm` — horas
+  - `BookingFixedDurationForm` — duração fixa
+  - `ProductOrderForm` — compra de produto
+  - `InquiryWithoutPaymentForm` — só pedido de info
+  - `NegotiationForm` — orçamento personalizado
+- Date pickers integrados com time slots; validação de disponibilidade em real-time
+- Botão submit dinâmico: "Reservar", "Comprar", "Enviar Pedido", "Fazer Oferta"
+
+### Amenity chips
+Chips visuais (Wi-Fi, Casa de banho, Acessibilidade, etc.) gerados a partir dos custom fields multi-enum do listing.
+
+### Detail items
+Custom fields tipo `enum`, `long`, `boolean` apresentados com labels formatados (ex: "Número de pessoas: 79").
+
+### Descrição
+- Truncada por defeito com **"Ver mais"** → expande
+- Botão **"Traduzir"** ao lado (via `/api/translate` → MyMemory)
+- Botões ficam **inline** numa flex row, no canto inferior da descrição
+
+## UserCard / Sobre o Autor
+
+Ficheiro: `src/containers/ListingPage/UserCard/UserCard.js`.
+
+- **Avatar grande** + nome do anfitrião + ícone de localização (pin vermelho)
+- **Meta inline**: "Esteve online há Xd · Responde em ~Yh · N seguidores · ★ X.X (N avaliações)"
+- **Botões**:
+  - Enviar Mensagem (abre inquiry modal)
+  - A Seguir / Seguir (toggle follow)
+  - Denunciar utilizador (ReportUserModal)
+- **WhatsApp button** (se host tiver número configurado)
+- **Bio expandível** — truncada a 170 caracteres com link "Ver mais"
+- **Last online formatado**: "Online agora", "há X minutos", "há X horas", "há X dias" conforme timestamp
+
+## Reviews
+
+Componente: `src/components/Reviews/Reviews.js`. Cada review:
+
+- Avatar + displayName do autor
+- Rating em estrelas
+- Data formatada (ex: "abril de 2026")
+- Texto do comentário
+- **Botão "Traduzir"** integrado em cada review individualmente
+
+## Botões e Features
+
+- **Favorito (❤️)** — `FavoriteButton` com contador; desabilitado em listings próprios
+- **Partilhar** — `ShareButtons` (Facebook, WhatsApp, copiar link)
+- **Denunciar anúncio** — `ReportListingModal` com formulário + attachments
+- **Lista de espera** — `WaitlistButton` quando o stock está esgotado
+- **Badge da categoria** — ícone + label no canto superior esquerdo da galeria (escondido durante slide de vídeo)
+- **Heart de favoritos** — canto superior direito da galeria
+
+## Custom Fields (secção "Detalhes")
+
+Ficheiro: `src/containers/ListingPage/CustomListingFields.js`.
+
+Mostra automaticamente todos os custom fields configurados no Sharetribe Console:
+- `enum` — dropdowns simples (ex: tipo de espaço)
+- `multi-enum` — chips múltiplos (ex: comodidades)
+- `long` — números (ex: capacidade)
+- `boolean` — sim/não
+- `text` — texto livre
+
+**Filtrados** por `listingType` + `categoryLevel1` (campos só aparecem se aplicáveis à categoria).
+
+**Excluídos da vista pública**: `averageRating`, `reviewCount` (backend-only, mas Sharetribe marca como `isDetail` por defeito).
+
+## Bottom da página
+
+- **SimilarListingsSection** — carrossel de anúncios similares (mesma `categoryLevel1`)
+- **Recently Viewed** — adicionado via Redux (`addToRecentlyViewedAndSync` ao carregar a página)

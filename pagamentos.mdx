@@ -1,0 +1,98 @@
+---
+title: "Pagamentos (Stripe Connect)"
+description: "Stripe Connect, comissões, payouts e onboarding de anfitriões."
+---
+
+# Pagamentos
+
+A V1H usa **Stripe Connect** (modelo "Express") — o Stripe trata de toda a complexidade de KYC, anti-fraude e payouts; a V1H apenas medeia.
+
+## Ficheiros principais
+
+- `src/containers/StripePayoutPage/StripePayoutPage.js` — página principal
+- `src/containers/StripePayoutPage/StripePayoutPage.duck.js` — Redux slice
+- `src/containers/StripePayoutPage/StripePayoutPage.module.css`
+- Componentes: `StripeConnectAccountStatusBox`, `StripeConnectAccountForm`
+
+## Modelo
+
+1. **Cliente** paga V1H (Stripe Connect Platform)
+2. **V1H** retira **comissão** (% configurada no Sharetribe Console)
+3. **Anfitrião** recebe o resto no seu Stripe Connect Account
+4. Payouts automáticos do Stripe para o IBAN do anfitrião
+
+## Onboarding do anfitrião
+
+Primeira vez que um anfitrião quer criar um anúncio com preço:
+
+1. Redireciona para **Stripe Connect onboarding** (hosted)
+2. Stripe recolhe:
+   - Dados pessoais (nome, NIF, morada, data nascimento)
+   - Conta bancária (IBAN)
+   - Verificação de identidade (foto BI/CC)
+3. Stripe valida e devolve via callback
+4. V1H mostra `StripeConnectAccountStatusBox`:
+   - ✅ Verde se tudo OK
+   - ⚠️ Amarelo se faltam documentos (`requirements.past_due`, `currently_due`)
+   - ❌ Vermelho se rejeitado
+
+### URLs de redirect
+- Success: `/payouts?success=true`
+- Failure: `/payouts?error=true`
+
+## Mostrar IBAN do anfitrião
+
+Após onboarding, V1H mostra os **últimos 4 dígitos do IBAN** registado:
+- Fetch via `external_accounts.data` da Stripe Account
+- Visual: "Conta terminada em ****1234"
+
+## Comissão V1H
+
+Configurada no **Sharetribe Console → Marketplace → Commission**:
+- Percentagem fixa sobre cada transação
+- Aplicada via Sharetribe `transaction-line-items` privileged
+- Endpoint server: `POST /api/transaction-line-items`
+
+Atualmente em modo teste — a percentagem final precisa de ser confirmada antes de go-live e refletida nos Termos.
+
+## Test vs Live
+
+**Test mode atual** (`.env`):
+```
+REACT_APP_STRIPE_PUBLISHABLE_KEY=pk_test_51IDRRz...
+```
+
+**Para produção** precisas trocar para:
+```
+REACT_APP_STRIPE_PUBLISHABLE_KEY=pk_live_...
+STRIPE_SECRET_KEY=sk_live_...
+```
+
+Estas vivem na conta Stripe da V1H. Ver [Pendências para Go-Live](pendencias-para-go-live).
+
+## LineItems
+
+Os "line items" de uma transação incluem:
+- Preço base (do listing) × quantidade
+- Comissão V1H (negativa do lado do provider)
+- Total
+
+Calculados server-side em `server/api/line-items.js` (endpoint privileged).
+
+## Negotiation flow
+
+Processo `default-negotiation` permite **oferta personalizada** antes do pagamento:
+- Customer faz **request quote**
+- Provider envia **offer** (com preço custom)
+- Customer aceita (paga) ou contra-oferece (`MakeCounterOfferModal`)
+
+## Stripe Webhook
+
+Sharetribe gere os webhooks Stripe nativamente. V1H não precisa de webhook próprio para pagamentos.
+
+## Multi-booking pagamento
+
+No flow `default-multi-booking-v10`:
+- Customer escolhe múltiplas datas
+- **Pagamento único** que cobre todas as reservas
+- Auto-aceitação do host → confirmação imediata

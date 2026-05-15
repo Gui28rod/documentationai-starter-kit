@@ -1,0 +1,118 @@
+---
+title: "Edit Listing Wizard"
+description: "Flow de criação e edição de anúncios — todos os passos."
+---
+
+# Edit Listing Wizard
+
+Flow multi-step que o anfitrião usa para **criar** ou **editar** um anúncio (`/publicar-anuncio` e `/l/:slug/:id/edit/...`).
+
+## Ficheiros principais
+
+- `src/containers/EditListingPage/EditListingWizard/EditListingWizard.js` — orquestrador dos tabs
+- `src/containers/EditListingPage/EditListingWizard/EditListingWizardTab.js` — wrapper de cada tab
+- `src/containers/EditListingPage/EditListingPage.duck.js` — Redux state
+
+## Passos (tabs) configuráveis
+
+Os tabs aparecem conforme o **processo de transação** escolhido. Cada processo tem ordem própria definida em `src/containers/EditListingPage/EditListingWizard/EditListingWizard.helpers.js`.
+
+| Tab | Quando aparece |
+|---|---|
+| **Details** | Sempre primeiro (obrigatório) |
+| **Location** | Booking, purchase com delivery |
+| **Pricing** | Booking |
+| **Pricing and Stock** | Purchase (items físicos) |
+| **Availability** | Booking |
+| **Delivery** | Purchase com pickup/shipping |
+| **Photos** | Sempre (último ou penúltimo) |
+| **Style** | Categorias/tags |
+
+## Processos suportados
+
+| Processo | Tabs |
+|---|---|
+| `default-booking` | Details → Location → Pricing → Availability → Photos |
+| `default-purchase` | Details → Pricing and Stock → Delivery → Photos |
+| `default-inquiry` | Details → Photos (sem pricing) |
+| `default-negotiation` | Details → Location → Pricing → Photos |
+
+## Panels (cada tab)
+
+### EditListingDetailsPanel
+Campos:
+- **Título** (obrigatório)
+- **Descrição** (obrigatório, textarea)
+- **Categoria** (Trabalho & Reuniões / Cultura / Eventos / etc.)
+- **Custom fields** definidos por categoria (capacidade, comodidades, etc.)
+
+### EditListingLocationPanel
+- **Endereço** com autocomplete via Mapbox
+- **Building** (opcional, ex: "2º andar")
+- Coordenadas guardadas + fuzzy obfuscation no display público
+
+### EditListingPricingPanel
+- **Preço por unidade** (day / night / hour / fixed)
+- **Variantes de preço** (BookingPriceVariants) — ex: "fim-de-semana mais caro"
+- Currency: EUR
+
+### EditListingPricingAndStockPanel
+Para items físicos:
+- Preço por unidade
+- **Stock** (número de items disponíveis)
+- Stock infinito vs limitado
+
+### EditListingAvailabilityPanel
+- **Calendário semanal** — slots por dia da semana
+- **Excepções** (date ranges blocked/extra available)
+- Multi-seats: vários slots no mesmo horário (`AVAILABILITY_MULTIPLE_SEATS`)
+- **Long-term booking**: agendamento de longa duração (90 dias)
+
+### EditListingDeliveryPanel
+- **Pickup** — onde o cliente vai buscar
+- **Shipping** — preço por país/região
+- Toggle de cada opção
+
+### EditListingPhotosPanel
+- Upload de até **25 fotos**
+- **Drag-to-reorder** com `pointer events` (mouse + touch, sem dependências externas)
+- Validação de tamanho (~20MB max por foto)
+- **YouTube URL field** — adiciona vídeo como último slide da galeria
+- Reorder visual em real-time
+
+### EditListingStylePanel
+- Categorias e tags adicionais
+
+## Multi-booking (auto-aceitação)
+
+Processo customizado `default-multi-booking-v10` no `v1h4-test`:
+- Cliente pode reservar **múltiplas datas/horas** num único pedido
+- Anfitrião configurado para **auto-aceitação** — não precisa de aprovar manualmente cada um
+- Listing tem que estar configurado para suportar este flow
+
+Ver [Decisões Importantes](decisoes-importantes) para mais detalhe.
+
+## Long-term booking
+
+Flow para reservas de meses/anos:
+- Estados especiais: `LONG_TERM_PENDING_APPROVAL`, `LONG_TERM_RESERVED`, etc.
+- Timer 90 dias para confirmação
+- Provider aprova antes de fechar
+- Ver [Reservas](reservas) para detalhe dos estados
+
+## Fluxo de save
+
+1. Utilizador preenche tab
+2. Carrega "Próximo" ou "Save and exit"
+3. Redux thunk envia ao Sharetribe SDK
+4. Sharetribe valida e atualiza
+5. Avança para próximo tab (ou fica para revisão)
+
+Se for **listing novo**, fica em estado `pending-approval` até admin aprovar.
+Se for **edit**, fica `published` imediatamente.
+
+## Cron que deteta edições
+
+O cron [`notifyExtraAlertsJob`](cron-jobs) corre a cada 5 min e deteta listings com `updatedAt` recente. Cria toasts in-app para:
+- **Seguidores** do anfitrião (notificação "X atualizou anúncio Y")
+- **Utilizadores que favoritaram** esse listing
