@@ -1,0 +1,16 @@
+---
+title: "Cron Jobs"
+description: "Tarefas automáticas executadas pelo servidor."
+---
+
+# Cron Jobs
+
+Tarefas automáticas executadas pelo servidor (`node-cron` dentro do processo Express).
+
+| Job | Frequência | Função |
+|---|---|---|
+| `notifySavedSearchesJob` | A cada 5 min | Email "novos resultados na pesquisa guardada" |
+| `notifyFavoritesJob` | Diário às 08:00 | Resumo diário de favoritos |
+| `notifyExtraAlertsJob` | A cada 5 min | Detecta edições + reviews → 4 tipos de alerta |
+
+Todos os jobs podem ser desativados via variável de ambiente (`DISABLE_*`) e re-agendados com `*_CRON`.

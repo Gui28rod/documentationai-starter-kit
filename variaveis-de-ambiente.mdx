@@ -1,0 +1,25 @@
+---
+title: Variáveis de Ambiente
+description: Configuração da aplicação por variáveis de ambiente.
+---
+
+# Variáveis de Ambiente
+
+Definidas em `.env`.
+
+## Configuradas em teste
+
+- `REACT_APP_SHARETRIBE_SDK_CLIENT_ID` / `SHARETRIBE_SDK_CLIENT_SECRET`
+- `SHARETRIBE_INTEGRATION_CLIENT_ID` / `SHARETRIBE_INTEGRATION_CLIENT_SECRET`
+- `REACT_APP_STRIPE_PUBLISHABLE_KEY` (test mode)
+- `REACT_APP_MAPBOX_ACCESS_TOKEN`
+- `REACT_APP_GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET`
+- `RESEND_API_KEY`
+- `REPORTS_TO_EMAIL` / `CONTACT_RECIPIENT`
+- `REACT_APP_MARKETPLACE_ROOT_URL`
+
+## Pendentes para produção
+
+- Stripe keys **live** (atualmente em test mode)
+- Integration SDK creds para o ambiente **Live** da Sharetribe
+- `REACT_APP_GOOGLE_ANALYTICS_ID` (GA4 `G-CE4QX3X8RV` configurado, pendente "Copy to live")

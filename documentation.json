@@ -15,59 +15,50 @@
         "icon": "book",
         "groups": [
           {
-            "group": "Start Here",
+            "group": "V1H",
             "icon": "rocket",
             "pages": [
               {
-                "title": "Introduction",
+                "title": "Introdução",
                 "path": "introduction",
                 "icon": "home"
               },
               {
-                "title": "Quickstart",
+                "title": "Tecnologia",
                 "path": "quickstart",
                 "icon": "zap"
               },
               {
-                "title": "Components",
-                "path": "components",
-                "icon": "code"
-              }
-            ]
-          },
-          {
-            "group": "Components",
-            "icon": "layers",
-            "pages": [
-              {
-                "title": "Images",
-                "path": "components/images",
-                "icon": "image"
+                "title": "Funcionalidades",
+                "path": "funcionalidades"
               },
               {
-                "title": "Cards",
-                "path": "components/cards",
-                "icon": "square"
+                "title": "Endpoints",
+                "path": "endpoints"
               },
               {
-                "title": "Code",
-                "path": "components/code",
-                "icon": "code"
+                "title": "Cron Jobs",
+                "path": "cron-jobs"
               },
               {
-                "title": "Callouts",
-                "path": "components/callouts",
-                "icon": "message-square"
+                "title": "Variáveis de Ambiente",
+                "path": "variaveis-de-ambiente"
               },
               {
-                "title": "Steps",
-                "path": "components/steps",
-                "icon": "list-ordered"
+                "title": "Pendências para Go-Live",
+                "path": "pendencias-para-go-live"
               },
               {
-                "title": "Tabs",
-                "path": "components/tabs",
-                "icon": "columns"
+                "title": "Problemas Conhecidos",
+                "path": "problemas-conhecidos"
+              },
+              {
+                "title": "Decisões Importantes",
+                "path": "decisoes-importantes"
+              },
+              {
+                "title": "Próximas Tarefas",
+                "path": "proximas-tarefas"
               }
             ]
           }

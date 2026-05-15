@@ -1,0 +1,77 @@
+# Funcionalidades Implementadas
+
+## Anúncios (Listings)
+- Criação/edição com fotos, descrição, preço, categoria, comodidades, disponibilidade
+- Drag-to-reorder das fotos no Edit Listing (mouse + touch)
+- URL do YouTube como último slide da galeria
+- Badge da categoria sobre a imagem (clicável)
+- Botão de favorito (coração) sobre cada card
+- Tradução automática da descrição via MyMemory API
+
+## Pesquisa
+- Por localização, categoria, keyword, preço, capacidade, comodidades
+- Pesquisas guardadas (sync com Sharetribe)
+- Dedup por chave canónica + auto-cleanup
+- Email automático e toast in-app para novos resultados
+
+## Reservas
+- Reserva única, múltiplas reservas (auto-aceitação), longo-prazo
+- "Adicionar ao calendário", lista de espera, partilha de orçamento
+- Aviso de indisponibilidade do anfitrião
+- Dashboard do anfitrião com stats
+
+## Perfis de Utilizador
+- Avatar, bio, localização, redes sociais
+- Línguas faladas (com bandeiras)
+- Tempo de resposta (auto-tracking)
+- Avaliação só lado cliente
+- Sistema de seguidores, último online
+
+## Avaliações
+- Sistema nativo Sharetribe
+- Rating médio por listing e por utilizador
+- Botão "Traduzir" em cada review
+
+## Notificações
+
+### In-app (toasts)
+- Favoritou o teu anúncio
+- Começou a seguir-te
+- Nova pesquisa guardada com resultados
+- Anúncio novo de quem segues
+- Anúncio que segues foi editado
+- Anúncio favoritado foi editado
+- Recebeste avaliação
+- Anúncio que segues recebeu avaliação
+
+### Emails
+- Resumo diário de favoritos
+- Pesquisa guardada com novos resultados
+- Recebeste avaliação (imediato)
+- Começaram a seguir-te (imediato)
+- Emails nativos Sharetribe
+
+### Topbar
+- Badge de notificações (sales + orders + DM)
+
+## Internacionalização
+- PT/EN toggle no topbar
+- Strings via react-intl
+- Tradução de conteúdo gerado pelo utilizador
+
+## UI/UX
+- Modo escuro
+- Cookie consent GDPR
+- PWA
+- Recently viewed, highlighted, similar, map listings
+- Mobile category ticker
+
+## Segurança e Denúncias
+- Reportar anúncio (rate limiting)
+- Reportar utilizador (cooldowns)
+- Limited Access Banner para admin
+
+## Admin/Operador
+- Login-as user
+- Host stats endpoint
+- Recompute listing rating
