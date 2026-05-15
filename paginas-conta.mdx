@@ -1,0 +1,135 @@
+---
+title: "Páginas de Conta (Dropdown do Topbar)"
+description: "Destacar Anúncio, Os meus anúncios, Os meus favoritos, Ajuda — páginas do menu do utilizador."
+---
+
+# Páginas do Dropdown do Avatar
+
+Páginas acessíveis pelo dropdown do avatar (canto superior direito da topbar). Algumas já estão descritas noutras secções; aqui ficam as restantes.
+
+## Destacar Anúncio (`DestacaAnuncioPage`)
+
+Ficheiro: `src/containers/DestacaAnuncioPage/DestacaAnuncioPage.js`
+
+### O que faz
+Permite ao anfitrião **destacar manualmente** um dos seus anúncios para aparecer na homepage como "Highlighted Listing".
+
+### Funcionamento
+- Lista os anúncios do utilizador
+- Botão "Destacar" em cada um
+- Ao destacar, adiciona ao `localStorage` (`sharetribe_highlighted_listings`)
+- O anúncio destacado aparece logo após o hero na homepage
+- Estado gerido por `src/ducks/highlightedListings.duck.js`
+
+### Quem vê este item
+Só aparece no dropdown se o utilizador **tem pelo menos um anúncio publicado** (condicional).
+
+### CSS
+- `src/containers/DestacaAnuncioPage/DestacaAnuncioPage.module.css`
+
+## Os Seus Anúncios (`ManageListingsPage`)
+
+Ficheiro: `src/containers/ManageListingsPage/ManageListingsPage.js`
+
+### O que faz
+Lista todos os anúncios do utilizador (publicados + em rascunho + draft + pending approval + closed).
+
+### Funcionalidades
+- Lista com cards (foto + título + estado)
+- Botões por listing:
+  - **Editar** → abre o `EditListingWizard`
+  - **Fechar** → muda estado para `closed` (deixa de aparecer na pesquisa)
+  - **Abrir** → reabre listing fechado
+  - **Eliminar** (?) — Sharetribe geralmente não permite eliminação total
+- Estado visual com badges (Publicado / Pendente Aprovação / Fechado)
+
+### Quem vê
+Só aparece no dropdown se o utilizador tem pelo menos um anúncio (mesmo que em rascunho).
+
+## Os Seus Favoritos (`FavoritesPage`)
+
+Ficheiro: `src/containers/FavoritesPage/FavoritesPage.js`
+
+### O que faz
+Mostra todos os anúncios que o utilizador marcou com ❤️ (favoritos).
+
+### Funcionamento
+- Lista visualmente igual à da pesquisa (cards)
+- Botão coração já preenchido em cada card → click remove dos favoritos
+- Lista carregada de `currentUser.privateData.favorites` (Sharetribe)
+- Sincronizada via `src/ducks/favorites.duck.js`
+
+### Persistência
+- Logged-in: `currentUser.privateData.favorites` (server)
+- Guest: `localStorage` chave `marketplace_favorites_guest`
+- Migração automática ao fazer login
+
+### Notificações relacionadas
+Quando o utilizador favorita um anúncio:
+- Server endpoint `POST /api/listing-like` regista
+- Throttle 24h por fã
+- Dispara toast no topo do anfitrião ("Alguém favoritou o teu anúncio")
+- Acumula para email diário de favoritos
+
+## Pesquisas Guardadas (`SavedSearchesPage`)
+
+Ver [Pesquisa e Filtros](pesquisa) → secção "Save Search".
+
+## A Seguir (`FollowingPage`)
+
+Ficheiro: `src/containers/FollowingPage/FollowingPage.js`
+
+### O que faz
+Lista todos os utilizadores que sigo (apenas hosts, normalmente).
+
+### Funcionalidades
+- Cards com avatar + nome + bio breve
+- Botão "Deixar de seguir" em cada um
+- Click no nome → vai para o ProfilePage do user
+
+Ver [Perfis](perfis) → secção "Sistema de Seguidores" para o flow completo.
+
+## Ajuda (`ContactPage`)
+
+Ficheiro: `src/containers/ContactPage/ContactPage.js`
+
+### O que faz
+Formulário de contacto + FAQ (perguntas frequentes).
+
+### Form de contacto
+Campos:
+- Nome
+- Email
+- Assunto (dropdown ou texto)
+- Mensagem (textarea)
+
+Submit → `POST /api/contact` → email para `CONTACT_RECIPIENT` (configurado no `.env`, default `admin@venue1hub.com`).
+
+### FAQ
+Lista de perguntas com respostas expansíveis (accordion). Conteúdo gerido via PageBuilder (asset hosted Sharetribe Console).
+
+### Quando aparece no dropdown
+Sempre — qualquer utilizador pode aceder.
+
+## Terminar Sessão
+
+Não é página — é uma **ação**:
+1. Click → dispatch `logoutThunk()` do Redux
+2. Limpa token Sharetribe
+3. Limpa `currentUser` do estado
+4. Redirect para homepage
+
+## Quando cada item aparece
+
+| Item | Visível para |
+|---|---|
+| O meu perfil | Todos os logged-in |
+| Configurações de perfil | Todos os logged-in |
+| Configurações de conta | Todos os logged-in |
+| Destacar Anúncio | Logged-in **com anúncios publicados** |
+| Os seus anúncios | Logged-in **com anúncios** (mesmo rascunho) |
+| Os seus favoritos | Todos os logged-in |
+| Pesquisas guardadas | Todos os logged-in |
+| A seguir | Todos os logged-in |
+| Ajuda | Todos (mesmo guest tem link via help icon) |
+| Terminar sessão | Logged-in |

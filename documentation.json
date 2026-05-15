@@ -61,6 +61,10 @@
               {
                 "title": "Recentemente Vistos",
                 "path": "recently-viewed"
+              },
+              {
+                "title": "Páginas de Conta (Dropdown)",
+                "path": "paginas-conta"
               }
             ]
           },
