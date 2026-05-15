@@ -1,0 +1,111 @@
+---
+title: "História do Projeto"
+description: "Cronologia das funcionalidades implementadas desde o início do desenvolvimento."
+---
+
+# História do Projeto
+
+Cronologia do desenvolvimento da V1H baseada no histórico Git, desde o fork do template Sharetribe até hoje.
+
+## Ponto de partida
+
+O projeto V1H **não foi construído do zero**. Partiu do [Sharetribe Web Template](https://github.com/sharetribe/web-template) (open-source, MIT license) versão 10.14.0+. Foi feito o fork e depois adaptado em VS Code.
+
+O que veio do **Sharetribe** (não foi programado pela V1H):
+- Sistema de transações, pagamentos via Stripe Connect
+- Mensagens entre cliente e anfitrião
+- Edit Listing Wizard base (Details, Pricing, Availability, Photos)
+- ProfilePage e ProfileSettingsPage base
+- AuthenticationPage com social logins
+- PageBuilder e SectionBuilder (motor universal de páginas)
+- Hooks Redux (auth, marketplaceData, user, etc.)
+- Sharetribe SDK + Integration SDK
+
+O que foi feito **localmente em VS Code** sobre o template:
+- Adaptação visual (cores, fontes, identidade V1H)
+- 9 categorias V1H + ícones próprios
+- Sistema de favoritos completo
+- Sistema de seguidores
+- Notificações (5 tipos de toasts + crons de email)
+- Tradução automática de conteúdo do utilizador
+- Modo escuro
+- Multi-booking + long-term booking customizados
+- Páginas customizadas (Como Funciona, Destacar Anúncio, Sobre Nós…)
+- Mobile category ticker, mobile filters
+- PWA + service worker
+- Cookie consent GDPR
+- Inúmeros endpoints customizados (`server/api/*`)
+- 3 cron jobs (`server/jobs/*`)
+
+## Marcos do desenvolvimento (cronologia)
+
+### Março 2026 — Setup inicial e fundações
+
+**22 Março** — Primeiro commit V1H: "adicionar página de favoritos"
+**23 Março** — Reservas e Histórico de clicks
+**24 Março** — Sistema de Destaques + rating amarelo
+**25 Março** — Recently Viewed (estilo eBay)
+**26 Março** — Atualização de destaques
+**27 Março** — Topbar e Footer customizados
+**30 Março** — Cores e fontes V1H aplicadas
+
+### Abril 2026 — Página principal, perfis, traduções
+
+**01 Abril** — Tradução PT/EN da landing page, categorias e listas
+**02 Abril** — Refinamentos
+**07–08 Abril** — Perfis melhorados (vários commits)
+**09 Abril** — Tradução + design landing page + footer
+**11 Abril** — Iteração
+**13 Abril** — Nova secção landing page + barra de pesquisa + transições
+**14 Abril** — GPS, landing page, mobile responsiveness, notificações
+**15 Abril** — Página "Destacar" + botões + opção no perfil
+**17 Abril** — Email verification gate, fixes inbox, traduções, página destacar-anuncio + pagamento, transição landing
+**20 Abril** — Tradução, listings UX/UI, landing page bugs, transições, ícones em vez de emojis
+**22 Abril** — Versão mobile completa, responsivo
+**23 Abril** — Login/signup buttons, auth flow, inbox defaults, mobile pagina inicial
+**24 Abril** — Mobile landing/auth/listing/transaction, favoritos mobile, cenas responsivas
+**26 Abril** — Filtros completos (46 versões!), 90 reservas, imagem principal v1/v2/v3
+**27 Abril** — v8
+**28 Abril** — Mobile completo, slides
+**29 Abril** — WhatsApp, transações várias, barra de pesquisas, filtro avaliações estrelas, filtro anúncios melhores/piores avaliados
+**30 Abril** — Mapa interativo + filtros estrelas melhores e piores + avaliações
+
+### Maio 2026 — Notificações avançadas, dark mode, traduções, doc
+
+**03 Maio** — Políticas cookie mobile
+**04 Maio** — Categorias mobile (várias iterações)
+**05 Maio** — Página "Como funciona" no footer, footer melhorado, preço por dia/por hora, NPS feedback (3, 5, 6)
+**07 Maio** — Feedback NPS refinements
+**08 Maio** — Idiomas (sistema de línguas faladas no perfil)
+**10–11 Maio** — Pesquisas guardadas + dark mode completo + apps (várias iterações)
+**12 Maio** — Contadores
+**13 Maio** — Partilhar orçamento, botão lista de espera, aviso indisponibilidade, dashboard do anfitrião
+**15 Maio** — **Documentation.AI** criada (esta documentação) + tradução de conteúdo (MyMemory) + 4 alertas extra (review-received, edits) + per-entry dismiss + user rating só lado cliente
+
+## Workflow de desenvolvimento
+
+O projeto é desenvolvido em **VS Code** localmente:
+
+1. Programador edita `.js`, `.css`, `.json` na máquina
+2. Roda dev server (`yarn run dev`)
+3. Testa em `localhost:3000` contra o ambiente Sharetribe `v1h4-test`
+4. `git commit` + `git push` para `Gui28rod/v1h---testes-dev` (GitHub)
+5. Mudanças vão para o branch `main`
+
+A versão **publicada** em produção será um deploy do branch `main` (provavelmente para Heroku ou AWS), apontando para o ambiente Sharetribe **Live** com Stripe **Live**.
+
+## Equipa
+
+Trabalhado por estagiários da V1H. Repositório no GitHub `Gui28rod` (conta pessoal — pendência de transferência para conta da empresa antes do go-live).
+
+## Onde estamos hoje
+
+- Branch `main` no `v1h4-test` (ambiente de teste Sharetribe)
+- **Ainda não em produção**
+- ~10.834 commits totais (incluindo fork do Sharetribe)
+- 13 categorias de funcionalidades implementadas
+- 16 endpoints customizados
+- 3 cron jobs ativos
+- 23 páginas de documentação
+
+Ver [Pendências para Go-Live](pendencias-para-go-live) para o que falta.

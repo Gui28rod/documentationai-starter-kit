@@ -1,0 +1,229 @@
+---
+title: "Páginas do Footer"
+description: "Cada página linkada no footer — conteúdo, rota e funcionalidades."
+---
+
+# Páginas do Footer
+
+Detalhe individual de cada página acessível pelo footer.
+
+## ⚙️ Plataforma
+
+### Como Funciona
+
+| | |
+|---|---|
+| **URL** | `/como-funciona` |
+| **Componente** | `src/containers/ComoFuncionaPage/ComoFuncionaPage.js` |
+| **Conteúdo** | Hardcoded em React com i18n (PT/EN) |
+
+**Estrutura**:
+- 2 secções principais: "Para Organizadores" e "Para Anfitriões"
+- **Steps ilustrados** — 4 passos por audiência (escolher espaço → reservar → confirmar → desfrutar)
+- **Garantias de segurança** — 3 cards (pagamento seguro, verificação, suporte)
+- **FAQ** integrado no fundo da página (`FAQContent.js`) com accordions expansíveis
+- **Scroll automático** para FAQ via hash `#faq` (link direto navega já aberto)
+- **CTAs** para "Pesquisar Anúncios" e "Publicar o Meu Espaço"
+
+**Funcionalidades especiais**:
+- Ilustrações SVG inline (vetoriais)
+- I18n completo PT/EN
+- Anchor links funcionais
+
+### Procurar Anúncios
+
+| | |
+|---|---|
+| **URL** | `/s` ou `/s/:listingType` |
+| **Componente** | `src/containers/SearchPage/` (SearchPageWithGrid ou SearchPageWithMap) |
+
+Página de pesquisa principal. Ver [Pesquisa e Filtros](pesquisa) para detalhe completo.
+
+### Publicar um Novo Anúncio
+
+| | |
+|---|---|
+| **URL** | `/publicar-anuncio` → `/l/draft/00000000-0000-0000-0000-000000000000/new/details` |
+| **Componente** | `src/containers/EditListingPage/EditListingPage.js` |
+
+Wizard multi-step. Ver [Edit Listing Wizard](edit-listing-wizard) para detalhe completo.
+
+### Perguntas Frequentes
+
+Não é página separada — é uma **secção** dentro de "Como Funciona":
+- Acesso via âncora: `/como-funciona#faq`
+- Componente: `FAQContent.js` (sub-componente)
+- Accordions expansíveis por pergunta
+- Suporte i18n PT/EN
+
+## 🏢 Empresa
+
+### Sobre Nós
+
+| | |
+|---|---|
+| **URL** | `/sobre-nos` |
+| **Componente** | `src/containers/AboutPage/AboutPage.js` |
+
+**Estrutura**:
+- **Hero** com imagem de fundo + slogan
+- **4 cards principais**: História / Missão / Visão / Público-Alvo
+- **Equipa** — grid com 5 fotos:
+  - Beatriz, Alexandre, Anabela, Lídia, Teresa
+  - Fotos em `src/assets/images/`
+- **5 valores** com ícones SVG (Confiança, Inovação, Comunidade, Sustentabilidade, Qualidade)
+- **CTA final** para começar a usar
+
+**I18n**: completo PT/EN.
+
+### Contacto
+
+| | |
+|---|---|
+| **URL** | `/contact` |
+| **Componente** | `src/containers/ContactPage/ContactPage.js` |
+
+**Form**:
+- Nome
+- Email
+- Telefone (com **seletor de país** + flag — biblioteca `flag-icons`)
+- Assunto
+- Mensagem
+- Submit → `POST /api/contact` → email para `admin@v1h.net`
+
+**Países suportados** no seletor de phone prefix:
+PT, ES, FR, GB, DE, IT, NL, BE, CH, US, BR, AO, MZ
+
+**Info cards na lateral**:
+- 📧 Email: `admin@v1h.net`
+- 📍 Endereço: Mira (Portugal)
+- 📞 Telefone: `+351 930 432 478`
+- 🕒 Horário: Segunda a Sexta, 9h–18h
+
+**Validações**: regex customizada para cada campo + frontend immediate feedback.
+
+## 🛡️ Suporte
+
+### Termos de Serviço
+
+| | |
+|---|---|
+| **URL** | `/terms-of-service` |
+| **Componente** | `src/containers/TermsOfServicePage/TermsOfServicePage.js` |
+| **Última atualização** | Abril 2026 |
+
+**16 secções jurídicas**:
+1. Identificação da empresa
+2. Aceitação dos termos
+3. Descrição do serviço
+4. Conta de utilizador
+5. Obrigações dos anfitriões
+6. Obrigações dos hóspedes/clientes
+7. Comissões e pagamentos
+8. Contratos de reserva
+9. Cancelamentos e reembolsos
+10. Limitação de responsabilidade
+11. Denúncia de conteúdos
+12. Propriedade intelectual
+13. Resolução de litígios
+14. Alterações aos termos
+15. Lei aplicável
+16. Contacto
+
+**Links externos**:
+- Livro de Reclamações
+- Plataforma ODR (Online Dispute Resolution) da Comissão Europeia
+
+**Registos legais mencionados**:
+- Marca INPI nº 716152
+- Patente europeia 20242006440889
+
+**⚠️ Pendência go-live** (ver [Pendências para Go-Live](pendencias-para-go-live)):
+- Atualizar com NIF, capital social, registo na conservatória, % comissão final, DPO
+
+### Política de Privacidade
+
+| | |
+|---|---|
+| **URL** | `/privacy-policy` |
+| **Componente** | `src/containers/PrivacyPolicyPage/PrivacyPolicyPage.js` |
+| **Última atualização** | Abril 2026 |
+
+**15 secções RGPD**:
+1. Responsável pelo tratamento
+2. Dados recolhidos
+3. Fins legais do tratamento
+4. Partilha de dados
+5. Transferências internacionais
+6. Período de retenção
+7. Direitos do titular
+8. Segurança
+9. Cookies (resumo + link para política específica)
+10. Decisões automatizadas
+11. Violações de dados
+12. Menores
+13. Autoridade de controlo (CNPD)
+14. Alterações
+15. Contacto
+
+**Subprocessadores mencionados**:
+- Sharetribe (infraestrutura marketplace)
+- Stripe (pagamentos)
+- AWS / Google Cloud / Azure (hosting)
+
+**Conformidade**: RGPD + LGPDP nacional.
+
+**⚠️ Pendência**: nomear DPO oficial e publicar contacto.
+
+### Política de Cookies
+
+| | |
+|---|---|
+| **URL** | `/cookie-policy` |
+| **Componente** | `src/containers/CookiePolicyPage/CookiePolicyPage.js` |
+| **Última atualização** | Abril 2026 |
+
+**8 secções**:
+1. Definição de cookie
+2. Tipos de cookies
+3. **Tabela de cookies específicos**
+4. Cookies de terceiros
+5. Como gerir consentimento
+6. Base legal
+7. Alterações à política
+8. Contacto
+
+**Tabela detalhada** com: nome do cookie, domínio, categoria (essencial/preferências/analytics/marketing), duração. Inclui:
+- `st-authinfo` (Sharetribe)
+- `st-clienttype` (Sharetribe)
+- `locale` (V1H)
+- `__stripe_mid` (Stripe)
+- `mapbox-gl` (Mapbox)
+- `_ga`, `_ga_*` (Google Analytics)
+
+**⚠️ Pendência**: atualizar tabela quando forem adicionados pixels Meta/Google Ads.
+
+### Definições de Cookies
+
+**Não é página** — é o **modal CookieConsent**.
+
+Carregar no link "Definições de cookies" do footer:
+1. Dispara `window.__v1hOpenCookiePrefs()`
+2. Abre o modal `CookieConsent` em modo modal
+3. Utilizador pode alterar consentimento por categoria
+
+Ver [Cookies & Privacidade](cookies-privacidade) para detalhe técnico.
+
+## Resumo executivo
+
+| | Quantidade |
+|---|---|
+| **Páginas separadas (rotas)** | 7 |
+| **Modais** | 1 (Definições de cookies) |
+| **Páginas hardcoded em React** | 6 (About, ComoFunciona, Contact, TermsOfService, PrivacyPolicy, CookiePolicy) |
+| **Páginas dinâmicas** | 2 (SearchPage, EditListingPage) |
+| **Conteúdo via CMS** | 0 — todas as páginas legais e institucionais são código React direto (não dependem do Sharetribe Console) |
+
+**Localização**: todas em `src/containers/` com sub-pastas próprias.
+**Rotas**: definidas em `src/routing/routeConfiguration.js`.
+**I18n**: completo PT/EN em todas.

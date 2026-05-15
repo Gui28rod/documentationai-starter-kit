@@ -27,6 +27,14 @@
                 "title": "Tecnologia",
                 "path": "quickstart",
                 "icon": "zap"
+              },
+              {
+                "title": "Sharetribe vs Customizações V1H",
+                "path": "sharetribe-vs-v1h"
+              },
+              {
+                "title": "História do Projeto",
+                "path": "historia-projeto"
               }
             ]
           },
@@ -65,6 +73,10 @@
               {
                 "title": "Páginas de Conta (Dropdown)",
                 "path": "paginas-conta"
+              },
+              {
+                "title": "Páginas do Footer",
+                "path": "paginas-footer"
               }
             ]
           },
