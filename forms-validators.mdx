@@ -1,0 +1,233 @@
+---
+title: "Forms & Validators"
+description: "Forms de booking/inquiry/negotiation + validators do src/util/validators.js."
+---
+
+# Forms & Validators
+
+Os forms da V1H usam **Final Form** (`react-final-form`). Validators reutilizáveis em `src/util/validators.js`.
+
+## Forms do OrderPanel
+
+Localizados em `src/components/OrderPanel/`. O `OrderPanel` escolhe qual usar consoante o `transactionProcessAlias`.
+
+### BookingDatesForm
+**Quando**: reservas por dia / noite.
+
+**Campos**:
+- `bookingStart` / `bookingEnd` (date range)
+- `seats` (se `multipleSeats`)
+
+**Validações**: `bookingDatesRequired`
+
+**Integrações**:
+- `EstimatedCustomerBreakdownMaybe` (preview de preço com line items)
+- `ShareBudgetButton` (partilhar orçamento)
+- `WaitlistButton` (se sem disponibilidade)
+
+### BookingTimeForm
+**Quando**: reservas por hora.
+
+**Campos**:
+- `bookingStartTime` / `bookingEndTime`
+- `seats`
+- `priceVariantName` (variantes de preço)
+
+**Comportamento**:
+- Fetch automático de `lineItems` ao mudar valores
+- `InitialValuesFetcher` para pré-preenchimento via URL partilhado
+
+### BookingFixedDurationForm
+**Quando**: eventos com duração pré-definida (ex: "workshop de 3h às 19h").
+
+**Campos**:
+- Data
+- Hora de início
+- Duração fixa (do listing config)
+
+### InquiryWithoutPaymentForm
+**Quando**: processo `default-inquiry` (sem pagamento).
+
+**Campos**:
+- Botão submit apenas
+
+Integra `SubmitFinePrint` com termos.
+
+### ProductOrderForm
+**Quando**: processo `default-purchase` (items físicos).
+
+**Campos**:
+- `quantity` (dropdown até 100)
+- `deliveryMethod` (pickup / shipping) se aplicável
+
+**Validações**:
+- `required` em quantity
+- `numberAtLeast(1)` em quantity
+
+### NegotiationForm
+**Quando**: processo `default-negotiation` — request quote inicial.
+
+**Campos**:
+- Mensagem
+- Custom fields da transação
+
+## Outros forms importantes
+
+| Form | Onde | Para que serve |
+|---|---|---|
+| `LoginForm` | AuthenticationPage | Login |
+| `SignupForm` | AuthenticationPage | Registo |
+| `ConfirmSignupForm` | AuthenticationPage | Confirmação pós-signup |
+| `ContactDetailsForm` | ContactDetailsPage | Edita email + telemóvel |
+| `PasswordChangeForm` | PasswordChangePage | Alterar password |
+| `PasswordRecoveryForm` | PasswordRecoveryPage | Pedir email de recuperação |
+| `PasswordResetForm` | PasswordResetPage | Definir nova password |
+| `ProfileSettingsForm` | ProfileSettingsPage | Edita perfil completo |
+| `StripePaymentForm` | CheckoutPage | Pagamento Stripe |
+| `StripeConnectAccountForm` | StripePayoutPage | Onboarding Stripe Connect |
+| `EditListingDetailsForm` | EditListingPage | Tab Details do wizard |
+| `EditListingPricingForm` | EditListingPage | Tab Pricing |
+| `EditListingLocationForm` | EditListingPage | Tab Location |
+| `EditListingAvailabilityForm` | EditListingPage | Tab Availability |
+| `EditListingPhotosForm` | EditListingPage | Tab Photos (drag-to-reorder + YouTube URL) |
+| `EditListingDeliveryForm` | EditListingPage | Tab Delivery |
+| `EditListingPricingAndStockForm` | EditListingPage | Tab Pricing & Stock |
+| `EditListingStyleForm` | EditListingPage | Tab Style/categorias |
+| `SendMessageForm` | TransactionPage + DirectMessagePage | Enviar mensagem (texto + upload imagem) |
+| `ReviewForm` | TransactionPage | Submeter avaliação |
+| `RequestQuoteForm` | RequestQuotePage | Pedido de orçamento |
+| `MakeOfferForm` | MakeOfferPage | Resposta com oferta |
+| `WaitlistForm` | WaitlistButton | Juntar à lista de espera |
+| `ContactForm` | ContactPage | Formulário de contacto |
+| `ReportListingForm` | ReportListingModal | Reportar anúncio |
+| `ReportUserForm` | ReportUserModal | Reportar utilizador |
+| `FeedbackForm` | FeedbackPromptModal | NPS pós-review |
+| `NewsletterForm` | Footer | Subscrever newsletter |
+
+## Validators (`src/util/validators.js`)
+
+Todos os validators retornam **`undefined` se válido** ou **string de erro se inválido** (padrão Final Form).
+
+### Validators básicos
+
+| Validator | Função |
+|---|---|
+| `required(message)` | Obrigatório. Falha em `undefined`, `null`, `''`, array vazio |
+| `minLength(message, min)` | Comprimento mínimo de string |
+| `maxLength(message, max)` | Comprimento máximo de string |
+| `nonEmptyArray(message)` | Array com pelo menos 1 elemento |
+
+### Validators de formato
+
+| Validator | Função |
+|---|---|
+| `emailFormatValid(message)` | Regex email standard |
+| `passwordFormatValid(message)` | Pelo menos 1 letra + 1 dígito |
+| `validBusinessURL(message)` | URL com `http://` ou `https://` |
+| `autocompletePlaceSelected(message)` | Endereço com latLng (do Mapbox autocomplete) |
+| `validateYoutubeURL(url, message)` | Extrai ID válido do YouTube |
+
+### Validators numéricos
+
+| Validator | Função |
+|---|---|
+| `numberAtLeast(message, min)` | Número >= min |
+| `validateInteger(value, max, min, smallMsg, bigMsg)` | Integer entre limites |
+| `ageAtLeast(message, minYears)` | Idade mínima (calculada da data) |
+
+### Validators de datas (booking)
+
+| Validator | Função |
+|---|---|
+| `bookingDateRequired(message)` | Valida que o campo é uma `Date` |
+| `bookingDatesRequired(startMsg, endMsg)` | Valida `startDate` + `endDate` |
+
+### Validators internacionais (country-specific)
+
+| Validator | Função |
+|---|---|
+| `validHKID(message)` | Hong Kong ID number |
+| `validSGID(message)` | Singapore ID (9 dígitos) |
+
+### Compositor
+
+```js
+import { composeValidators, required, minLength } from '../util/validators';
+
+const validate = composeValidators(
+  required('Campo obrigatório'),
+  minLength('Mínimo 8 caracteres', 8)
+);
+```
+
+Roda os validators em ordem; retorna o **primeiro erro** encontrado.
+
+## Padrões de uso
+
+### No form
+```jsx
+<Field
+  name="email"
+  validate={composeValidators(
+    required(intl.formatMessage({id: 'Form.required'})),
+    emailFormatValid(intl.formatMessage({id: 'Form.emailInvalid'}))
+  )}
+>
+  {({ input, meta }) => (
+    <FieldTextInput {...input} {...meta} />
+  )}
+</Field>
+```
+
+### Validação custom inline
+```jsx
+<Field
+  name="age"
+  validate={(value) => {
+    if (!value || value < 18) {
+      return intl.formatMessage({id: 'SignupForm.ageRestriction'});
+    }
+    return undefined;
+  }}
+/>
+```
+
+## Padrões V1H custom
+
+Alguns forms V1H adicionaram:
+- **Live validation** com feedback à medida que se escreve
+- **Botões CTA secundários** (ShareBudget, Waitlist) integrados no form
+- **Phone input com seletor de país** + flags (biblioteca `flag-icons`)
+
+## Form state com Final Form
+
+```jsx
+import { Form } from 'react-final-form';
+
+<Form
+  onSubmit={handleSubmit}
+  initialValues={initialValues}
+  render={({ handleSubmit, submitting, pristine, valid, values }) => (
+    <form onSubmit={handleSubmit}>
+      ...
+      <button disabled={submitting || pristine || !valid}>Submit</button>
+    </form>
+  )}
+/>
+```
+
+`submitting`, `pristine`, `valid` controlam o estado do botão.
+
+## SubmitButton & finalForm helpers
+
+Padrão da V1H usa `PrimaryButton` com `inProgress` prop:
+
+```jsx
+<PrimaryButton
+  type="submit"
+  inProgress={submitting}
+  disabled={submitting || invalid || pristine}
+>
+  Guardar
+</PrimaryButton>
+```

@@ -1,0 +1,199 @@
+---
+title: "Account Pages (sub-páginas de conta)"
+description: "Páginas em /account/* — ContactDetails, Password, PaymentMethods, StripePayout, ManageAccount, ManageListings, DestacaAnuncio."
+---
+
+# Account Pages
+
+Páginas acessíveis pelo menu Account (sub-páginas de `/account/*` + páginas de gestão).
+
+## ContactDetailsPage
+
+**URL**: `/account/contact-details`
+**Ficheiro**: `src/containers/ContactDetailsPage/`
+
+### Funcionalidades
+- **Email**: editar email; envia confirmação para o novo email
+- **Telemóvel** (`phoneNumber` em `protectedData`)
+- **Botão "Reenviar email de verificação"**
+- **Link "Recuperar password"**
+- **Estados de erro**: `saveEmailError`, `savePhoneNumberError`
+
+### Validações
+- Email format
+- Telemóvel: formato livre
+
+## PasswordChangePage
+
+**URL**: `/account/password-change`
+**Ficheiro**: `src/containers/PasswordChangePage/`
+
+### Funcionalidades
+- **Form**: password antiga + password nova
+- **Regras password nova**: 8-64 caracteres + pelo menos 1 letra + 1 dígito
+- **Verifica `passwordSet`**: se o user fez signup via SSO (sem password), mostra mensagem em vez do form
+
+### Validators usados
+- `required`
+- `minLength(8)` / `maxLength(64)`
+- `passwordFormatValid` (regex letra + dígito)
+
+## PaymentMethodsPage
+
+**URL**: `/account/payment-methods`
+**Ficheiro**: `src/containers/PaymentMethodsPage/`
+
+### Funcionalidades
+- **Lista cartões guardados** (last 4 + brand + expiry)
+- **Adicionar cartão** via Stripe `SetupIntent`
+- **Eliminar cartão** com confirmação
+- Form de morada (necessário para 3D Secure):
+  - Nome, endereço, código postal, estado, cidade, país
+
+### Lógica Stripe
+1. Cria `SetupIntent` server-side (auth Stripe Customer)
+2. Frontend usa `confirmCardSetup` (Stripe.js)
+3. Card guardado em Stripe Customer
+4. Lista refrescada via `paymentMethods.duck.js`
+
+## StripePayoutPage
+
+**URL**: `/account/payments`
+**Ficheiro**: `src/containers/StripePayoutPage/`
+
+### Funcionalidades
+- **Stripe Connect** para anfitriões receberem pagamentos
+- **Status box** visual:
+  - 🟢 Verde se onboarding completo
+  - 🟡 Amarelo se faltam dados (`requirements.past_due`, `currently_due`)
+  - 🔴 Vermelho se rejeitado
+- **Redirect para Stripe** hosted onboarding form
+- **Return URL types**: success / failure (handle em URL)
+- **Mostra últimos 4 dígitos do IBAN** registado
+
+Ver [Pagamentos](pagamentos) para detalhe.
+
+## ManageAccountPage
+
+**URL**: `/account`
+**Ficheiro**: `src/containers/ManageAccountPage/`
+
+### Sub-componentes
+- **PrivateDetailsForm** — custom user fields em `privateData` / `protectedData`
+- **DeleteAccountForm** — eliminar conta com password confirmation
+
+### Delete Account flow
+1. User confirma password
+2. `POST /api/delete-account`
+3. Server chama Sharetribe SDK `deleteUser`
+4. Logout automático
+5. Redirect para home
+
+⚠️ **Irreversível** — listings do user também são fechados.
+
+## ManageListingsPage
+
+**URL**: `/your-listings`
+**Ficheiro**: `src/containers/ManageListingsPage/`
+
+### Funcionalidades
+Cada listing aparece como **card** com:
+- Foto
+- Título
+- Preço
+- Localização
+- Rating (com IconReviewStar)
+- **Badge de estado**: Draft / Pending Approval / Published / Closed
+
+### Ações por listing (menu dropdown)
+
+| Ação | Função |
+|---|---|
+| **Edit** | Abre `EditListingWizard` |
+| **Close** | Esconde do marketplace (sem deleção real) |
+| **Open** | Republica listing fechado |
+| **Discard draft** | Elimina rascunho (com modal de confirmação) |
+| **Delete** | Fecha + adiciona a `deletedListingIds` (localStorage + privateData server) |
+
+### Estados visuais
+- **Draft** — em rascunho, não publicado
+- **Pending Approval** — admin tem de aprovar
+- **Published** — visível no marketplace
+- **Closed** — escondido, mas dados preservados
+
+### HostDashboard
+Componente complementar que mostra **stats do anfitrião**:
+- Total bookings
+- Revenue
+- Pending payouts
+- Rating médio
+- Recent reviews
+
+(Stats vêm de `GET /api/host-stats`)
+
+### Flow de deleção
+1. Click "Delete" → `addDeletedListingId(id)` (localStorage)
+2. `onCloseListing(id)` (Sharetribe SDK)
+3. Sync `deletedListings` para `privateData` server
+4. Filtering local remove do view sem reload
+
+## DestacaAnuncioPage
+
+**URL**: `/destaque-anuncio`
+**Ficheiro**: `src/containers/DestacaAnuncioPage/`
+
+### Funcionalidades
+Permite ao anfitrião **destacar manualmente** um dos seus anúncios na homepage.
+
+### Estrutura em 2 secções
+1. **ListingSelectCard** — escolher qual anúncio destacar
+2. **ListingDetail** — pré-visualização + form de pagamento
+
+### Pré-visualização
+- Card visual idêntica à da homepage
+- **Título e descrição editáveis inline** (com IconEdit)
+- Imagens do anúncio em carrossel
+- Pode adicionar imagens extra via file input
+- Comodidades (multi-enum chips)
+- Rating + número de reviews
+- Nome do anfitrião + badge "verificado"
+
+### Pagamento
+- **Stripe Card Element** integrado
+- **Taxa fixa**: €9,99/mês
+- Validação `cardComplete` antes de submit
+- Custom styling (font Inter, padding, cores)
+
+### Persistência
+- Redux dispatch `addHighlightedListing` guarda em Redux store
+- Dados guardados: id, slug, title, description, imageUrl, extraImageUrls, amenityChips, rating, reviewCount, category
+- Persistido em `localStorage` chave `sharetribe_highlighted_listings`
+
+### Visual
+- **Scroll smooth** com easing cubic (2.4s) ao selecionar listing
+- **Toast** "já em destaque" se selecciona listing já destacado
+- Badges overlay "Em Destaque" / "Featured"
+- Botões "BOOK NOW" / "VIEW DETAILS" são preview (não funcionais)
+
+### Quando aparece no dropdown topbar
+Só se o utilizador tem pelo menos um anúncio publicado.
+
+## Resumo de URLs
+
+| URL | Função |
+|---|---|
+| `/account` | Manage Account (edit profile, delete account) |
+| `/account/contact-details` | Mudar email/telemóvel |
+| `/account/password-change` | Alterar password |
+| `/account/payment-methods` | Cartões Stripe |
+| `/account/payments` | Stripe Connect (payout) |
+| `/your-listings` | Gerir os meus anúncios |
+| `/destaque-anuncio` | Destacar anúncio |
+
+## Routing comum
+
+Todas estas páginas requerem **autenticação** (`auth: true` no `routeConfiguration.js`). Sem login → redirect para `/login`.
+
+Algumas requerem condições extra:
+- DestacaAnuncioPage: precisa de pelo menos 1 listing publicado
+- StripePayoutPage: precisa de Stripe Connect onboarding feito (ou redirect para criar)

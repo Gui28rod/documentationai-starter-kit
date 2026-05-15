@@ -77,6 +77,10 @@
               {
                 "title": "Páginas do Footer",
                 "path": "paginas-footer"
+              },
+              {
+                "title": "Account Pages (Manage/Listings/Destaque)",
+                "path": "account-pages"
               }
             ]
           },
@@ -95,6 +99,14 @@
               {
                 "title": "Reservas e Inbox",
                 "path": "reservas"
+              },
+              {
+                "title": "Processos de Transação",
+                "path": "processos-transacao"
+              },
+              {
+                "title": "Checkout & Negotiation",
+                "path": "checkout-negotiation"
               },
               {
                 "title": "Pagamentos (Stripe)",
@@ -167,6 +179,26 @@
               {
                 "title": "Server, Config, Routing, Assets",
                 "path": "server-config-routing"
+              },
+              {
+                "title": "Custom Fields & Listing Config",
+                "path": "custom-fields"
+              },
+              {
+                "title": "Forms & Validators",
+                "path": "forms-validators"
+              },
+              {
+                "title": "PageBuilder & SectionBuilder",
+                "path": "pagebuilder"
+              },
+              {
+                "title": "Dev Resources",
+                "path": "dev-resources"
+              },
+              {
+                "title": "I18n Keys Catalogue",
+                "path": "i18n-keys"
               }
             ]
           },

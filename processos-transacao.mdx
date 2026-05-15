@@ -1,0 +1,236 @@
+---
+title: "Processos de Transação"
+description: "Os 4 processos Sharetribe (booking, purchase, inquiry, negotiation) com estados e transições."
+---
+
+# Processos de Transação
+
+Cada transação na V1H segue um **processo Sharetribe** definido em `src/transactions/`. Cada processo é uma máquina de estados com transições válidas.
+
+## 4 processos disponíveis
+
+### `default-booking` — reservas com data/hora
+
+**Ficheiro**: `src/transactions/transactionProcessBooking.js`
+
+| Estado | O que significa |
+|---|---|
+| `INITIAL` | Estado inicial (não persiste) |
+| `INQUIRY` | Cliente pediu info sem pagamento (free inquiry) |
+| `PENDING_PAYMENT` | À espera do pagamento Stripe |
+| `LONG_TERM_PENDING_APPROVAL` | Reserva > 90 dias → host aprova primeiro |
+| `PAYMENT_WINDOW_OPEN` | Janela de pagamento aberta (X horas) |
+| `PREAUTHORIZED` | Pagamento pré-autorizado, host decide |
+| `ACCEPTED` | Aceite pelo host, à espera da data |
+| `DELIVERED` | Data passou, "entregue" |
+| `REVIEWED` | Review submetida |
+
+**Transições principais**:
+- `INQUIRE` — pedir info sem pagar
+- `REQUEST_PAYMENT` — iniciar pedido com pagamento
+- `ACCEPT_LONG_TERM_RESERVATION` — host aceita long-term
+- `CONFIRM_PAYMENT` — confirmação Stripe
+- `ACCEPT` / `DECLINE` — host aceita ou recusa
+- `COMPLETE` — auto-complete após X horas
+- `REVIEW` — submeter avaliação
+
+### `default-purchase` — compras de items físicos
+
+**Ficheiro**: `src/transactions/transactionProcessPurchase.js`
+
+| Estado | O que significa |
+|---|---|
+| `INITIAL` | Estado inicial |
+| `INQUIRY` | Pedido de info sem compra |
+| `PENDING_PAYMENT` | À espera do pagamento |
+| `PURCHASED` | Pago, à espera de envio |
+| `DELIVERED` | Vendedor marcou como entregue |
+| `RECEIVED` | Cliente confirmou receção |
+| `DISPUTED` | Cliente abriu disputa |
+| `COMPLETED` | Auto-complete após X dias sem disputa |
+| `REVIEWED` | Review submetida |
+
+**Transições importantes**:
+- `MARK_DELIVERED` — vendedor marca como enviado
+- `MARK_RECEIVED` — cliente confirma receção
+- `DISPUTE` — abre loop de disputa (resolvido por operador)
+- `AUTO_COMPLETE` — Sharetribe fecha automaticamente
+
+### `default-inquiry` — só pedido de info
+
+**Ficheiro**: `src/transactions/transactionProcessInquiry.js`
+
+| Estado | O que significa |
+|---|---|
+| `INITIAL` | Estado inicial |
+| `FREE_INQUIRY` | Pedido criado, sem pagamento |
+
+**Transição única**: `INQUIRE_WITHOUT_PAYMENT`
+
+**Uso**: para mercados/países sem Stripe ou para casos onde só queres mensagens.
+
+### `default-negotiation` — orçamentos personalizados
+
+**Ficheiro**: `src/transactions/transactionProcessNegotiation.js`
+
+| Estado | O que significa |
+|---|---|
+| `INITIAL` | Estado inicial |
+| `QUOTE_REQUESTED` | Cliente pediu orçamento |
+| `OFFER_PENDING` | Host fez oferta inicial |
+| `PENDING_PAYMENT` | Ambas as partes acordaram preço |
+| `OFFER_ACCEPTED` | Cliente aceitou |
+| `DELIVERED` | Entregue |
+| `COMPLETED` / `REVIEWED` | Final |
+
+**Dois modos**:
+- **Forward**: cliente pede quote → host responde
+- **Reverse**: host faz offer → cliente aceita ou contra-oferta
+
+**Transições de negociação**:
+- `MAKE_OFFER` — host envia oferta
+- `REQUEST_QUOTE` — cliente pede orçamento
+- `CUSTOMER_MAKE_COUNTER_OFFER` — cliente contra-oferta
+- `REQUEST_CHANGES` — pedir mudanças
+- `ACCEPT_DELIVERABLE` — aceitar entregável
+
+## Variantes customizadas V1H
+
+A V1H tem **2 variantes** que estendem o `default-booking`:
+
+### `default-multi-booking-v10`
+- Cliente reserva **múltiplas datas/horas** num único pedido
+- **Auto-aceitação** pelo host configurada
+- Estados normais do booking mas com batch de bookings simultâneos
+
+### `default-long-term-booking-v10`
+- Reservas de meses/anos
+- Estados extra:
+  - `LONG_TERM_PENDING_APPROVAL`
+  - `LONG_TERM_RESERVED`
+  - `LONG_TERM_DECLINED`
+  - `LONG_TERM_EXPIRED`
+  - `LONG_TERM_CANCELLED`
+- Timer 90 dias para confirmação
+
+Atualmente ativos no `v1h4-test`. Ver [Decisões Importantes](decisoes-importantes).
+
+## CheckoutPage
+
+Ficheiro: `src/containers/CheckoutPage/`
+
+### Flow
+```
+Cliente seleciona datas no OrderPanel
+  → Click "Reservar"
+  → /checkout?listingId=...&orderData=...
+  → CheckoutPage faz speculate da transação
+  → Calcula line items (preço + comissão)
+  → StripePaymentForm aparece
+  → Cliente preenche cartão
+  → Confirma pagamento (com 3D Secure se necessário)
+  → Transição CONFIRM_PAYMENT
+  → Redirect para TransactionPage
+```
+
+### Componentes
+- `CheckoutPage.js` — controlador principal Redux
+- `CheckoutPageWithPayment.js` — flow com Stripe
+- `CheckoutPageWithInquiryProcess.js` — flow sem pagamento (inquiry only)
+- `StripePaymentForm/` — Stripe Elements com 3D Secure
+- `DetailsSideCard` — resumo de preços ao lado
+- `MobileOrderBreakdown` — versão mobile
+- `CheckoutPageSessionHelpers` — persiste dados em sessionStorage entre refreshes
+
+### Ações Redux
+- `speculateTransaction` — pre-calcula sem criar (mostra preview)
+- `initiateOrder` — cria PaymentIntent + transaction
+- `confirmPayment` — confirma Stripe + transita o estado
+
+## TransactionPage
+
+Ficheiro: `src/containers/TransactionPage/`
+
+Página de uma transação individual (`/sale/:id` ou `/order/:id`).
+
+### Layout em 3 secções
+
+1. **TransactionPanel** (lateral)
+   - Card do outro utilizador (avatar, nome, rating, localização)
+   - Botão "Seguir / A seguir"
+   - Detalhes da reserva (datas, preço, line items)
+
+2. **ActivityFeed** (centro)
+   - Cronologia de transições
+   - Mensagens trocadas
+   - Reviews quando submetidas
+   - Notificações de aceitação/recusa
+
+3. **ActionButtons** (em baixo da panel ou centro)
+   - **Condicionais** ao estado + papel (provider vs customer):
+     - PENDING_PAYMENT: Cliente vê "Pagar"
+     - PREAUTHORIZED: Provider vê "Aceitar" / "Recusar"
+     - DELIVERED: Cliente vê "Confirmar receção" (purchase)
+     - COMPLETED: Ambos veem "Avaliar"
+     - DISPUTED: Operador resolve
+
+### Modais especializados
+
+- `ReviewForm` / `ReviewModal` — submeter review (1-5 estrelas + texto)
+- `DisputeModal` — abrir disputa com motivo
+- `MakeCounterOfferModal` — re-negociar preço
+- `RequestChangesModal` — pedir mudanças pós-entrega
+
+### State data por processo
+
+Ficheiros separados:
+- `TransactionPage.stateDataBooking.js`
+- `TransactionPage.stateDataPurchase.js`
+- `TransactionPage.stateDataInquiry.js`
+- `TransactionPage.stateDataNegotiation.js`
+
+Cada um mapeia estado → componentes visuais + ações.
+
+## MakeOfferPage & RequestQuotePage
+
+Ambas dedicadas ao **processo negotiation**.
+
+### MakeOfferPage (`/l/:slug/:id/make-offer`)
+- Para **host** responder a pedido de quote
+- `MakeOfferForm` com: preço, mensagem, custom fields da transação
+- Submissão → transição `MAKE_OFFER` → cliente recebe notificação
+
+### RequestQuotePage (`/l/:slug/:id/request-quote`)
+- Para **cliente** pedir orçamento
+- `RequestQuoteForm` recolhe mensagem inicial + custom data
+- Submissão → transição `REQUEST_QUOTE` → host recebe notificação
+
+Ambas têm `DetailsSideCard`, `LocationDetails`, `ResponsiveImage`.
+
+## DirectMessagePage
+
+Ficheiro: `src/containers/DirectMessagePage/`
+
+Página de chat direto **fora de uma transação** (`/mensagens/:userId`).
+
+### Funcionalidades
+- Chat com histórico de mensagens
+- **Polling cada 15s** (refresh para novas mensagens)
+- **Galeria de imagens** com lightbox:
+  - Zoom até 8x
+  - Pan com rato ou toque (mobile)
+- **Status online** ("Online agora", "Há 5 min", "Há 2 dias")
+- Integração com `SendMessageForm` (mesmo componente do TransactionPage)
+- Notificações via SDK
+- Follow/unfollow integrado no header
+- Recently Viewed section no rodapé
+- Carregamento paginado de histórico (50 mensagens por page)
+
+## Resumo visual
+
+```
+default-booking:  Cliente → REQUEST_PAYMENT → CONFIRM_PAYMENT → ACCEPT → COMPLETE → REVIEW
+default-purchase: Cliente → REQUEST_PAYMENT → MARK_DELIVERED → MARK_RECEIVED → REVIEW
+default-inquiry:  Cliente → INQUIRE_WITHOUT_PAYMENT (FIM)
+default-negotiation: Cliente → REQUEST_QUOTE → host MAKE_OFFER → cliente ACCEPT → PAYMENT → DELIVERED → REVIEW
+```

@@ -1,0 +1,178 @@
+---
+title: "PageBuilder & SectionBuilder"
+description: "Sistema universal de páginas via assets hosted no Sharetribe Console."
+---
+
+# PageBuilder & SectionBuilder
+
+Motor de renderização universal de páginas. Permite às chefes da V1H **editar conteúdo de páginas (Homepage, Footer, About, FAQs) no Sharetribe Console sem programador**.
+
+## O que é
+
+O Sharetribe Console permite **alojar "page assets"** — ficheiros JSON com estrutura de página. O PageBuilder lê esses JSON e renderiza usando componentes React mapeados.
+
+## Como funciona
+
+```
+1. Chefe vai ao Sharetribe Console → Pages → edita "Landing Page"
+2. Salva → Sharetribe gera asset JSON
+3. V1H frontend (ao carregar a página):
+   - fetch do asset via SDK
+   - PageBuilder parsea JSON
+   - Mapeia cada section ao componente React correspondente
+   - Renderiza visual
+4. Resultado: página com novo conteúdo, sem deploy
+```
+
+## Estrutura JSON dos assets
+
+```json
+{
+  "sections": [
+    {
+      "sectionType": "hero",
+      "sectionId": "intro",
+      "blocks": [
+        {
+          "blockType": "default-block",
+          "blockId": "main",
+          "title": { "content": "Encontre o espaço ideal..." },
+          "callToAction": {...}
+        }
+      ]
+    },
+    {
+      "sectionType": "carousel",
+      ...
+    }
+  ]
+}
+```
+
+## Section types disponíveis
+
+Ficheiro: `src/containers/PageBuilder/SectionBuilder/SectionBuilder.js`
+
+Mapeamento `sectionType` → componente:
+
+| sectionType | Componente | Função |
+|---|---|---|
+| `article` | `SectionArticle` | Texto longo (Markdown, blocks) |
+| `carousel` | `SectionCarousel` | Carrossel horizontal de cards |
+| `columns` | `SectionColumns` | Grid de N colunas |
+| `features` | `SectionFeatures` | Lista de features com ícone |
+| `footer` | `SectionFooter` | Renderiza o footer |
+| `hero` | `SectionHero` | Hero banner com background + CTA |
+| `highlightedListing` | `SectionHighlightedListing` | Destaque de 1 listing |
+| `landingMap` | `SectionLandingMap` | Mapa interativo |
+| `listings` | `SectionListings` | Grid de anúncios |
+| `mobilePromo` | `SectionMobilePromo` | Banner promocional mobile |
+| `slideshow` | `SectionSlideshow` | Slideshow de imagens |
+| `whyUs` | `SectionWhyUs` | Cards de benefícios |
+
+Cada section tem o seu sub-folder com `.js` + `.module.css` + componentes auxiliares.
+
+## Block types
+
+Dentro de cada section há **blocks**. Mapeados em `BlockBuilder/BlockBuilder.js`:
+
+| blockType | Componente | Função |
+|---|---|---|
+| `default-block` | `BlockDefault` | Block genérico com título + texto + CTA |
+| `footer-block` | `BlockFooter` | Block específico do footer |
+| `social-media-link` | `BlockSocialMediaLink` | Link social com ícone |
+
+## Fields & Primitives
+
+Dentro de cada block há **fields** (texto, imagem, link, etc.). Mapeados em `Field/Field.js`:
+
+| Field type | Primitive | Função |
+|---|---|---|
+| `heading1` `heading2` ... | `Heading` | Cabeçalhos H1–H6 |
+| `paragraph` | `Markdown` | Texto longo com Markdown |
+| `ingress` | `Ingress` | Texto introdutório destacado |
+| `image` | `Image` | Imagem responsiva |
+| `link` `internalLink` `externalLink` | `Link` | Link interno ou externo |
+| `youtube` | `YoutubeEmbed` | Embed YouTube |
+| `code` | `Code` | Bloco de código |
+| `customAppearance` | `CustomAppearance` | Customização de cores/fundos |
+| `searchCTA` | `SearchCTA` | Caixa de busca CTA |
+
+## Páginas que usam o PageBuilder
+
+- **LandingPage** — `/`
+- **CMSPage** — `/p/:pageId` (Sobre Nós, Como Funciona se forem CMS)
+- **FooterContainer** — o footer todo
+
+Páginas hardcoded (não usam PageBuilder):
+- About, Contact, Privacy, Terms, Cookie Policy — React hardcoded em PT/EN
+- ComoFunciona — híbrido (estrutura React, conteúdo hardcoded)
+
+## Estilo partilhado
+
+Ficheiro: `src/containers/PageBuilder/SectionBuilder/SectionBuilder.module.css`
+
+Classes partilhadas entre todas as sections:
+- `sectionDetails` — wrapper de info principal
+- `title` — estilo de título
+- `description` — estilo de descrição
+- `ctaButton` — botão CTA standard
+- `blockContainer` — wrapper de blocks
+- `defaultLink` — link estilizado
+
+Mais **overrides para modo escuro** dentro deste mesmo ficheiro.
+
+## Como adicionar uma nova section
+
+Quero criar `SectionTestimonials`:
+
+1. **Criar pasta** `src/containers/PageBuilder/SectionBuilder/SectionTestimonials/`
+2. **Criar componente** `SectionTestimonials.js` (recebe props `{ sectionId, blocks, ... }`)
+3. **Criar CSS** `SectionTestimonials.module.css`
+4. **Exportar** via `index.js`
+5. **Registar** em `SectionBuilder.js`:
+   ```js
+   import SectionTestimonials from './SectionTestimonials';
+   
+   const SECTION_COMPONENTS = {
+     ...,
+     testimonials: { component: SectionTestimonials, ... }
+   };
+   ```
+6. **No Sharetribe Console** → criar asset com `sectionType: 'testimonials'`
+
+## Como adicionar uma nova primitive (field)
+
+Quero campo `mapEmbed`:
+
+1. Criar `src/containers/PageBuilder/Primitives/MapEmbed/MapEmbed.js`
+2. Registar em `Field/Field.js` mapping
+3. Usar nos asset JSONs com `"fieldType": "mapEmbed"`
+
+## Fallback page
+
+Se o asset falhar a carregar:
+- Página renderiza fallback hardcoded ou erro 500
+- Logs em Sentry (se configurado)
+- Para testar fallback: bloquear request ao Sharetribe Console assets
+
+## Customizações V1H ao PageBuilder
+
+A V1H adicionou:
+- **Normalização PT** — converte ortografia pré-1990 para moderna nos textos vindos do CMS
+- **Em-dash cleanup** — substitui `" — "` por `", "` em textos
+- **Injeção programática** de Highlighted Listing após hero
+- **Scroll automático** para âncoras especiais (`#espacos-disponiveis`)
+
+Implementado em `LandingPage.js` antes de passar o asset ao PageBuilder.
+
+## Edição prática
+
+Para editar a Landing Page:
+1. Login no Sharetribe Console
+2. Pages → Landing Page
+3. Edita sections / blocks via UI
+4. Save → publica em produção
+5. Frontend faz fetch do novo asset em ~1 min (cache)
+
+**Para testar local**: alterar asset via Console → reload `localhost:3000`.

@@ -1,0 +1,222 @@
+---
+title: "I18n Keys Catalogue"
+description: "Catálogo das ~1383 chaves de tradução em pt.json organizadas por secção."
+---
+
+# I18n Keys Catalogue
+
+A V1H tem dois ficheiros de tradução principais:
+
+- `src/translations/pt.json` — **1.383 chaves** (português europeu)
+- `src/translations/en.json` — **1.764 chaves** (inglês)
+
+A diferença de tamanho é porque o EN tem mais variantes do template original Sharetribe.
+
+## 113 secções totais
+
+As chaves estão organizadas por **namespace** (prefixo `ComponenteName.`). Há **113 namespaces** distintos no `pt.json`.
+
+## Top 15 namespaces (mais chaves)
+
+| Namespace | Chaves | Onde se usa |
+|---|---|---|
+| `TransactionPage.` | 114 | Página de transação + estados |
+| `InboxPage.` | 67 | Inbox de transações |
+| `StripeConnectAccountForm.` | 54 | Form Stripe Connect |
+| `EditListingWizard.` | 49 | Wizard de edit listing |
+| `StripePaymentForm.` | 45 | Form de pagamento Stripe |
+| `ProfileSettingsForm.` | 31 | Form de edição de perfil |
+| `ManageListingCard.` | 31 | Card no ManageListingsPage |
+| `AuthenticationPage.` | 31 | Login/signup |
+| `ListingPage.` | 30 | Página do anúncio |
+| `ReportUserModal.` | 29 | Modal reportar utilizador |
+| `ReportListingModal.` | 29 | Modal reportar anúncio |
+| `ContactDetailsForm.` | 29 | Form de email/telemóvel |
+| `TransactionPanel.` | 28 | Painel lateral da transação |
+| `SignupForm.` | 28 | Form de signup |
+| `CheckoutPage.` | 28 | Página de checkout |
+
+## Namespaces por categoria
+
+### Autenticação
+- `AuthenticationPage.*` — toda a página
+- `LoginForm.*` — login
+- `SignupForm.*` — signup
+- `ConfirmSignupForm.*` — confirmação SSO
+- `PasswordRecoveryForm.*` / `PasswordRecoveryPage.*`
+- `PasswordResetForm.*` / `PasswordResetPage.*`
+- `EmailVerificationForm.*` / `EmailVerificationPage.*`
+- `TermsOfService.*` — checkbox no signup
+
+### Listings
+- `ListingPage.*` — página do anúncio (30)
+- `ListingCard.*` — card na search/grid
+- `ListingImageGallery.*` — galeria
+- `ManageListingsPage.*` / `ManageListingCard.*` — gestão
+- `EditListingPage.*` + 8 sub-panels (Details, Pricing, Location, Availability, Photos, Delivery, PricingAndStock, Style)
+- `EditListingWizard.*` — wizard wrapper (49)
+
+### Reservas / Transações
+- `CheckoutPage.*` — checkout (28)
+- `InboxPage.*` — inbox (67)
+- `TransactionPage.*` — detalhe de transação (114 — maior)
+- `TransactionPanel.*` — painel lateral
+- `OrderBreakdown.*` — line items
+- `BookingDatesForm.*` / `BookingTimeForm.*` / `BookingFixedDurationForm.*`
+- `InquiryForm.*` — inquiry sem pagamento
+- `ProductOrderForm.*` — purchase
+- `NegotiationForm.*` / `MakeOfferForm.*` / `RequestQuoteForm.*`
+
+### Pagamentos
+- `StripePaymentForm.*` (45)
+- `StripeConnectAccountForm.*` (54)
+- `PaymentMethodsPage.*`
+- `SavedCardDetails.*`
+
+### Perfis
+- `ProfilePage.*`
+- `ProfileSettingsPage.*` / `ProfileSettingsForm.*` (31)
+- `ManageAccountPage.*`
+- `ContactDetailsPage.*` / `ContactDetailsForm.*` (29)
+- `PasswordChangePage.*` / `PasswordChangeForm.*`
+- `DeleteAccountForm.*`
+- `UserNav.*`
+
+### Pesquisa
+- `SearchPage.*`
+- `FilterComponent.*` / `FilterForm.*` / `FilterPlain.*` / `FilterPopup.*`
+- `SortBy.*`
+- `MainPanelHeader.*`
+- `KeywordFilter.*` / `PriceFilter.*` / `BookingDateRangeFilter.*` / etc.
+
+### Páginas V1H
+- `LandingPage.*`
+- `FavoritesPage.*`
+- `FollowingPage.*`
+- `SavedSearchesPage.*`
+- `RecentlyViewedPage.*`
+- `DirectMessagePage.*`
+- `DestacaAnuncioPage.*`
+- `AboutPage.*`
+- `ComoFuncionaPage.*`
+- `ContactPage.*`
+- `PrivacyPolicyPage.*`
+- `TermsOfServicePage.*`
+- `CookiePolicyPage.*`
+
+### Componentes
+- `TopbarDesktop.*` / `TopbarMobile.*`
+- `Footer.*`
+- `Avatar.*`
+- `Modal.*`
+- `CustomExtendedDataField.*`
+- `FieldDateAndTimeInput.*` / `FieldDateRangeInput.*`
+- `FieldReviewRating.*`
+- `LimitedAccessBanner.*`
+- `MaintenanceMode.*`
+- `MissingInformationReminder.*`
+- `NotFoundPage.*`
+- `NoAccessPage.*`
+
+### Notificações
+- `FavoriteAlert.*`
+- `FollowAlert.*`
+- `SavedSearchAlert.*`
+- `NewListingNotification.*`
+- `ExtraAlerts.*`
+- `FeedbackPromptModal.*`
+
+### Modais
+- `ReportListingModal.*` (29)
+- `ReportUserModal.*` (29)
+- `DiscardDraftModal.*`
+- `WelcomeModal.*`
+- `ModalMissingInformation.*`
+
+### Form helpers
+- `BookingModeToggle.*`
+- `ImageCarousel.*`
+- `LayoutWrapperAccountSettingsSideNav.*`
+- `Corrigir.*` — provavelmente texto solto, atenção
+
+### Categorias e listingTypes
+- `CategoryConfig.*`
+- `ListingTypeConfig.*`
+
+## Como adicionar nova chave
+
+1. **Adicionar ao `pt.json`**:
+   ```json
+   "MyComponent.myKey": "Texto em português"
+   ```
+
+2. **Adicionar ao `en.json`**:
+   ```json
+   "MyComponent.myKey": "Text in English"
+   ```
+
+3. **Usar no código**:
+   ```jsx
+   <FormattedMessage id="MyComponent.myKey" />
+   ```
+   
+   Ou com hook:
+   ```jsx
+   const intl = useIntl();
+   const label = intl.formatMessage({ id: 'MyComponent.myKey' });
+   ```
+
+4. **Com valores dinâmicos** (placeholders):
+   ```json
+   "MyComponent.greeting": "Olá {name}, tens {count} mensagens"
+   ```
+   ```jsx
+   <FormattedMessage 
+     id="MyComponent.greeting" 
+     values={{ name: 'João', count: 5 }} 
+   />
+   ```
+
+## Sincronização PT ↔ EN
+
+Não há script automático que garanta paridade. Para verificar:
+
+```bash
+# Conta chaves
+jq 'keys | length' src/translations/pt.json
+jq 'keys | length' src/translations/en.json
+
+# Chaves em EN mas não em PT
+diff <(jq -r 'keys[]' src/translations/en.json | sort) <(jq -r 'keys[]' src/translations/pt.json | sort)
+```
+
+⚠️ **Gap atual**: ~381 chaves em EN não estão em PT. São do template Sharetribe original (componentes não usados pela V1H). Sem impacto prático.
+
+## Manutenção das traduções
+
+### Sharetribe oferece serviço de tradução automática?
+**Não**. O Sharetribe `Pages` (PageBuilder) tem conteúdo em CMS que pode ser editado por idioma, mas as **strings de UI** (`pt.json`, `en.json`) são responsabilidade do dev.
+
+### `yarn run translate`
+Script que ajuda a comparar PT vs EN e detectar chaves em falta. Não traduz automaticamente — apenas reporta.
+
+### MyMemory (tradução automática)
+Para **conteúdo do utilizador** (descrições, reviews), usamos MyMemory via `/api/translate`. Ver [Tradução](traducao).
+
+## Fr/Es/De
+
+Os ficheiros `fr.json`, `es.json`, `de.json` existem em `src/translations/` mas são **herdados do template Sharetribe** — nunca foram atualizados pela V1H. Não são oferecidos na UI (o language switcher só mostra PT/EN).
+
+Para suportar mais idiomas, seria preciso:
+1. Atualizar esses JSONs com strings V1H
+2. Adicionar opções ao language switcher
+3. Configurar `localeContext` para os aceitar
+
+## Resumo
+
+- **PT**: 1.383 chaves em 113 namespaces
+- **EN**: 1.764 chaves (com chaves herdadas Sharetribe)
+- **Gap**: ~381 chaves em EN sem equivalente PT (sem impacto visível)
+- **Outros idiomas**: ficheiros existem mas inativos
+- **Tradução de UI**: manual em JSON
+- **Tradução de conteúdo**: automática via MyMemory

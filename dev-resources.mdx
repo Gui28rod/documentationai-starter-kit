@@ -1,0 +1,227 @@
+---
+title: "Dev Resources"
+description: "StyleguidePage, Tests, Scripts utilitários, Analytics, Service Worker — recursos técnicos para devs."
+---
+
+# Dev Resources
+
+Recursos técnicos para desenvolvedores que trabalham no projeto.
+
+## StyleguidePage
+
+**URL**: `/styleguide` (não linkado — acesso direto)
+**Ficheiro**: `src/containers/StyleguidePage/`
+
+Página oculta de showcase de componentes — útil para devs e designers verem o sistema visual completo.
+
+### O que mostra
+- **Cores** da palette V1H (com hex)
+- **Tipografia** (Britannic Bold, Century Gothic, Red Hat Text) em vários tamanhos
+- **Botões** (Primary, Secondary, InlineText, Disabled, etc.)
+- **Form fields** (Text, Number, Checkbox, Select, DatePicker, etc.)
+- **Cards** (ListingCard com variantes)
+- **Modais** (todos os tipos)
+- **Ícones** (todos os 40+ ícones SVG)
+- **Layouts** (LayoutComposer variantes)
+- **Avatars** (Small, Medium, Large)
+
+### Para que serve
+- Designers veem o que está disponível antes de pedir novo design
+- Devs copiam o exemplo de uso
+- QA testa visual em ambos os modos (claro/escuro)
+
+### Como adicionar componente
+1. Importar em `StyleguidePage.js`
+2. Adicionar secção com `<ComponentExample component={X} />`
+3. Definir variantes a mostrar
+
+## Tests
+
+Testes em `src/**/*.test.js` (Jest + React Testing Library).
+
+### O que está testado
+
+| Componente | Test file |
+|---|---|
+| `auth.duck` | `src/ducks/auth.test.js` |
+| `marketplaceData.duck` | `src/ducks/marketplaceData.test.js` |
+| `app` | `src/app.test.js` |
+| `EditListingPage` | `src/containers/EditListingPage/EditListingPage.test.js` |
+| `SearchPage` | `src/containers/SearchPage/SearchPage.test.js` |
+| `ListingCard` | `src/components/ListingCard/ListingCard.test.js` |
+| `FieldBoolean`, `FieldSelectTree` | snapshots |
+
+### Cobertura
+- **Limitada** — herdada do template Sharetribe
+- Focada em ducks principais + smoke tests de páginas
+- Pouca cobertura nos componentes V1H customizados (ExtraAlerts, TranslateButton, etc.)
+
+### Como correr
+```bash
+yarn test                # interactive watch
+yarn test --coverage     # com cobertura
+yarn test EditListing    # filtrar por nome
+```
+
+### Helpers
+- `src/util/testData.js` — mocks de listings, users, transactions
+- `src/util/testHelpers.js` — render wrappers (Redux store + Router + Intl)
+
+## Scripts utilitários
+
+Diretório: `scripts/`
+
+| Script | Função |
+|---|---|
+| `backfill-response-times.js` | Calcula `responseTime` dos hosts retroativamente (corre uma vez para popular dados de utilizadores antigos) |
+| (outros adicionados conforme necessidade) | |
+
+### Como correr
+```bash
+node scripts/backfill-response-times.js
+```
+
+Requer Integration SDK credentials no `.env`. Lê todas as transactions e calcula response time médio por user. Atualiza `metadata.responseStats` de cada user.
+
+## Analytics
+
+Diretório: `src/analytics/`
+
+### Google Analytics 4
+
+- `REACT_APP_GOOGLE_ANALYTICS_ID` no `.env`
+- Carregado dinamicamente via `includeScripts.js`
+- **Gating cookie consent**: só carrega se categoria "analytics" aceita
+- Eventos automáticos: page views, scroll depth (via Enhanced Measurement do GA — recomendado **desativar** Enhanced Measurement)
+
+### Plausible (alternativa, não usada)
+
+- `REACT_APP_PLAUSIBLE_DOMAINS` (comentado no `.env`)
+- Mais privacy-friendly que GA
+- Pago
+
+### Eventos customizados V1H
+
+Triggered via `analytics.duck.js` (ou similar):
+- `listing_viewed`
+- `favorite_added` / `favorite_removed`
+- `search_performed`
+- `booking_completed`
+- `signup_completed`
+
+## Service Worker
+
+Ficheiro: `public/service-worker.js`
+
+```js
+const CACHE_NAME = 'v1hub-pwa-shell-v1';
+```
+
+### Handlers
+- `install` — cria cache vazio
+- `activate` — limpa caches antigos (de versões anteriores)
+- `fetch` — **network-first** (passa direto, sem pré-cache)
+
+### Por que sem pré-cache?
+Os assets do site mudam frequentemente em dev. Pré-cache levaria a versões desatualizadas. Network-first significa que vai sempre ao servidor primeiro.
+
+### Por que existe se não faz nada útil?
+**Requisito para o browser permitir "Install App"**. Sem service worker, o "Add to Home Screen" não aparece.
+
+### Para estender (futuro)
+Adicionar:
+- Offline page fallback
+- Cache de assets estáticos (CSS, fonts)
+- Background sync (enviar mensagens quando voltar online)
+- Push notifications
+
+## Web Manifest
+
+Ficheiro: `public/manifest.json` (gerado dinamicamente via `server/resources/webmanifest.js`)
+
+```json
+{
+  "name": "Venue1Hub",
+  "short_name": "V1H",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#BAA38A",
+  "background_color": "#ffffff",
+  "icons": [...]
+}
+```
+
+`display: standalone` significa que ao instalar fica como app independente (sem chrome do browser).
+
+## PWA Counter
+
+Ficheiro: `server/data/pwa-counter.json`
+
+Conta quantos utilizadores instalaram a PWA.
+
+### Endpoints
+- `GET /api/pwa-counter` — lê
+- `POST /api/pwa-counter/increment` — incrementa
+
+### Bug conhecido
+Ficheiro está trackeado pelo git → reseta a cada `git pull`. Ver [Problemas Conhecidos](problemas-conhecidos).
+
+## Dev scripts (package.json)
+
+| Script | Comando |
+|---|---|
+| `yarn run dev` | Frontend dev server |
+| `yarn run dev-server` | Server dev (SSR + API) |
+| `yarn run build` | Production build |
+| `yarn run start` | Production server |
+| `yarn run test` | Jest tests |
+| `yarn run translate` | Atualizar traduções |
+
+## Linting
+
+- **ESLint** com config `.eslintrc`
+- **Prettier** com `.prettierrc`
+- Pre-commit hook (se configurado) corre lint + format
+
+## VS Code config
+
+Diretório: `.vscode/` (se tracked) ou `.vscode-local/`:
+- Settings
+- Recommended extensions
+- Launch configs
+
+## Type checking
+
+- Sem TypeScript — projeto é JS
+- Usa **PropTypes** em alguns componentes
+- Type definitions em `src/util/types.js`
+
+## CI/CD
+
+Atualmente:
+- **GitHub push** → branch main
+- Sem CI automático configurado (não há `.github/workflows/`)
+- Deploy manual via Heroku push ou similar
+
+Pendente: adicionar GitHub Actions para:
+- Lint + tests em PRs
+- Build automático
+- Deploy automático em push para `main`
+
+## Debugging
+
+### Frontend
+- Redux DevTools (extensão browser)
+- React DevTools
+- Network tab para SDK calls
+
+### Backend
+- `console.log` aparece no terminal do servidor
+- Sentry (se `REACT_APP_SENTRY_DSN` configurado)
+- Logs estruturados em `server/log.js`
+
+### Common debug recipes
+- **Listing não aparece na search** → verificar `flex-cli search set` foi corrido para os custom fields
+- **Pagamento falha** → ver Stripe Dashboard logs + browser console
+- **Notificação não chega** → ver `metadata.unseen*Alerts` do user via Integration SDK
+- **Cron não corre** → verificar `DISABLE_*` env vars + logs do servidor
