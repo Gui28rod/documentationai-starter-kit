@@ -59,7 +59,7 @@
                 "path": "topbar"
               },
               {
-                "title": "Footer",
+                "title": "Footer (componente)",
                 "path": "footer"
               },
               {
@@ -83,7 +83,7 @@
                 "path": "paginas-conta"
               },
               {
-                "title": "Páginas do Footer",
+                "title": "Páginas Legais & Institucionais",
                 "path": "paginas-footer"
               },
               {
