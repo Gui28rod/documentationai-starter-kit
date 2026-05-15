@@ -1,12 +1,78 @@
-# Tecnologia
+---
+title: "Tecnologia"
+description: "Stack técnica completa do projeto V1H."
+---
 
-A V1H foi construída sobre o Sharetribe Web Template (open-source). Stack técnica:
+A V1H foi construída sobre o **Sharetribe Web Template** (open-source). Stack técnica completa:
 
-- **Frontend**: React 18 + Redux Toolkit + CSS Modules
-- **Backend**: Node.js + Express (renderização server-side + endpoints customizados + cron jobs)
-- **Base de dados**: Sharetribe Marketplace API (gerida pela Sharetribe — não há BD própria)
-- **Pagamentos**: Stripe Connect (atualmente em modo teste)
-- **Mapas**: Mapbox
-- **Emails transacionais**: Resend
-- **Análise**: Google Analytics 4 (test env configurado, pendente para produção)
-- **Cron jobs**: node-cron dentro do processo Express
+## Frontend
+- **React 18** com hooks
+- **Redux Toolkit** para estado global (26 ducks)
+- **CSS Modules** scoped por componente
+- **React Final Form** para formulários
+- **react-intl** para internacionalização PT/EN
+- **Loadable Components** para code splitting
+
+## Backend
+- **Node.js + Express** para SSR + endpoints customizados
+- **Sharetribe Marketplace SDK** (cliente API)
+- **Sharetribe Integration SDK** (operator-level, para cron jobs)
+- **node-cron** para tarefas agendadas dentro do processo Express
+- **Resend** para emails transacionais
+- **Helmet** para headers de segurança + CSP com nonce
+
+## Base de dados
+- **Sharetribe Marketplace API** (gerida pela Sharetribe — V1H não tem BD própria)
+- Tudo persistido lá: users, listings, transactions, reviews, messages, metadata
+
+## Pagamentos
+- **Stripe Connect** (modelo Express)
+- Atualmente em **modo teste** (`pk_test_*`)
+- Onboarding hosted pela Stripe (KYC + IBAN)
+- 3D Secure automático para cartões europeus
+
+## Mapas
+- **Mapbox** (token configurado no `.env`)
+- Suporte alternativo para Google Maps API (não usado)
+
+## Análise e Tracking
+- **Google Analytics 4** (`G-CE4QX3X8RV` configurado em test, pendente "Copy to live")
+- **Plausible Analytics** preparado mas não ativo
+- Gating cookie consent: GA só carrega se categoria "analytics" aceite
+
+## Infraestrutura PWA
+- **Service Worker** (`public/service-worker.js`)
+- **Web Manifest** gerado dinamicamente
+- Install prompt + counter de instalações
+
+## Tradução
+- **react-intl** para UI (113 namespaces, ~1.383 chaves PT)
+- **MyMemory API** (gratuito) para tradução de conteúdo de utilizador
+
+## Hosting
+- Pode correr em **Heroku, AWS, Railway, Render** — qualquer Node host
+- Frontend + backend no mesmo processo (não há build separado)
+- Sharetribe trata BD + payment processing
+
+## Desenvolvimento
+- **VS Code** como editor principal
+- **Yarn** para package management
+- **Git + GitHub** para versionamento
+- **Jest + React Testing Library** para testes (cobertura limitada)
+
+## Versões importantes
+
+| Dependência | Versão |
+|---|---|
+| React | 18.x |
+| Node | >= 18.20.1 (recomendado >= 22.22.0) |
+| Sharetribe Web Template (base) | 10.14.0+ |
+| sharetribe-flex-sdk | latest |
+| @reduxjs/toolkit | 1.x / 2.x |
+| react-intl | latest |
+| moment + moment-timezone | latest |
+| Stripe.js | latest |
+| Mapbox GL JS | latest |
+| Resend SDK | latest |
+
+Para mais detalhes ver [Sharetribe vs Customizações V1H](sharetribe-vs-v1h) e [Variáveis de Ambiente](variaveis-de-ambiente).

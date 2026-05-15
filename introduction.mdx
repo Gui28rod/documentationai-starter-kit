@@ -1,21 +1,118 @@
-# Introdução ao V1H (Venue1Hub)
+---
+title: "Introdução"
+description: "Visão geral do projeto V1H — o que é, como funciona, e como navegar nesta documentação."
+---
 
-V1H é um marketplace português que liga anfitriões (donos de espaços) a clientes (organizadores de eventos, profissionais, particulares) para arrendamento de espaços por hora, dia ou longo-prazo.
+## O que é a V1H
 
-**Estado**: desenvolvimento avançado em ambiente de teste Sharetribe (v1h4-test). Ainda não foi para produção.
+A **Venue1Hub (V1H)** é um marketplace português que liga **anfitriões** (donos de espaços) a **clientes** (organizadores de eventos, profissionais, particulares) para arrendamento de espaços por hora, dia ou longo-prazo.
+
+**Última atualização**: 2026-05-16
+**Estado**: desenvolvimento avançado em ambiente de teste Sharetribe (`v1h4-test`). Ainda **não foi para produção**.
+
+## Como funciona (resumo rápido)
+
+1. **Cliente** pesquisa espaços por categoria, localização, preço, datas
+2. Encontra um anúncio, escolhe datas/horas, paga via Stripe
+3. **Anfitrião** recebe o pedido na sua [Caixa de Entrada](reservas), aceita ou recusa
+4. Após a reserva, ambos podem trocar mensagens
+5. Quando a reserva termina, ambos podem [avaliar](avaliacoes)
+6. V1H retira **comissão** automaticamente; Stripe envia o resto ao anfitrião
+
+## Stack técnica
+
+- **Frontend**: React 18 + Redux Toolkit + CSS Modules
+- **Backend**: Node.js + Express (renderização server-side + endpoints customizados + cron jobs)
+- **Marketplace API**: gerida pela Sharetribe (sem BD própria)
+- **Pagamentos**: Stripe Connect
+- **Mapas**: Mapbox
+- **Email**: Resend
+- Detalhe completo em [Tecnologia](quickstart) e [Sharetribe vs Customizações V1H](sharetribe-vs-v1h)
+
+## Como navegar nesta documentação
+
+A documentação está organizada em **6 grupos** na sidebar:
+
+### 📘 Sobre o Projeto
+Introdução geral, stack técnica, comparação Sharetribe vs custom, painel admin do Sharetribe, e índice geral.
+
+### 🎨 Páginas do Site
+Cada página visível ao utilizador (Homepage, Topbar, Footer, Listing, Pesquisa, Perfis, Recentemente Vistos, Dropdown de conta, Páginas legais, Account Pages).
+
+### 🔀 Flows Principais
+Os percursos do utilizador (Autenticação, Publicar Anúncio, Reservas, Processos de Transação, Checkout, Pagamentos, Avaliações).
+
+### 🧩 Sistemas Transversais
+Funcionalidades que atravessam todo o site (Notificações, Cookies, Tradução PT/EN, Modo Escuro, Mobile & PWA).
+
+### 💻 Referência Técnica
+Catálogos exaustivos (todos os 41 containers, ~110 componentes, 26 ducks Redux, endpoints, cron jobs, env vars, custom fields, forms, PageBuilder, dev resources, i18n keys).
+
+### 🚩 Estado do Projeto
+O que falta para go-live, problemas conhecidos, decisões importantes, próximas tarefas.
+
+## Por onde começar
+
+| Quem és | Por onde começar |
+|---|---|
+| **Chefe / Stakeholder** | [Funcionalidades](funcionalidades) → [Pendências para Go-Live](pendencias-para-go-live) |
+| **Designer** | [Páginas do Site](homepage) (cada uma) → [Modo Escuro & Theming](modo-escuro) |
+| **Dev novo no projeto** | [Sharetribe vs Customizações V1H](sharetribe-vs-v1h) → [Catálogo de Containers](catalogo-containers) → [Dev Resources](dev-resources) |
+| **Admin de marketplace** | [Sharetribe Console (Admin)](sharetribe-console) |
+| **Quero encontrar algo específico** | [Índice de Funcionalidades](indice-funcionalidades-detalhado) (mapa funcionalidade → página) |
 
 ## Categorias de espaços
 
-- Trabalho & Reuniões
-- Educação & Cultura
-- Gastronomia & Convívio
-- Eventos & Festas
-- Criatividade & Produção
-- Saúde & bem-estar
-- Desporto & Atividade Física
-- Espaços ao Ar Livre
-- Espaços Inusitados & Alternativos
+A V1H suporta **9 categorias** próprias:
+
+| Categoria | Exemplos |
+|---|---|
+| Trabalho & Reuniões | Escritórios, salas de reunião, coworking |
+| Educação & Cultura | Salas de aula, espaços para workshops |
+| Gastronomia & Convívio | Cozinhas, salas para refeições |
+| Eventos & Festas | Salões, terraços |
+| Criatividade & Produção | Estúdios, ateliers, espaços de filmagem |
+| Saúde & Bem-estar | Salas para terapias, yoga, massagens |
+| Desporto & Atividade Física | Ginásios, courts, espaços ao ar livre |
+| Espaços ao Ar Livre | Quintas, terraços, jardins |
+| Espaços Inusitados & Alternativos | O que não cabe nas outras |
+
+Cada categoria tem ícone próprio (`src/components/CategoryIcons/`) + filtros específicos.
 
 ## Modelo de negócio
 
-Comissão por reserva, processada via Stripe Connect.
+- **Comissão por reserva** retirada automaticamente sobre cada transação
+- Processada via **Stripe Connect** (V1H recebe comissão, anfitrião recebe o resto)
+- Percentagem configurada no Sharetribe Console (pendente confirmação para go-live)
+- Ver [Pagamentos](pagamentos) para detalhe técnico
+
+## Stats do projeto
+
+- **40 páginas** de documentação (esta)
+- **41 containers / páginas** no código React
+- **~110 componentes** reutilizáveis
+- **26 ducks Redux**
+- **16 endpoints** customizados (`server/api/*`)
+- **3 cron jobs** ativos (`server/jobs/*`)
+- **9 categorias** de espaços com ícones próprios
+- **2 idiomas** suportados (PT + EN) + 5 cookies categories GDPR-ready
+- **Modo escuro** completo
+- **PWA** instalável
+
+## Equipa & repositório
+
+- Desenvolvido por estagiários da V1H em **VS Code**
+- Repositório GitHub: `Gui28rod/v1h---testes-dev` (conta pessoal — **pendente transferência** para conta da empresa antes do go-live)
+- Documentação no repositório `Gui28rod/documentationai-starter-kit` (sincronizada com este site)
+
+## Próximos passos para ir para produção
+
+Ver [Pendências para Go-Live](pendencias-para-go-live). Resumo:
+
+1. Termos + Privacidade atualizados (NIF, capital, registo, DPO) — **bloqueante**
+2. Stripe keys live
+3. Integration SDK live
+4. GA4 "Copy to live"
+5. Custom domain (`docs.venue1hub.com`)
+6. Decisão mobile app (PWA vs Capacitor)
+7. Chatbot AI + handoff humano (AnyChat a avaliar)
