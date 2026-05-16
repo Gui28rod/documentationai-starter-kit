@@ -1,0 +1,40 @@
+---
+title: "O meu perfil"
+description: "Página pública do teu perfil — o que outros utilizadores veem."
+---
+
+## O que é
+
+A página pública do teu perfil, visível para qualquer pessoa (logged-in ou guest) quando clica no teu nome num anúncio, review, ou em qualquer sítio do site.
+
+**URL**: `/u/:userId`
+**Ficheiro**: `src/containers/ProfilePage/`
+**Onde aceder**: dropdown do avatar (canto superior direito) → **"O meu perfil"**
+
+## O que mostra
+
+### Sidebar (lateral)
+- **Avatar grande** (foto de perfil)
+- **Botão Seguir / A seguir** — outros podem seguir-te
+- **Rating ⭐** + número de avaliações recebidas como cliente
+- **Followers count** — quantos te seguem
+- **Línguas faladas** (com bandeiras)
+- **Social links** (Facebook, Instagram, etc.)
+- **Response time** (ex: "Responde em ~2h")
+- **Last online** ("Online agora", "há X min", "há X dias")
+- **Localização**
+
+### Conteúdo principal
+- Os teus anúncios publicados (com `ProfileListingsSearchBar` para outros filtrarem)
+- Reviews que recebeste
+- A tua bio
+
+## Diferença para "Configurações do perfil"
+
+| | O meu perfil | Configurações do perfil |
+|---|---|---|
+| **Para que serve** | **Ver** o teu perfil público | **Editar** o teu perfil |
+| **Quem vê** | Toda a gente | Só tu |
+| **URL** | `/u/:userId` | `/profile-settings` |
+
+Detalhe completo: [Perfis de Utilizador](perfis).

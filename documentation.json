@@ -75,16 +75,50 @@
                 "path": "recently-viewed"
               },
               {
-                "title": "Páginas de Conta (Dropdown)",
-                "path": "paginas-conta"
-              },
-              {
                 "title": "Páginas Legais & Institucionais",
                 "path": "paginas-footer"
+              }
+            ]
+          },
+          {
+            "group": "Itens do Dropdown (Avatar)",
+            "icon": "user",
+            "pages": [
+              {
+                "title": "O meu perfil",
+                "path": "o-meu-perfil"
               },
               {
-                "title": "Account Pages (Manage/Listings/Destaque)",
-                "path": "account-pages"
+                "title": "Configurações do perfil",
+                "path": "configuracoes-perfil"
+              },
+              {
+                "title": "Configurações da conta",
+                "path": "configuracoes-conta"
+              },
+              {
+                "title": "Destacar anúncio",
+                "path": "destacar-anuncio"
+              },
+              {
+                "title": "Os seus anúncios",
+                "path": "os-seus-anuncios"
+              },
+              {
+                "title": "Os seus favoritos",
+                "path": "os-seus-favoritos"
+              },
+              {
+                "title": "Pesquisas guardadas",
+                "path": "pesquisas-guardadas"
+              },
+              {
+                "title": "A seguir",
+                "path": "a-seguir"
+              },
+              {
+                "title": "Ajuda",
+                "path": "ajuda"
               }
             ]
           },

@@ -1,0 +1,59 @@
+---
+title: "A seguir"
+description: "Página com os utilizadores (anfitriões) que segues no V1H."
+---
+
+## O que é
+
+Página com **todos os utilizadores** (geralmente anfitriões) que segues no V1H.
+
+**URL**: `/a-seguir`
+**Ficheiro**: `src/containers/FollowingPage/`
+**Onde aceder**: dropdown do avatar → **"A seguir"**
+
+## O que mostra
+
+Cada utilizador seguido aparece como **card**:
+- **Avatar**
+- **Nome** + display name
+- **Bio** breve
+- **Botão "Deixar de seguir"**
+- Click no nome → vai para o `ProfilePage` desse user
+
+## Como começar a seguir alguém
+
+Em qualquer parte do site onde aparece o avatar/nome de um anfitrião (página de anúncio, perfil público):
+
+1. Click em **"Seguir"** ao lado do nome
+2. Servidor regista (`POST /api/user-follow`)
+3. **Throttle 24h** — mesmo fã só notifica 1x por dia
+4. Se passar throttle:
+   - Toast in-app aparece à pessoa seguida
+   - **Email imediato** ("Alguém começou a seguir-te")
+
+## Notificações ao seguir alguém
+
+Quando segues alguém, **passas a receber notificações** quando essa pessoa:
+
+- **Publica anúncio novo** → toast in-app "X publicou um novo anúncio"
+- **Edita anúncio** → toast "X atualizou o anúncio Y"
+- **Recebe avaliação** → toast "X recebeu uma nova avaliação" (excluindo se for tu o autor da review)
+
+Tudo via cron `notifyExtraAlertsJob` (5 min).
+
+Ver [Notificações](notificacoes-completas).
+
+## Diferença para "Os seus favoritos"
+
+| | A seguir | Os seus favoritos |
+|---|---|---|
+| **O que guarda** | Utilizadores | Anúncios específicos |
+| **Para que serve** | Acompanhar quem publica | Lembrar de espaços |
+| **Notificações** | Edits + reviews + novos anúncios | Email diário de quem favoritou |
+
+## Persistência
+
+- Server-side em `currentUser.privateData.following` (array de userIds)
+- Sincronizada via `src/ducks/follow.duck.js`
+
+Detalhe completo: [Perfis de Utilizador](perfis).

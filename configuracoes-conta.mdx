@@ -1,0 +1,65 @@
+---
+title: "Configurações da conta"
+description: "Email, palavra-passe, dados de contacto, métodos de pagamento, eliminar conta."
+---
+
+## O que é
+
+Painel com as **definições privadas** da conta (não visíveis ao público).
+
+**URL**: `/account`
+**Onde aceder**: dropdown do avatar → **"Configurações da conta"**
+
+## Sub-páginas dentro de "Configurações da conta"
+
+| Sub-página | URL | O que faz |
+|---|---|---|
+| **Contact details** | `/account/contact-details` | Mudar email + telemóvel |
+| **Password** | `/account/password-change` | Alterar palavra-passe |
+| **Payment methods** | `/account/payment-methods` | Cartões guardados (Stripe) |
+| **Payouts** | `/account/payments` | Stripe Connect onboarding (para anfitriões receberem pagamentos) |
+| **Manage account** | `/account` | Eliminar conta (com confirmação) |
+
+## Contact Details
+
+- Editar **email** (envia confirmação para o novo)
+- Editar **telemóvel**
+- Botão "Reenviar email de verificação"
+- Link "Recuperar password"
+
+## Password Change
+
+- Form: password antiga + nova
+- **Regras password nova**: 8-64 chars + pelo menos 1 letra + 1 dígito
+- Se signup foi via Google (SSO), mostra mensagem em vez do form
+
+## Payment Methods
+
+- Lista cartões guardados (últimos 4 dígitos + brand + expiry)
+- **Adicionar cartão** via Stripe `SetupIntent` (3D Secure se necessário)
+- **Eliminar cartão** com confirmação
+
+## Payouts (Stripe Connect)
+
+- Status box visual:
+  - 🟢 Verde se onboarding completo
+  - 🟡 Amarelo se faltam dados
+  - 🔴 Vermelho se rejeitado
+- **Redirect para Stripe** para preencher dados (KYC + IBAN)
+- Mostra últimos 4 dígitos do IBAN registado
+
+## Eliminar conta
+
+- Confirmação com **password**
+- `POST /api/delete-account` → Sharetribe SDK `deleteUser`
+- ⚠️ **Irreversível** — listings do user também são fechados
+- Logout automático após sucesso
+
+## Diferença para "Configurações do perfil"
+
+| | Configurações da conta | Configurações do perfil |
+|---|---|---|
+| **Edita** | Dados privados (email, password) | Dados públicos (bio, foto) |
+| **Para que serve** | Segurança + pagamentos | Aparência pública |
+
+Para mais detalhe técnico (ficheiro fonte, helpers, etc.) ver [Catálogo de Containers](catalogo-containers).

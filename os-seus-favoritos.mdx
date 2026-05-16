@@ -1,0 +1,54 @@
+---
+title: "Os seus favoritos"
+description: "Página com os anúncios que o utilizador marcou com coração ❤️."
+---
+
+## O que é
+
+Página com **todos os anúncios** que marcaste com ❤️ (coração) no site.
+
+**URL**: `/favoritos`
+**Ficheiro**: `src/containers/FavoritesPage/`
+**Onde aceder**: dropdown do avatar → **"Os seus favoritos"**
+
+## O que mostra
+
+- Lista visual igual à da pesquisa (cards com foto + título + preço + localização + rating)
+- Coração **já preenchido** em cada card → click remove dos favoritos
+
+## Como funciona
+
+### Marcar um anúncio como favorito
+
+Em qualquer lado do site (cards na pesquisa, página do anúncio):
+1. Click no coração 🤍 → fica vermelho ❤️
+2. Servidor regista (`POST /api/listing-like`)
+3. Throttle 24h por (fã, anúncio) — evita spam
+4. Se passar throttle → toast in-app aparece ao anfitrião
+5. Acumula em `dailyFavoriteDigest` para email diário às 08:00
+
+### Persistência
+
+| Estado do utilizador | Storage |
+|---|---|
+| **Logged-in** | `currentUser.privateData.favorites` (server Sharetribe) |
+| **Guest** (não logado) | `localStorage` chave `marketplace_favorites_guest` |
+| **Login** | Migração automática guest → server |
+
+Sincronização via `src/ducks/favorites.duck.js`.
+
+## Notificações relacionadas
+
+Quando alguém favorita um teu anúncio:
+- **Toast in-app** ao topo (poll 60s)
+- **Email diário às 08:00** com resumo (top 10 anúncios favoritados)
+
+Ver [Notificações](notificacoes-completas) + [Cron Jobs](cron-jobs).
+
+## Diferença para "A seguir"
+
+| | Os seus favoritos | A seguir |
+|---|---|---|
+| **O que guarda** | Anúncios específicos | Utilizadores (anfitriões) |
+| **Para que serve** | Lembrar de espaços que gostei | Acompanhar quem segues |
+| **Notificação** | Email diário de favoritos | Toast quando publicam anúncio novo |

@@ -1,0 +1,54 @@
+---
+title: "Ajuda"
+description: "Página de contacto + perguntas frequentes para ajuda ao utilizador."
+---
+
+## O que é
+
+Página com **formulário de contacto** + **perguntas frequentes** (FAQ) para utilizadores tirarem dúvidas.
+
+**URL**: `/contact`
+**Ficheiro**: `src/containers/ContactPage/`
+**Onde aceder**:
+- Dropdown do avatar → **"Ajuda"**
+- Ícone (?) no topbar
+
+## Form de contacto
+
+Campos pedidos:
+
+| Campo | Validação |
+|---|---|
+| **Nome** | Obrigatório |
+| **Email** | Formato email válido |
+| **Telefone** | Com seletor de país + flag (biblioteca `flag-icons`) |
+| **Assunto** | Texto |
+| **Mensagem** | Textarea |
+
+**Submit** → `POST /api/contact` → envia email para `admin@v1h.net` (configurável via env `CONTACT_RECIPIENT`).
+
+## Países suportados no seletor de telefone
+
+PT 🇵🇹, ES 🇪🇸, FR 🇫🇷, GB 🇬🇧, DE 🇩🇪, IT 🇮🇹, NL 🇳🇱, BE 🇧🇪, CH 🇨🇭, US 🇺🇸, BR 🇧🇷, AO 🇦🇴, MZ 🇲🇿
+
+## Informação de contacto direta
+
+Na lateral mostra cards com:
+
+- 📧 **Email**: `admin@v1h.net`
+- 📍 **Endereço**: Mira (Portugal)
+- 📞 **Telefone**: `+351 930 432 478`
+- 🕒 **Horário**: Segunda a Sexta, 9h–18h
+
+## FAQ (Perguntas Frequentes)
+
+Lista de perguntas com respostas **expansíveis** (accordion):
+- Componente: `FAQContent.js`
+- Suporte i18n PT/EN
+- Acessível também via âncora: `/como-funciona#faq`
+
+## Quem vê este item no dropdown
+
+**Todos** — qualquer utilizador (logged-in ou guest) pode aceder.
+
+Detalhe completo: [Páginas Legais & Institucionais](paginas-footer).

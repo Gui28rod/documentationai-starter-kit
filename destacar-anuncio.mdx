@@ -1,0 +1,53 @@
+---
+title: "Destacar anúncio"
+description: "Página onde o anfitrião pode destacar um dos seus anúncios na homepage."
+---
+
+## O que é
+
+Página onde o anfitrião escolhe **um dos seus anúncios** para aparecer **destacado na homepage** (como "Highlighted Listing" logo após o hero).
+
+**URL**: `/destaque-anuncio`
+**Ficheiro**: `src/containers/DestacaAnuncioPage/`
+**Onde aceder**: dropdown do avatar → **"Destacar anúncio"** *(só aparece se tens pelo menos 1 anúncio publicado)*
+
+## Estrutura em 2 secções
+
+### 1. ListingSelectCard
+- Lista todos os anúncios publicados pelo anfitrião
+- Botão "Destacar" em cada card
+- Toast "já em destaque" se selecionar um já destacado
+- **Scroll smooth** com easing (2.4s) ao selecionar
+
+### 2. ListingDetail (após seleção)
+- **Pré-visualização** do anúncio como aparecerá na homepage
+- Card visual idêntica à da landing
+- **Título e descrição editáveis inline** (com ícone de lápis)
+- Carrossel de imagens do anúncio
+- Pode **adicionar imagens extra** via file input
+- Mostra comodidades (multi-enum chips)
+- Rating + número de reviews
+- Nome do anfitrião + badge "verificado"
+
+## Pagamento
+
+Tem **custo associado**:
+
+- **Stripe Card Element** integrado para pagamento
+- **Taxa fixa**: €9,99/mês
+- Validação `cardComplete` antes de submit
+- Custom styling do form (font Inter, padding, cores V1H)
+
+## Persistência
+
+- Redux dispatch: `addHighlightedListing(listingData)`
+- Guarda em `localStorage` chave `sharetribe_highlighted_listings`
+- Dados: id, slug, title, description, imageUrl, extraImageUrls, amenityChips, rating, reviewCount, category
+- Aparece na homepage logo após o hero
+
+## Visual
+
+- Badge overlay "Em Destaque" / "Featured" no card destacado
+- Botões "BOOK NOW" / "VIEW DETAILS" são preview (não funcionais nesta página)
+
+Para mais detalhe técnico (ficheiro fonte, helpers, etc.) ver [Catálogo de Containers](catalogo-containers).

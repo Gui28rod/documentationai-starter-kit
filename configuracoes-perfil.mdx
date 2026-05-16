@@ -1,0 +1,60 @@
+---
+title: "Configurações do perfil"
+description: "Editar avatar, nome, bio, línguas faladas, social links, localização."
+---
+
+## O que é
+
+Página onde editas o **teu perfil público** (avatar, bio, línguas, etc.).
+
+**URL**: `/profile-settings`
+**Ficheiro**: `src/containers/ProfileSettingsPage/`
+**Onde aceder**: dropdown do avatar → **"Configurações do perfil"**
+
+## Campos editáveis
+
+### Form: `ProfileSettingsForm`
+
+| Campo | Validação |
+|---|---|
+| **Avatar** (foto) | Upload com transient state |
+| **First name** | Letras + acentos + apóstrofos + hífens, máx 50 chars |
+| **Last name** | Idem |
+| **Display name** | Alfanumérico + símbolos, máx 60 chars |
+| **Bio** | Textarea, máx 500 chars |
+| **Localização** | Autocomplete Mapbox |
+| **Línguas faladas** | Multi-select com bandeiras (`LanguagesField`) |
+| **Social links** | Array de URLs com normalização (`SocialLinksField`) |
+
+### Línguas faladas (LanguagesField)
+
+Lista com bandeiras (`flag-icons`):
+- Português 🇵🇹
+- English 🇬🇧
+- Español 🇪🇸
+- Français 🇫🇷
+- Italiano 🇮🇹
+- Deutsch 🇩🇪
+- E mais
+
+### Social Links (SocialLinksField)
+
+Plataformas suportadas:
+- Facebook
+- Instagram
+- Twitter
+- LinkedIn
+- TikTok
+- YouTube
+- Pinterest
+
+URL normalization automática (ex: `@user` → `https://instagram.com/user`).
+
+## Diferença para "Configurações da conta"
+
+| | Configurações do perfil | Configurações da conta |
+|---|---|---|
+| **Edita** | Dados públicos (bio, foto, social) | Dados privados (email, password, pagamento) |
+| **URL** | `/profile-settings` | `/account/*` |
+
+Detalhe completo: [Perfis de Utilizador](perfis) + [Catálogo de Containers](catalogo-containers).
