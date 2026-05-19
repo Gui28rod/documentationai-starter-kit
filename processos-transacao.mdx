@@ -3,7 +3,7 @@ title: "Processos de Transação"
 description: "Os 4 processos Sharetribe (booking, purchase, inquiry, negotiation) com estados e transições."
 ---
 
-Cada transação na V1H segue um **processo Sharetribe** definido em `src/transactions/`. Cada processo é uma máquina de estados com transições válidas.
+Cada transação na V1H segue um **processo Sharetribe** definido em `src/transactions/`. Cada processo é uma máquina de estados com transições válidas que determinam o que cliente e anfitrião podem fazer em cada momento.
 
 ## 4 processos disponíveis
 
@@ -16,7 +16,7 @@ Cada transação na V1H segue um **processo Sharetribe** definido em `src/transa
 | `INITIAL` | Estado inicial (não persiste) |
 | `INQUIRY` | Cliente pediu info sem pagamento (free inquiry) |
 | `PENDING_PAYMENT` | À espera do pagamento Stripe |
-| `LONG_TERM_PENDING_APPROVAL` | Reserva > 90 dias → host aprova primeiro |
+| `LONG_TERM_PENDING_APPROVAL` | Reserva superior a 90 dias — host aprova primeiro |
 | `PAYMENT_WINDOW_OPEN` | Janela de pagamento aberta (X horas) |
 | `PREAUTHORIZED` | Pagamento pré-autorizado, host decide |
 | `ACCEPTED` | Aceite pelo host, à espera da data |
@@ -58,6 +58,8 @@ Cada transação na V1H segue um **processo Sharetribe** definido em `src/transa
 
 **Ficheiro**: `src/transactions/transactionProcessInquiry.js`
 
+Este processo simplificado destina-se a mercados ou casos onde não há pagamento, servindo apenas como canal de comunicação inicial.
+
 | Estado | O que significa |
 |---|---|
 | `INITIAL` | Estado inicial |
@@ -65,11 +67,13 @@ Cada transação na V1H segue um **processo Sharetribe** definido em `src/transa
 
 **Transição única**: `INQUIRE_WITHOUT_PAYMENT`
 
-**Uso**: para mercados/países sem Stripe ou para casos onde só queres mensagens.
+**Uso**: para mercados ou países sem Stripe, ou para casos onde só se pretende troca de mensagens.
 
 ### `default-negotiation` — orçamentos personalizados
 
 **Ficheiro**: `src/transactions/transactionProcessNegotiation.js`
+
+O processo de negociação permite que cliente e anfitrião cheguem a um preço acordado antes de qualquer pagamento. Suporta dois sentidos: o cliente pede orçamento ou o anfitrião faz uma oferta diretamente.
 
 | Estado | O que significa |
 |---|---|
@@ -82,8 +86,8 @@ Cada transação na V1H segue um **processo Sharetribe** definido em `src/transa
 | `COMPLETED` / `REVIEWED` | Final |
 
 **Dois modos**:
-- **Forward**: cliente pede quote → host responde
-- **Reverse**: host faz offer → cliente aceita ou contra-oferta
+- **Forward**: cliente pede quote — host responde
+- **Reverse**: host faz offer — cliente aceita ou contra-oferta
 
 **Transições de negociação**:
 - `MAKE_OFFER` — host envia oferta
@@ -94,7 +98,7 @@ Cada transação na V1H segue um **processo Sharetribe** definido em `src/transa
 
 ## Variantes customizadas V1H
 
-A V1H tem **2 variantes** que estendem o `default-booking`:
+A V1H tem **2 variantes** que estendem o `default-booking` para cobrir casos de uso específicos do mercado português de espaços.
 
 ### `default-multi-booking-v10`
 - Cliente reserva **múltiplas datas/horas** num único pedido
@@ -142,14 +146,14 @@ Cliente seleciona datas no OrderPanel
 
 ### Ações Redux
 - `speculateTransaction` — pre-calcula sem criar (mostra preview)
-- `initiateOrder` — cria PaymentIntent + transaction
-- `confirmPayment` — confirma Stripe + transita o estado
+- `initiateOrder` — cria PaymentIntent e transaction
+- `confirmPayment` — confirma Stripe e transita o estado
 
 ## TransactionPage
 
 Ficheiro: `src/containers/TransactionPage/`
 
-Página de uma transação individual (`/sale/:id` ou `/order/:id`).
+Página de uma transação individual (`/sale/:id` ou `/order/:id`). O layout apresenta em simultâneo o painel de detalhes, o histórico de atividade e os botões de ação disponíveis para o utilizador no estado atual.
 
 ### Layout em 3 secções
 
@@ -165,7 +169,7 @@ Página de uma transação individual (`/sale/:id` ou `/order/:id`).
    - Notificações de aceitação/recusa
 
 3. **ActionButtons** (em baixo da panel ou centro)
-   - **Condicionais** ao estado + papel (provider vs customer):
+   - Condicionais ao estado e papel (provider vs customer):
      - PENDING_PAYMENT: Cliente vê "Pagar"
      - PREAUTHORIZED: Provider vê "Aceitar" / "Recusar"
      - DELIVERED: Cliente vê "Confirmar receção" (purchase)
@@ -174,34 +178,32 @@ Página de uma transação individual (`/sale/:id` ou `/order/:id`).
 
 ### Modais especializados
 
-- `ReviewForm` / `ReviewModal` — submeter review (1-5 estrelas + texto)
+- `ReviewForm` / `ReviewModal` — submeter review (1-5 estrelas e texto)
 - `DisputeModal` — abrir disputa com motivo
 - `MakeCounterOfferModal` — re-negociar preço
 - `RequestChangesModal` — pedir mudanças pós-entrega
 
 ### State data por processo
 
-Ficheiros separados:
+Ficheiros separados definem o mapeamento de estado para componentes visuais e ações disponíveis em cada processo:
 - `TransactionPage.stateDataBooking.js`
 - `TransactionPage.stateDataPurchase.js`
 - `TransactionPage.stateDataInquiry.js`
 - `TransactionPage.stateDataNegotiation.js`
 
-Cada um mapeia estado → componentes visuais + ações.
-
 ## MakeOfferPage & RequestQuotePage
 
-Ambas dedicadas ao **processo negotiation**.
+Ambas dedicadas ao **processo negotiation**. São páginas independentes com formulários específicos para cada papel na negociação.
 
 ### MakeOfferPage (`/l/:slug/:id/make-offer`)
 - Para **host** responder a pedido de quote
 - `MakeOfferForm` com: preço, mensagem, custom fields da transação
-- Submissão → transição `MAKE_OFFER` → cliente recebe notificação
+- Submissão — transição `MAKE_OFFER` — cliente recebe notificação
 
 ### RequestQuotePage (`/l/:slug/:id/request-quote`)
 - Para **cliente** pedir orçamento
-- `RequestQuoteForm` recolhe mensagem inicial + custom data
-- Submissão → transição `REQUEST_QUOTE` → host recebe notificação
+- `RequestQuoteForm` recolhe mensagem inicial e custom data
+- Submissão — transição `REQUEST_QUOTE` — host recebe notificação
 
 Ambas têm `DetailsSideCard`, `LocationDetails`, `ResponsiveImage`.
 
@@ -209,7 +211,7 @@ Ambas têm `DetailsSideCard`, `LocationDetails`, `ResponsiveImage`.
 
 Ficheiro: `src/containers/DirectMessagePage/`
 
-Página de chat direto **fora de uma transação** (`/mensagens/:userId`).
+Página de chat direto **fora de uma transação** (`/mensagens/:userId`). Permite comunicação entre utilizadores sem necessidade de uma transação ativa, com polling para atualizar mensagens em tempo real.
 
 ### Funcionalidades
 - Chat com histórico de mensagens

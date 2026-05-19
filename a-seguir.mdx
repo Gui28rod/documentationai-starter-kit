@@ -5,24 +5,25 @@ description: "Página com os utilizadores (anfitriões) que segues no V1H."
 
 ## O que é
 
-Página com **todos os utilizadores** (geralmente anfitriões) que segues no V1H.
+Página com **todos os utilizadores** (geralmente anfitriões) que segues no V1H. Esta página permite-te acompanhar as atividades dos anfitriões favoritos, nomeadamente quando publicam novos anúncios, editam anúncios existentes ou recebem avaliações.
 
 **URL**: `/a-seguir`
 **Ficheiro**: `src/containers/FollowingPage/`
-**Onde aceder**: dropdown do avatar → **"A seguir"**
+**Onde aceder**: dropdown do avatar, "A seguir"
 
 ## O que mostra
 
-Cada utilizador seguido aparece como **card**:
+Cada utilizador seguido aparece como card. O card apresenta as informações essenciais do perfil e permite deixar de seguir diretamente a partir desta lista.
+
 - **Avatar**
 - **Nome** + display name
 - **Bio** breve
 - **Botão "Deixar de seguir"**
-- Click no nome → vai para o `ProfilePage` desse user
+- Click no nome vai para o `ProfilePage` desse user
 
 ## Como começar a seguir alguém
 
-Em qualquer parte do site onde aparece o avatar/nome de um anfitrião (página de anúncio, perfil público):
+Em qualquer parte do site onde aparece o avatar/nome de um anfitrião (página de anúncio, perfil público), basta clicar no botão de seguir. O servidor regista a relação e, se for a primeira vez nesse dia, envia uma notificação ao utilizador seguido.
 
 1. Click em **"Seguir"** ao lado do nome
 2. Servidor regista (`POST /api/user-follow`)
@@ -33,17 +34,17 @@ Em qualquer parte do site onde aparece o avatar/nome de um anfitrião (página d
 
 ## Notificações ao seguir alguém
 
-Quando segues alguém, **passas a receber notificações** quando essa pessoa:
+Quando segues alguém, passas a receber notificações quando essa pessoa realiza determinadas ações na plataforma. Estas notificações chegam como toasts in-app e são geradas pelo cron `notifyExtraAlertsJob` (5 min).
 
-- **Publica anúncio novo** → toast in-app "X publicou um novo anúncio"
-- **Edita anúncio** → toast "X atualizou o anúncio Y"
-- **Recebe avaliação** → toast "X recebeu uma nova avaliação" (excluindo se for tu o autor da review)
-
-Tudo via cron `notifyExtraAlertsJob` (5 min).
+- **Publica anúncio novo** — toast in-app "X publicou um novo anúncio"
+- **Edita anúncio** — toast "X atualizou o anúncio Y"
+- **Recebe avaliação** — toast "X recebeu uma nova avaliação" (excluindo se for tu o autor da review)
 
 Ver [Notificações](notificacoes-completas).
 
 ## Diferença para "Os seus favoritos"
+
+A página "A seguir" e "Os seus favoritos" têm propósitos distintos. "A seguir" é sobre acompanhar pessoas; "Os seus favoritos" é sobre guardar espaços específicos.
 
 | | A seguir | Os seus favoritos |
 |---|---|---|
@@ -52,6 +53,8 @@ Ver [Notificações](notificacoes-completas).
 | **Notificações** | Edits + reviews + novos anúncios | Email diário de quem favoritou |
 
 ## Persistência
+
+Os dados de quem seguis estão guardados no servidor associados à tua conta, pelo que ficam disponíveis em qualquer dispositivo onde faças login.
 
 - Server-side em `currentUser.privateData.following` (array de userIds)
 - Sincronizada via `src/ducks/follow.duck.js`

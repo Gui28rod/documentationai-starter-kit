@@ -5,7 +5,7 @@ description: "Design responsivo, mobile category ticker, service worker e instal
 
 ## Design responsivo
 
-A V1H usa **CSS Modules** com media queries para adaptar entre desktop e mobile.
+A V1H usa **CSS Modules** com media queries para adaptar entre desktop e mobile. A abordagem de design não é consistente — alguns componentes são mobile-first e outros são desktop-first, reflexo da herança do template Sharetribe.
 
 ### Breakpoints principais
 
@@ -25,13 +25,13 @@ A V1H usa **CSS Modules** com media queries para adaptar entre desktop e mobile.
 
 Ficheiro: `src/containers/TopbarContainer/Topbar/MobileCategoryTicker/`
 
-**O que é**: carrossel horizontal acima da topbar mobile com as 9 categorias.
+O Mobile Category Ticker é um carrossel horizontal acima da topbar mobile que mostra as 9 categorias da V1H. Permite ao utilizador navegar diretamente para uma categoria de espaços sem abrir o menu de pesquisa.
 
 **Funcionalidades**:
 - Drag horizontal + momentum scroll
 - Ícones de categorias dinâmicos
 - Mapas PT/EN embutidos (`PT_LABELS`, `EN_LABELS`)
-- Click em categoria → search page filtrada
+- Click em categoria — search page filtrada
 
 ## TopbarMobileNav
 
@@ -46,6 +46,8 @@ Substitui `TopbarDesktop` em telas pequenas. Tem:
 Menu hambúrguer abre `TopbarMobileMenu` (side panel) com todos os links do profile dropdown.
 
 ## PWA (Progressive Web App)
+
+A V1H é uma Progressive Web App instalável. O service worker é o requisito técnico que permite ao browser apresentar o prompt de instalação ao utilizador.
 
 ### Service Worker
 
@@ -75,10 +77,11 @@ Define:
 
 ### Install Prompt
 
-Componente `PwaInstallButton` no footer. Comportamento:
+Componente `PwaInstallButton` no footer. O botão só aparece quando o browser deteta que o site cumpre os critérios de instalação e ainda não foi instalado.
+
 - Escuta `beforeinstallprompt` event do browser
 - Quando disparado, mostra botão "Instalar App"
-- Click → mostra prompt nativo do browser
+- Click — mostra prompt nativo do browser
 - Após instalação, incrementa contador `/api/pwa-counter/increment`
 
 ## PWA Counter
@@ -93,7 +96,7 @@ Endpoint:
 - `POST /api/pwa-counter/increment` — soma 1
 
 ### Bug conhecido
-Este ficheiro está **trackeado pelo git** → reseta a cada `git pull`. Soluções propostas:
+Este ficheiro está **trackeado pelo git**, o que faz com que o contador resete a cada `git pull`. Soluções propostas:
 - Adicionar ao `.gitignore`
 - Migrar para `metadata` Sharetribe
 
@@ -101,11 +104,11 @@ Ver [Problemas Conhecidos](problemas-conhecidos).
 
 ## Decisão Mobile App nativa
 
-Pendente: usar **PWA** ou desenvolver app nativa com **Capacitor**?
+A decisão entre manter apenas a PWA ou desenvolver uma app nativa via Capacitor está pendente das chefes. Cada opção tem vantagens e custos distintos.
 
 | | PWA | Capacitor |
 |---|---|---|
-| **Custo** | €0 | €124 + Apple Developer + Google Play |
+| **Custo** | 0 | Custo a confirmar, mais Apple Developer e Google Play |
 | **Distribuição** | Browser ("Install App") | App Stores (mais visibilidade) |
 | **Funcionalidades nativas** | Limitadas | Acesso a camera, push notifications, etc. |
 | **Manutenção** | 1 codebase (web) | 1 codebase (Capacitor) + 2 reviews stores |
@@ -113,6 +116,8 @@ Pendente: usar **PWA** ou desenvolver app nativa com **Capacitor**?
 Decisão: pendente das chefes. Ver [Pendências para Go-Live](pendencias-para-go-live).
 
 ## Optimizações mobile aplicadas
+
+Estas optimizações melhoram a experiência em dispositivos com ecrãs mais pequenos e ligações mais lentas.
 
 - Imagens responsivas com `srcset` (variantes scaled-small/medium/large)
 - Lazy load de iframes (YouTube, Mapbox)

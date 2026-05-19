@@ -3,17 +3,20 @@ title: "Avaliações (Reviews)"
 description: "Sistema de reviews — rating por listing, por utilizador, e tradução."
 ---
 
-A V1H usa o sistema nativo de reviews do Sharetribe, com adições próprias.
+A V1H usa o sistema nativo de reviews do Sharetribe, com adições próprias. As avaliações são bidirecionais — tanto o cliente avalia o anfitrião como o anfitrião avalia o cliente — e ficam visíveis nos perfis e nas páginas dos anúncios.
 
 ## Quando aparecem
 
-Depois de uma transação chegar ao estado `COMPLETED`, **ambas as partes** podem deixar review:
-- **Customer → Provider** (tipo `ofProvider`) — review do anfitrião/serviço
-- **Provider → Customer** (tipo `ofCustomer`) — review do guest
+Depois de uma transação chegar ao estado `COMPLETED`, **ambas as partes** podem deixar review. O período de tempo para submeter avaliação é configurado no Sharetribe Console.
+
+- **Customer para Provider** (tipo `ofProvider`) — review do anfitrião/serviço
+- **Provider para Customer** (tipo `ofCustomer`) — review do guest
 
 Período: até X dias após a transação terminar (configurado no Sharetribe Console).
 
 ## Rating por listing
+
+O rating de um anúncio é calculado com base nas avaliações recebidas nesse listing específico, e é mostrado em vários pontos da interface para ajudar os clientes a escolher.
 
 Mostrado em:
 - **ListingCard** (carrossel, search results)
@@ -23,12 +26,14 @@ Cálculo: média de todas as reviews `ofProvider` desse listing. Ficheiro: `src/
 
 ## Rating por utilizador
 
+O rating de um utilizador é apresentado na sidebar do perfil público e no UserCard dentro da página do anúncio. Este número reflete exclusivamente o comportamento do utilizador como cliente (guest), por decisão explícita da equipa V1H.
+
 Mostrado em:
-- **Sidebar do ProfilePage** (formato ★ 3.1 (7 avaliações))
+- **Sidebar do ProfilePage** (formato 3.1 (7 avaliações))
 - **UserCard na ListingPage** (inline meta line)
 
 ### IMPORTANTE — só lado cliente
-A média do utilizador agrega **apenas reviews `type: 'ofCustomer'`** — i.e. reviews recebidas como **guest**, não como anfitrião.
+A média do utilizador agrega **apenas reviews `type: 'ofCustomer'`**, ou seja, reviews recebidas como **guest**, não como anfitrião.
 
 **Razão**: as chefes V1H decidiram em 2026-05 que misturar host + customer distorce a média. Querem que o número reflita só comportamento como guest. Ver [Decisões Importantes](decisoes-importantes).
 
@@ -44,15 +49,18 @@ const customerReviews = all.filter(
 
 Ficheiro: `src/components/Reviews/Reviews.js`
 
-Renderiza lista. Cada review:
+O componente renderiza a lista de avaliações recebidas. Cada review apresenta o perfil do autor, a classificação, a data e o texto, com a opção de tradução automática integrada.
+
+Cada review inclui:
 - **Avatar** + **displayName** do autor
-- **Rating** em estrelas (⭐)
+- **Rating** em estrelas
 - **Data** formatada (ex: "abril de 2026")
 - **Texto** do comentário
 - **Botão "Traduzir"** integrado (`TranslateButton`)
 
 ### Tradução por review
-Cada review tem o seu próprio toggle "Traduzir / Ver original":
+Cada review tem o seu próprio toggle "Traduzir / Ver original". A tradução é feita via MyMemory API e fica em cache localmente, pelo que alternar entre original e tradução não volta a chamar a API.
+
 - Aproveita o componente `TranslateButton` (igual à descrição)
 - Cache local — toggle back-and-forth sem re-hit API
 - Idioma alvo = locale do topbar (PT ou EN)
@@ -61,14 +69,17 @@ Cada review tem o seu próprio toggle "Traduzir / Ver original":
 
 Ficheiro: `src/containers/TransactionPage/ReviewForm/ReviewForm.js`
 
+O formulário de avaliação aparece automaticamente quando uma transação é marcada como concluída. Ambas as partes veem o formulário em simultâneo mas não podem ler a avaliação da outra parte antes de submeter a sua.
+
 Aparece quando uma transação chega a `COMPLETED`:
 - **Rating** (1-5 estrelas)
 - **Comentário** (textarea)
-- Submit → Sharetribe SDK `reviews.create`
+- Submit — Sharetribe SDK `reviews.create`
 
 ## Pedido automático de review
 
-Após `COMPLETED`, ambas as partes recebem:
+Após `COMPLETED`, ambas as partes recebem comunicações automáticas a solicitar avaliação. Para além do email nativo do Sharetribe, existe um modal NPS interno que aparece após submissão da review.
+
 - **Email automático** do Sharetribe (configurado no Console)
 - **Notificação no inbox**
 
@@ -76,7 +87,8 @@ Após review enviado, o **FeedbackPromptModal** abre opcionalmente (NPS interno 
 
 ## Cron de notificação de reviews
 
-[`notifyExtraAlertsJob`](cron-jobs) deteta reviews novas e:
+O cron [`notifyExtraAlertsJob`](cron-jobs) deteta reviews novas a cada 5 minutos e realiza as seguintes ações para notificar as partes envolvidas.
+
 - Cria toast in-app `review-received` para o subject
 - **Envia email imediato** para o subject (via Resend)
 - Cria toast `followed-listing-review` para os seguidores do subject (excluindo o autor da review)

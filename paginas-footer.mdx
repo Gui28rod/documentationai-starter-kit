@@ -5,7 +5,7 @@ description: "Cada página linkada no footer — conteúdo, rota e funcionalidad
 
 Detalhe individual de cada página acessível pelo footer.
 
-## ⚙️ Plataforma
+## Plataforma
 
 ### Como Funciona
 
@@ -15,9 +15,11 @@ Detalhe individual de cada página acessível pelo footer.
 | **Componente** | `src/containers/ComoFuncionaPage/ComoFuncionaPage.js` |
 | **Conteúdo** | Hardcoded em React com i18n (PT/EN) |
 
+A página "Como Funciona" apresenta o marketplace para as duas audiências principais, explicando o processo de cada uma com steps ilustrados e garantias de segurança.
+
 **Estrutura**:
 - 2 secções principais: "Para Organizadores" e "Para Anfitriões"
-- **Steps ilustrados** — 4 passos por audiência (escolher espaço → reservar → confirmar → desfrutar)
+- **Steps ilustrados** — 4 passos por audiência (escolher espaço, reservar, confirmar, desfrutar)
 - **Garantias de segurança** — 3 cards (pagamento seguro, verificação, suporte)
 - **FAQ** integrado no fundo da página (`FAQContent.js`) com accordions expansíveis
 - **Scroll automático** para FAQ via hash `#faq` (link direto navega já aberto)
@@ -48,13 +50,13 @@ Wizard multi-step. Ver [Edit Listing Wizard](edit-listing-wizard) para detalhe c
 
 ### Perguntas Frequentes
 
-Não é página separada — é uma **secção** dentro de "Como Funciona":
+Não é página separada, é uma **secção** dentro de "Como Funciona":
 - Acesso via âncora: `/como-funciona#faq`
 - Componente: `FAQContent.js` (sub-componente)
 - Accordions expansíveis por pergunta
 - Suporte i18n PT/EN
 
-## 🏢 Empresa
+## Empresa
 
 ### Sobre Nós
 
@@ -63,12 +65,12 @@ Não é página separada — é uma **secção** dentro de "Como Funciona":
 | **URL** | `/sobre-nos` |
 | **Componente** | `src/containers/AboutPage/AboutPage.js` |
 
+A página "Sobre Nós" apresenta a equipa e os valores da V1H. O conteúdo é hardcoded em React com suporte PT/EN completo.
+
 **Estrutura**:
-- **Hero** com imagem de fundo + slogan
-- **4 cards principais**: História / Missão / Visão / Público-Alvo
-- **Equipa** — grid com 5 fotos:
-  - Beatriz, Alexandre, Anabela, Lídia, Teresa
-  - Fotos em `src/assets/images/`
+- **Hero** com imagem de fundo e slogan
+- **4 cards principais**: História, Missão, Visão, Público-Alvo
+- **Equipa** — grid com 5 fotos: Beatriz, Alexandre, Anabela, Lídia, Teresa (fotos em `src/assets/images/`)
 - **5 valores** com ícones SVG (Confiança, Inovação, Comunidade, Sustentabilidade, Qualidade)
 - **CTA final** para começar a usar
 
@@ -81,26 +83,28 @@ Não é página separada — é uma **secção** dentro de "Como Funciona":
 | **URL** | `/contact` |
 | **Componente** | `src/containers/ContactPage/ContactPage.js` |
 
+O formulário de contacto envia os dados via `POST /api/contact` para o email de admin, com validação imediata no cliente.
+
 **Form**:
 - Nome
 - Email
-- Telefone (com **seletor de país** + flag — biblioteca `flag-icons`)
+- Telefone (com **seletor de país** e bandeira, biblioteca `flag-icons`)
 - Assunto
 - Mensagem
-- Submit → `POST /api/contact` → email para `admin@v1h.net`
+- Submit — `POST /api/contact` — email para `admin@v1h.net`
 
 **Países suportados** no seletor de phone prefix:
 PT, ES, FR, GB, DE, IT, NL, BE, CH, US, BR, AO, MZ
 
 **Info cards na lateral**:
-- 📧 Email: `admin@v1h.net`
-- 📍 Endereço: Mira (Portugal)
-- 📞 Telefone: `+351 930 432 478`
-- 🕒 Horário: Segunda a Sexta, 9h–18h
+- Email: `admin@v1h.net`
+- Endereço: Mira (Portugal)
+- Telefone: `+351 930 432 478`
+- Horário: Segunda a Sexta, 9h–18h
 
-**Validações**: regex customizada para cada campo + frontend immediate feedback.
+**Validações**: regex customizada para cada campo com feedback imediato no frontend.
 
-## 🛡️ Suporte
+## Suporte
 
 ### Termos de Serviço
 
@@ -109,6 +113,8 @@ PT, ES, FR, GB, DE, IT, NL, BE, CH, US, BR, AO, MZ
 | **URL** | `/terms-of-service` |
 | **Componente** | `src/containers/TermsOfServicePage/TermsOfServicePage.js` |
 | **Última atualização** | Abril 2026 |
+
+O documento cobre 16 secções jurídicas e inclui links para os mecanismos legais de reclamação disponíveis em Portugal e na União Europeia.
 
 **16 secções jurídicas**:
 1. Identificação da empresa
@@ -136,8 +142,7 @@ PT, ES, FR, GB, DE, IT, NL, BE, CH, US, BR, AO, MZ
 - Marca INPI nº 716152
 - Patente europeia 20242006440889
 
-**⚠️ Pendência go-live** (ver [Pendências para Go-Live](pendencias-para-go-live)):
-- Atualizar com NIF, capital social, registo na conservatória, % comissão final, DPO
+**Pendência go-live** (ver [Pendências para Go-Live](pendencias-para-go-live)): atualizar com NIF, capital social, registo na conservatória, percentagem de comissão final, DPO.
 
 ### Política de Privacidade
 
@@ -146,6 +151,8 @@ PT, ES, FR, GB, DE, IT, NL, BE, CH, US, BR, AO, MZ
 | **URL** | `/privacy-policy` |
 | **Componente** | `src/containers/PrivacyPolicyPage/PrivacyPolicyPage.js` |
 | **Última atualização** | Abril 2026 |
+
+O documento cobre 15 secções RGPD e nomeia os subprocessadores de dados utilizados pela plataforma.
 
 **15 secções RGPD**:
 1. Responsável pelo tratamento
@@ -156,7 +163,7 @@ PT, ES, FR, GB, DE, IT, NL, BE, CH, US, BR, AO, MZ
 6. Período de retenção
 7. Direitos do titular
 8. Segurança
-9. Cookies (resumo + link para política específica)
+9. Cookies (resumo e link para política específica)
 10. Decisões automatizadas
 11. Violações de dados
 12. Menores
@@ -169,9 +176,9 @@ PT, ES, FR, GB, DE, IT, NL, BE, CH, US, BR, AO, MZ
 - Stripe (pagamentos)
 - AWS / Google Cloud / Azure (hosting)
 
-**Conformidade**: RGPD + LGPDP nacional.
+**Conformidade**: RGPD e LGPDP nacional.
 
-**⚠️ Pendência**: nomear DPO oficial e publicar contacto.
+**Pendência**: nomear DPO oficial e publicar contacto.
 
 ### Política de Cookies
 
@@ -199,7 +206,7 @@ PT, ES, FR, GB, DE, IT, NL, BE, CH, US, BR, AO, MZ
 - `mapbox-gl` (Mapbox)
 - `_ga`, `_ga_*` (Google Analytics)
 
-**⚠️ Pendência**: atualizar tabela quando forem adicionados pixels Meta/Google Ads.
+**Pendência**: atualizar tabela quando forem adicionados pixels Meta/Google Ads.
 
 ### Definições de Cookies
 

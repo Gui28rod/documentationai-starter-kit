@@ -7,18 +7,18 @@ Página de busca de anúncios (`/s`) com filtros avançados, mapa interativo e g
 
 ## Ficheiros principais
 
-Diretório: `src/containers/SearchPage/` — **60+ ficheiros**, arquitetura modular.
+Diretório: `src/containers/SearchPage/` — mais de 60 ficheiros, arquitetura modular.
 
 Principais:
 - `SearchPageWithMap.js` — layout com mapa lateral
 - `SearchPageWithGrid.js` — layout grid (sem mapa)
 - `SearchResultsPanel.js` — painel de resultados
 - `NoSearchResultsMaybe.js` — placeholder quando 0 resultados
-- `MainPanelHeader.js` — header com contagem + sort + save button
+- `MainPanelHeader.js` — header com contagem, sort e save button
 
 ## Filtros disponíveis
 
-Cada filtro em ficheiro próprio:
+Cada filtro tem o seu próprio componente, com renderização diferente em desktop (dropdown popup) e mobile (modal cheio). A camada de abstração `FilterForm`, `FilterPopup` e `FilterPlain` garante que o mesmo filtro funciona em ambos os contextos.
 
 | Filtro | Componente | Descrição |
 |---|---|---|
@@ -26,7 +26,7 @@ Cada filtro em ficheiro próprio:
 | Preço | `PriceFilter` | Range slider min-max |
 | Datas | `BookingDateRangeFilter` | Date picker (check-in/check-out) |
 | Lugares (capacidade) | `SeatsFilter` | Número mínimo de pessoas |
-| Rating mínimo | `StarRatingFilter` | ★★★★☆ |
+| Rating mínimo | `StarRatingFilter` | Filtra por rating mínimo em estrelas |
 | Categoria | `CategoryMultiFilter` | Multi-select de 9 categorias |
 | Single select | `SelectSingleFilter` | Filtros enum (ex: tipo de espaço) |
 | Multi select | `SelectMultipleFilter` | Filtros multi-enum (ex: comodidades) |
@@ -39,36 +39,40 @@ Cada filtro em ficheiro próprio:
 
 ## Vista Mapa vs Grid
 
+O utilizador pode alternar entre dois modos de visualização. O mapa mostra os pins com preços e permite identificar a localização dos espaços; a grelha é mais densa em informação por linha.
+
 ### Mapa (`SearchPageWithMap`)
-- Mapa Mapbox/Google na metade direita
+- Mapa Mapbox na metade direita
 - Pins agrupados (`SearchMapGroupLabel`)
 - Pins de preço individuais (`SearchMapPriceLabel`)
-- Click no pin → `SearchMapInfoCard` (mini-card com foto e preço)
+- Click no pin — `SearchMapInfoCard` (mini-card com foto e preço)
 
 ### Grid (`SearchPageWithGrid`)
 - Sem mapa
 - Layout 3-4 colunas
 
-Toggle entre os dois (botão "Ver mapa" / "Ver lista").
+Toggle entre os dois com o botão "Ver mapa" / "Ver lista".
 
 ## Sort e paginação
 
-- `SortBy.js` — opções: relevância, mais recentes, preço asc/desc, rating
-- Paginação tradicional (página 1, 2, 3…) ou infinite scroll consoante config
+- `SortBy.js` — opções: relevância, mais recentes, preço ascendente/descendente, rating
+- Paginação tradicional (página 1, 2, 3...) ou infinite scroll consoante config
 
 ## Save Search
 
-Componente `SaveSearchButton.js` (botão coração ao lado da contagem de resultados):
-- Carregar → guarda os filtros atuais via `savedSearches.duck.js`
-- Re-clicar → remove dos guardados
-- Visual heart preenchido vs vazio
+Componente `SaveSearchButton.js` (botão coração ao lado da contagem de resultados). A pesquisa guardada fica associada ao utilizador no servidor e pode gerar notificações quando há novos resultados correspondentes.
+
+- Carregar — guarda os filtros atuais via `savedSearches.duck.js`
+- Re-clicar — remove dos guardados
+- Visual: heart preenchido vs vazio
 - Sincroniza com `currentUser.privateData.savedSearches` (server)
 
-Detecção de duplicados por **chave canónica** (params normalizados sem URL-only params como `page`, `sort`, `mapSearch`, `bounds`). Ver [Decisões Importantes](decisoes-importantes).
+Deteção de duplicados por **chave canónica** (params normalizados sem URL-only params como `page`, `sort`, `mapSearch`, `bounds`). Ver [Decisões Importantes](decisoes-importantes).
 
 ## Mobile Filters
 
-Componente `SearchFiltersMobile.js`:
+Componente `SearchFiltersMobile.js`. Em mobile, os filtros abrem num modal cheio para facilitar a interação em ecrãs pequenos.
+
 - Botão "Filtros" abre modal cheio
 - Filtros em lista vertical
 - Botão "Aplicar" no fundo
@@ -76,7 +80,7 @@ Componente `SearchFiltersMobile.js`:
 
 ## Categorias
 
-Configuradas em `src/config/configListing.js`. As 9 categorias V1H:
+As 9 categorias estão configuradas em `src/config/configListing.js` e têm cada uma o seu ícone próprio em `src/components/CategoryIcons/`.
 
 1. Trabalho & Reuniões
 2. Educação & Cultura
@@ -87,5 +91,3 @@ Configuradas em `src/config/configListing.js`. As 9 categorias V1H:
 7. Desporto & Atividade Física
 8. Espaços ao Ar Livre
 9. Espaços Inusitados & Alternativos
-
-Cada categoria tem ícone próprio em `src/components/CategoryIcons/`.

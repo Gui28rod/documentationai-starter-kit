@@ -3,7 +3,7 @@ title: "Reservas e Inbox"
 description: "InboxPage, waitlist, multi-booking, partilha de orçamento, calendar export — perspetiva do utilizador."
 ---
 
-Esta página descreve a **experiência do utilizador** ao gerir reservas. Para os processos Sharetribe + estados + transições em detalhe técnico, ver [Processos de Transação](processos-transacao).
+Esta página descreve a **experiência do utilizador** ao gerir reservas. Para os processos Sharetribe, estados e transições em detalhe técnico, ver [Processos de Transação](processos-transacao).
 
 ## InboxPage
 
@@ -19,28 +19,31 @@ Esta página descreve a **experiência do utilizador** ao gerir reservas. Para o
 
 ### Funcionalidades
 
+A InboxPage centraliza toda a gestão de transações, com filtros e ordenação para facilitar a navegação em contas com muitas reservas.
+
 - **Lista** ordenada por data (mais recente primeiro)
 - **Filtros**:
   - `InboxSearchForm` — busca por texto
   - `InboxSortBy` — ordenar por data, estado, valor
 - **Badge de estado** em cada transação (Pendente, Aceite, Concluída, etc.)
 - **Mensagens integradas** — chat entre cliente e anfitrião dentro de cada transação
-- **Botão de ação contextual** ao clicar numa transação (Aceitar / Recusar / Pagar / Cancelar conforme estado)
+- **Botão de ação contextual** ao clicar numa transação (Aceitar, Recusar, Pagar, Cancelar conforme estado)
 
 ### Badge no Topbar
 
-O número vermelho no ícone Inbox do topbar conta:
+O número vermelho no ícone Inbox do topbar agrega três contadores distintos para dar uma visão rápida das notificações pendentes.
+
 - Sales novos (anfitrião não viu ainda)
 - Orders novos
 - Direct messages não lidas
 
-Cap visual "4+" se > 4. Ver [Topbar](topbar) + [Notificações](notificacoes-completas).
+Cap visual "4+" se a contagem for superior a 4. Ver [Topbar](topbar) e [Notificações](notificacoes-completas).
 
 ## Botões e funcionalidades adicionais
 
 ### Lista de espera (Waitlist)
 
-Quando um listing está esgotado, aparece botão **"Juntar à lista de espera"** no OrderPanel:
+Quando um listing está esgotado, aparece botão **"Juntar à lista de espera"** no OrderPanel. O pedido fica registado no servidor e gera notificação automática ao admin.
 
 - Componente: `src/components/OrderPanel/WaitlistButton/`
 - Endpoint: `POST /api/waitlist` com `{ email, listingId, date? }`
@@ -50,7 +53,7 @@ Quando um listing está esgotado, aparece botão **"Juntar à lista de espera"**
 
 ### Multi-booking auto-accept
 
-Para o processo customizado **`default-multi-booking-v10`**:
+Para o processo customizado **`default-multi-booking-v10`**, o cliente pode reservar múltiplas datas de uma só vez, com pagamento único e confirmação imediata.
 
 - Cliente seleciona múltiplas datas/horas no OrderPanel
 - Cria **batch de transactions simultaneamente** (uma por slot)
@@ -61,7 +64,7 @@ Ver [Processos de Transação](processos-transacao) para detalhe técnico.
 
 ### Long-term booking
 
-Para reservas de meses/anos (processo `default-long-term-booking-v10`):
+Para reservas de meses/anos (processo `default-long-term-booking-v10`), há um estado intermédio de aprovação com timer de 90 dias.
 
 - Estado adicional `LONG_TERM_PENDING_APPROVAL` — anfitrião tem 90 dias para confirmar
 - Timer no inbox indica quanto falta
@@ -69,28 +72,27 @@ Para reservas de meses/anos (processo `default-long-term-booking-v10`):
 
 ### "Adicionar ao calendário"
 
-Após uma reserva ficar `ACCEPTED`, aparece botão na TransactionPage:
+Após uma reserva ficar `ACCEPTED`, aparece botão na TransactionPage para exportar o evento para o calendário pessoal.
 
-- **Google Calendar** ✅ ativo — abre nova aba com evento pré-preenchido
-- **Apple Calendar + Outlook** ocultos via flag `SHOW_APPLE_OUTLOOK=false` (memória [calendar button done](decisoes-importantes))
+- **Google Calendar** — ativo, abre nova aba com evento pré-preenchido
+- **Apple Calendar e Outlook** — ocultos via flag `SHOW_APPLE_OUTLOOK=false`
 - Componente: `src/components/AddToCalendarButton/`
 
 ### Partilha de orçamento
 
-Botão **"Partilhar orçamento"** no OrderPanel envia link público com:
+Botão **"Partilhar orçamento"** no OrderPanel gera um link público partilhável com os detalhes da reserva. É útil para o cliente obter aprovação interna antes de fechar.
 
 - Preço calculado
 - Datas
 - Detalhes do espaço
-- Útil para o cliente partilhar com colegas/chefes antes de fechar
+- Útil para o cliente partilhar com colegas/responsáveis antes de fechar
 
 Link válido por 30 dias (configurável).
 
 ### Dashboard do anfitrião
 
-Componente: `HostDashboard` (visível no `ManageListingsPage`).
+Componente: `HostDashboard` (visível no `ManageListingsPage`). O dashboard agrega métricas de desempenho dos espaços do anfitrião num único ecrã.
 
-Mostra ao anfitrião:
 - Total de reservas no mês
 - Revenue acumulado
 - Pending payouts
@@ -109,16 +111,16 @@ Dados via `GET /api/host-stats`. Ver [Endpoints](endpoints).
 | `COMPLETED` | **Avaliar** | **Avaliar** |
 | `CANCELED` | "Cancelado" | "Cancelado" |
 
-Para a lista completa de estados + transições, ver [Processos de Transação](processos-transacao).
+Para a lista completa de estados e transições, ver [Processos de Transação](processos-transacao).
 
 ## Onde está o quê
 
-| Quero saber sobre… | Página |
+| Quero saber sobre... | Página |
 |---|---|
 | Estados de cada processo (booking, purchase, etc.) | [Processos de Transação](processos-transacao) |
 | Flow detalhado de checkout (pagamento Stripe) | [Checkout & Negotiation](checkout-negotiation) |
 | Negotiation (orçamentos personalizados) | [Checkout & Negotiation](checkout-negotiation) |
 | TransactionPage (timeline, modals) | [Processos de Transação](processos-transacao) |
 | DirectMessagePage (chat sem transação) | [Processos de Transação](processos-transacao) |
-| Notificações no inbox (badge) | [Notificações](notificacoes-completas) + [Topbar](topbar) |
+| Notificações no inbox (badge) | [Notificações](notificacoes-completas) e [Topbar](topbar) |
 | Avaliações após reserva | [Avaliações (Reviews)](avaliacoes) |

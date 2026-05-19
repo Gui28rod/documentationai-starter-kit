@@ -3,17 +3,17 @@ title: "Sharetribe Console (Admin Panel)"
 description: "Painel admin do Sharetribe — Users, Listings, Transactions, Reviews + Build (General, Content, Design, Listings, Transactions, Monetization, Integrations, Advanced)."
 ---
 
-O **Sharetribe Console** é o painel admin web onde as chefes da V1H gerem o marketplace **sem programador**.
+O **Sharetribe Console** é o painel admin web onde as responsáveis da V1H gerem o marketplace **sem programador**.
 
 **URL**: `https://console.sharetribe.com/o/v1h4/m/v1h4-test/`
 
 ## Estrutura geral
 
-Sidebar dividida em **3 zonas**:
+A sidebar divide-se em quatro zonas principais. As zonas "Manage" e "Build" são as mais usadas no dia-a-dia.
 
 ### 1. Home (top)
 - V1H — Venue1Hub (nome do marketplace)
-- Toggle `test` ↔ `live` (ambientes separados)
+- Toggle `test` e `live` (ambientes separados)
 - Botões: **View marketplace**, **Copy changes to...**, **Go live**
 
 ### 2. Manage (gestão diária)
@@ -37,39 +37,37 @@ Sidebar dividida em **3 zonas**:
 - Help Center
 - Contact support
 
-## ⚙️ Ambientes (test vs live)
+## Ambientes (test vs live)
+
+Os dois ambientes estão completamente isolados em termos de dados. A configuração pode ser copiada de test para live, mas os utilizadores, anúncios e transações ficam sempre separados.
 
 | | test | live |
 |---|---|---|
 | URL admin | `console.sharetribe.com/o/v1h4/m/v1h4-test/` | `console.sharetribe.com/o/v1h4/m/v1h4-live/` |
 | Dados | "Test data" (visíveis com badge laranja) | Dados reais |
 | Stripe | Test keys (`pk_test_...`) | Live keys (`pk_live_...`) |
-| Sandbox? | ✅ tudo seguro | ⚠️ produção real |
+| Sandbox? | Tudo seguro | Produção real |
 
-**Botão "Copy changes to..."** — copia configuração (Build) de test → live. **Não copia dados** (users, listings, transactions ficam isolados).
+**Botão "Copy changes to..."** — copia configuração (Build) de test para live. **Não copia dados** (users, listings, transactions ficam isolados).
 
-**Botão "Go live"** — promove o ambiente test atual para live (use com cuidado!).
+**Botão "Go live"** — promove o ambiente test atual para live (use com cuidado).
 
-## 📋 Manage — Users
+## Manage — Users
 
 **URL**: `/v1h4-test/users`
 
-Lista todos os utilizadores (atualmente 19 em test). Mostra:
-- Avatar
-- Nome
-- N° de listings
-- Data de criação
+Lista todos os utilizadores (atualmente 19 em test). Mostra avatar, nome, número de listings e data de criação.
 
 ### Filtros
-- Search por nome / email / ID
+- Search por nome, email ou ID
 - Filter por estado, role, etc.
 
 ### Ações por utilizador
-Click num user → modal/página com:
+Click num user — modal/página com:
 - **Overview**: Bio, Nome, Email, Stripe account ID, User ID
 - **Botão "Email {User}"** — manda email manualmente
-- **Listings** count + link
-- **Transactions** count + link
+- **Listings** count e link
+- **Transactions** count e link
 
 ### Menu de ações (3 pontos)
 - **Verify email** — força verificação manual
@@ -80,19 +78,14 @@ Click num user → modal/página com:
 ### Download .csv
 Exporta lista completa de users para Excel.
 
-## 📋 Manage — Listings
+## Manage — Listings
 
 **URL**: `/v1h4-test/listings`
 
-Lista todos os anúncios (atualmente 40 em test). Mostra:
-- Thumb
-- Título
-- Preço
-- Data criação
-- Badge de estado: Published / **Draft** (cinza) / Pending Approval / Closed
+Lista todos os anúncios (atualmente 40 em test). Mostra thumb, título, preço, data de criação e badge de estado: Published, Draft (cinza), Pending Approval, Closed.
 
 ### Click num listing
-Abre detalhe:
+Abre detalhe com:
 - **Summary**: título, descrição, preço, localização
 - **Custom fields**
 - **Photos**
@@ -104,19 +97,13 @@ Abre detalhe:
 - **Delete listing** — elimina permanentemente
 
 ### Aprovar listings pending
-Se tens "Listing approval" ativo (em Build → Listings → Settings), novos listings ficam `Pending` até admin aprovar aqui.
+Se tens "Listing approval" ativo (em Build, Listings, Settings), novos listings ficam `Pending` até admin aprovar aqui.
 
-## 📋 Manage — Transactions
+## Manage — Transactions
 
 **URL**: `/v1h4-test/transactions`
 
-Lista todas as transações (atualmente 66 em test). Mostra:
-- Thumb do listing
-- Título do listing
-- Customer / Provider
-- Preço
-- **Last transition** (Confirm payment / Inquire / Complete / Accept / etc.)
-- Created / Last activity
+Lista todas as transações (atualmente 66 em test). Mostra thumb do listing, título do listing, Customer e Provider, preço, última transição e datas.
 
 ### Click numa transação
 Abre detalhe completo:
@@ -126,31 +113,24 @@ Abre detalhe completo:
 - **Next possible transitions** (com ações):
   - Operator accept
   - Operator decline
-  - Outros conforme processo + estado atual
+  - Outros conforme processo e estado atual
 
 ### Menu de ações
 - **Add a review** — admin pode adicionar review manualmente
 - (Outros conforme processo)
 
 ### Operator transitions
-O admin (operator) pode forçar transições. Útil para:
-- Aceitar manualmente uma reserva travada
-- Cancelar uma transação problemática
-- Resolver disputas
+O admin (operator) pode forçar transições. Útil para aceitar manualmente uma reserva travada, cancelar uma transação problemática ou resolver disputas.
 
-## 📋 Manage — Reviews
+## Manage — Reviews
 
 **URL**: `/v1h4-test/reviews`
 
-Lista todas as reviews (atualmente 23 em test). Mostra:
-- Avatares (autor + subject)
-- "X reviewed Y"
-- Rating em estrelas
-- Badge `Pending` (se ainda não publicada)
+Lista todas as reviews (atualmente 23 em test). Mostra avatares (autor e subject), "X reviewed Y", rating em estrelas e badge `Pending` (se ainda não publicada).
 
 ### Click numa review
 - **Summary**: "X left a review for Y"
-- Data + hora
+- Data e hora
 - Rating
 - **Texto da review**
 - Review ID
@@ -158,11 +138,11 @@ Lista todas as reviews (atualmente 23 em test). Mostra:
 ### Menu de ações
 - **Delete review** — elimina permanentemente
 
-⚠️ Reviews não podem ser editadas, apenas eliminadas.
+Reviews não podem ser editadas, apenas eliminadas.
 
-## 🛠️ Build — configurar o produto
+## Build — configurar o produto
 
-### Build → General
+### Build — General
 - Marketplace name
 - URL
 - Currency
@@ -170,89 +150,89 @@ Lista todas as reviews (atualmente 23 em test). Mostra:
 - Logo, brand image
 - Cores
 
-### Build → Content
+### Build — Content
 - **Pages** (PageBuilder assets) — Landing page, About, Footer, etc.
 - **Translations** (não usado — V1H usa pt.json/en.json no código)
 - **Microcopy** (textos sistémicos)
 
-### Build → Design
+### Build — Design
 - **Branding** (cores principais)
 - **Logos** (versões)
 - **Typography**
 - **Layout** (search page variant, listing page variant)
 
-### Build → Users
+### Build — Users
 - **User types** (Cliente, Anfitrião, Ambos)
 - **Custom user fields** (Línguas, Tipo de utilizador, etc.)
 
-### Build → Listings
+### Build — Listings
 - **Listing types** (daily-booking, hourly-booking, etc.)
 - **Custom listing fields** (capacidade, comodidades, etc.)
 - **Categories** (9 categorias V1H)
 - **Approval settings** (review listings before publishing)
 - **Search indexing** (que campos são indexados)
 
-### Build → Transactions
+### Build — Transactions
 - **Transaction processes** (default-booking, default-purchase, etc.)
 - **Email notifications** (templates de email enviados pelo Sharetribe)
 - **Provider commission** (configurada aqui)
 - **Customer commission** (opcional)
 
-### Build → Monetization
-- **Commission** (% que V1H cobra por transação)
+### Build — Monetization
+- **Commission** (percentagem que V1H cobra por transação)
 - **Stripe Connect setup**
 - **VAT/Tax** (se aplicável)
 
-### Build → Integrations
+### Build — Integrations
 - **Webhooks** (notificar URLs externas em eventos)
 - **Zapier** (automações)
 - **Plausible Analytics**
-- **Outros**
+- Outros
 
-### Build → Advanced
+### Build — Advanced
 - **API access**
 - **Privileged transitions**
 - **CLI access**
 - **Developer settings**
 
-## 🚦 Workflow típico
+## Workflow típico
 
 ### Adicionar nova categoria
-1. Build → Listings → Categories → Add category
-2. Define key + label PT/EN
-3. (Opcional) Build → Listings → Custom fields → adiciona campos só para essa categoria
+1. Build, Listings, Categories, Add category
+2. Define key e label PT/EN
+3. (Opcional) Build, Listings, Custom fields — adiciona campos só para essa categoria
 4. Atualiza `src/config/configListing.js` no código frontend
 5. `flex-cli search set` para indexar
-6. Commit + push
+6. Commit e push
 
 ### Aprovar listing pending
-1. Manage → Listings → Filter: Pending Approval
-2. Click no listing → revê
+1. Manage, Listings, Filter: Pending Approval
+2. Click no listing e revê
 3. Approve (no menu de ações)
 
 ### Resolver disputa
-1. Manage → Transactions → filter: Disputed
-2. Click → analisa as mensagens
+1. Manage, Transactions, filter: Disputed
+2. Click e analisa as mensagens
 3. Operator transition: Complete (a favor do customer) ou Cancel (a favor do provider)
 
 ### Banir user fraudulento
-1. Manage → Users → encontra user
-2. Menu: Ban user → confirma
+1. Manage, Users, encontra user
+2. Menu: Ban user, confirma
 3. (Opcional) Delete user
 
 ### Mudar template de email
-1. Build → Transactions → Email notifications
+1. Build, Transactions, Email notifications
 2. Seleciona o email (ex: "Booking accepted")
 3. Edita HTML / texto
-4. Save → próximos emails usam o novo template
+4. Save — próximos emails usam o novo template
 
-## 🔑 Quem tem acesso ao Console
+## Quem tem acesso ao Console
 
-- Apenas **administradores Sharetribe** convidados (não é público)
-- Cada admin tem login email/password + 2FA opcional
-- **Pendente para a V1H**: convidar emails oficiais da empresa (admin@venue1hub.com em vez de pessoais)
+Apenas **administradores Sharetribe** convidados têm acesso ao Console. Cada admin tem login email/password com 2FA opcional.
 
-## 🆚 Console vs Código
+**Pendente para a V1H**: convidar emails oficiais da empresa (admin@venue1hub.com em vez de emails pessoais).
+
+## Console vs Código
 
 | Faz-se no **Console** | Faz-se no **Código (VS Code)** |
 |---|---|
@@ -265,10 +245,10 @@ Lista todas as reviews (atualmente 23 em test). Mostra:
 | Aceitar refunds | Customizar UX |
 | Editar Pages CMS | Mudar SDK calls |
 
-Resumo: **Console = gestão e configuração** / **Código = funcionalidades e UI**.
+Resumo: **Console = gestão e configuração**, **Código = funcionalidades e UI**.
 
 ## Botões importantes no topo do Console
 
 - **View marketplace** — abre o site público numa aba nova
-- **Copy changes to live** — copia config test → live (não dados)
-- **Go live** — promove env (irreversível, cuidado!)
+- **Copy changes to live** — copia config test para live (não dados)
+- **Go live** — promove env (irreversível)

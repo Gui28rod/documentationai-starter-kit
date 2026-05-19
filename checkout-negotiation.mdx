@@ -7,23 +7,25 @@ description: "Flow de pagamento Stripe step-by-step + flow de negotiation (orça
 
 Ficheiro: `src/containers/CheckoutPage/`
 
+O checkout é o processo pelo qual um cliente finaliza uma reserva e efetua o pagamento. O fluxo integra o Stripe para processamento seguro, incluindo suporte a 3D Secure para cartões europeus.
+
 ### Flow completo
 
 ```
 1. Cliente na ListingPage
 2. Seleciona datas/horas/quantity no OrderPanel
 3. Click "Reservar" ou "Comprar"
-4. Redirect → /checkout?listingId=...&orderData=...
+4. Redirect para /checkout?listingId=...&orderData=...
 5. CheckoutPage faz "speculate" da transação
-   ↓
+   
 6. Calcula line items (preço + comissão + total)
 7. Mostra resumo (DetailsSideCard) + StripePaymentForm
 8. Cliente preenche cartão (ou seleciona cartão guardado)
-9. Confirma → confirmCardPayment (Stripe.js)
-   ↓ se necessário 3D Secure
-10. Stripe valida → transição CONFIRM_PAYMENT
+9. Confirma — confirmCardPayment (Stripe.js)
+   (se necessário 3D Secure)
+10. Stripe valida — transição CONFIRM_PAYMENT
 11. Sharetribe cria transaction
-12. Redirect → /sale/:id ou /order/:id (TransactionPage)
+12. Redirect para /sale/:id ou /order/:id (TransactionPage)
 ```
 
 ### Componentes principais
@@ -49,6 +51,8 @@ Ficheiro: `src/containers/CheckoutPage/`
 
 ### Speculate vs Initiate
 
+A distinção entre "speculate" e "initiate" é importante: o speculate mostra o preço ao utilizador sem comprometer nenhuma reserva, enquanto o initiate cria a transação real e o PaymentIntent Stripe.
+
 **Speculate** (`POST /api/transaction-line-items`):
 - Não cria transação real
 - Apenas calcula line items para mostrar preço
@@ -61,7 +65,8 @@ Ficheiro: `src/containers/CheckoutPage/`
 
 ### Persistência em sessionStorage
 
-`CheckoutPageSessionHelpers` guarda:
+`CheckoutPageSessionHelpers` guarda informação crítica em sessionStorage para que, em caso de refresh durante o checkout, o utilizador não perca o progresso.
+
 - `listingId`
 - `orderData` (datas, quantity, etc.)
 - `transactionId` (após initiate)
@@ -70,14 +75,13 @@ Sobrevive a refresh do browser. Útil se o user fizer F5 a meio do checkout.
 
 ### 3D Secure (Strong Customer Authentication)
 
-Para cartões europeus, alguns pagamentos exigem 3D Secure:
+Para cartões europeus, alguns pagamentos exigem 3D Secure. O Stripe Elements trata disto automaticamente; o código da V1H apenas reage ao estado devolvido pelo Stripe.
+
 1. `confirmCardPayment` chama Stripe
 2. Stripe retorna `requires_action`
 3. Frontend mostra modal/redirect para autenticação 3DS
-4. Após sucesso → `succeeded`
+4. Após sucesso, `succeeded`
 5. Continua flow
-
-Stripe Elements trata disto automaticamente — o nosso código só reage ao estado.
 
 ### Métodos de pagamento
 
@@ -97,7 +101,7 @@ Stripe Elements trata disto automaticamente — o nosso código só reage ao est
 
 ## Negotiation Flow
 
-Processo `default-negotiation` — permite orçamento personalizado.
+Processo `default-negotiation` — permite orçamento personalizado. Este fluxo é adequado quando o preço não é fixo e as partes precisam de negociar antes de fechar a reserva.
 
 ### 2 modos
 
@@ -106,17 +110,17 @@ Processo `default-negotiation` — permite orçamento personalizado.
 ```
 1. Cliente na ListingPage (com listing tipo "negotiable")
 2. Click "Pedir Orçamento"
-3. Redirect → /l/:slug/:id/request-quote
+3. Redirect para /l/:slug/:id/request-quote
 4. RequestQuoteForm: preenche mensagem + custom fields
-5. Submit → transição REQUEST_QUOTE
+5. Submit — transição REQUEST_QUOTE
 6. Transaction criada em estado QUOTE_REQUESTED
 7. Provider recebe notificação inbox + email
-8. Provider abre transação → vê o pedido
+8. Provider abre transação — vê o pedido
 9. Provider responde com offer (preço + mensagem)
-10. Transição MAKE_OFFER → estado OFFER_PENDING
-11. Cliente vê oferta → ACCEPT ou CUSTOMER_MAKE_COUNTER_OFFER
-12. Se aceita → PENDING_PAYMENT → pagamento → CONFIRM_PAYMENT
-13. ACCEPTED → DELIVERED → COMPLETED → REVIEWED
+10. Transição MAKE_OFFER — estado OFFER_PENDING
+11. Cliente vê oferta — ACCEPT ou CUSTOMER_MAKE_COUNTER_OFFER
+12. Se aceita — PENDING_PAYMENT — pagamento — CONFIRM_PAYMENT
+13. ACCEPTED — DELIVERED — COMPLETED — REVIEWED
 ```
 
 #### Reverse (provider inicia)
@@ -124,7 +128,7 @@ Processo `default-negotiation` — permite orçamento personalizado.
 ```
 1. Provider envia DM/proposta unsolicited
 2. Cria transação em estado OFFER_PENDING
-3. Cliente recebe → aceita ou contra-oferta
+3. Cliente recebe — aceita ou contra-oferta
 4. Continua como acima
 ```
 
@@ -132,52 +136,50 @@ Processo `default-negotiation` — permite orçamento personalizado.
 
 **URL**: `/l/:slug/:id/make-offer`
 
-**Para**: provider responder a pedido de quote.
+Página usada pelo anfitrião para responder a um pedido de orçamento recebido de um cliente.
 
 **Form**:
 - `price` (input com moeda)
 - `message` (textarea)
 - Custom fields da transação
 
-**Submit** → transição `MAKE_OFFER` → cliente recebe notificação.
+**Submit** envia a transição `MAKE_OFFER` e o cliente recebe notificação.
 
 ### RequestQuotePage
 
 **URL**: `/l/:slug/:id/request-quote`
 
-**Para**: cliente pedir orçamento.
+Página usada pelo cliente para iniciar um pedido de orçamento ao anfitrião de um anúncio.
 
 **Form**:
 - `message` (textarea inicial)
 - Custom fields (ex: datas pretendidas, número de pessoas, requisitos especiais)
 
-**Submit** → transição `REQUEST_QUOTE` → provider recebe notificação.
+**Submit** envia a transição `REQUEST_QUOTE` e o anfitrião recebe notificação.
 
 ### MakeCounterOfferModal
 
 **Onde**: TransactionPage (quando há offer ativa)
 
-**Para**: cliente contra-oferecer.
+Modal que permite ao cliente apresentar uma contra-proposta de preço ao anfitrião, sem abandonar a transação.
 
 **Form**:
 - `counterPrice`
 - `counterMessage`
 
-**Submit** → transição `CUSTOMER_MAKE_COUNTER_OFFER` → provider vê nova proposta.
+**Submit** envia a transição `CUSTOMER_MAKE_COUNTER_OFFER` e o anfitrião vê a nova proposta.
 
 ### Loops de negotiation
 
-Cliente e provider podem alternar contra-ofertas até chegarem a acordo:
+Cliente e provider podem alternar contra-ofertas quantas vezes for necessário até chegarem a acordo. O Sharetribe suporta N iterações sem limite definido.
 
 ```
-Provider: €500
-Cliente:  contra €400
-Provider: contra €450
+Provider: 500
+Cliente:  contra 400
+Provider: contra 450
 Cliente:  ACCEPT
-→ PENDING_PAYMENT
+PENDING_PAYMENT
 ```
-
-Sharetribe permite N iterações.
 
 ### Estados detalhados
 
@@ -192,7 +194,7 @@ Sharetribe permite N iterações.
 
 ### Custom transactionFields
 
-Os campos personalizáveis da transação são configurados no `listingType.transactionFields` (em `configListing.js`):
+Os campos personalizáveis da transação são configurados no `listingType.transactionFields` (em `configListing.js`). Estes campos recolhem informação adicional durante o pedido de orçamento.
 
 ```js
 transactionFields: [
@@ -203,9 +205,10 @@ transactionFields: [
 
 Aparecem nos forms (RequestQuoteForm, MakeOfferForm) e ficam guardados na transaction `metadata`.
 
-### Email automáticos
+### Emails automáticos
 
-Cada transição gera:
+Cada transição gera um email automático para a outra parte, configurado no Sharetribe Console, mais uma notificação no inbox com o badge do topbar a incrementar.
+
 - **Email para o outro lado** (configurado no Sharetribe Console)
 - **Notificação inbox** (badge no topbar)
 

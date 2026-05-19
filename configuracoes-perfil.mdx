@@ -5,15 +5,17 @@ description: "Editar avatar, nome, bio, línguas faladas, social links, localiza
 
 ## O que é
 
-Página onde editas o **teu perfil público** (avatar, bio, línguas, etc.).
+Página onde editas o **teu perfil público**, incluindo avatar, bio, línguas faladas e links para redes sociais. As informações editadas aqui ficam visíveis para qualquer pessoa que visitar o teu perfil.
 
 **URL**: `/profile-settings`
 **Ficheiro**: `src/containers/ProfileSettingsPage/`
-**Onde aceder**: dropdown do avatar → **"Configurações do perfil"**
+**Onde aceder**: dropdown do avatar, "Configurações do perfil"
 
 ## Campos editáveis
 
 ### Form: `ProfileSettingsForm`
+
+O formulário de perfil permite editar todos os dados públicos da conta. Cada campo tem validação específica para garantir que a informação apresentada ao público está formatada corretamente.
 
 | Campo | Validação |
 |---|---|
@@ -28,16 +30,20 @@ Página onde editas o **teu perfil público** (avatar, bio, línguas, etc.).
 
 ### Línguas faladas (LanguagesField)
 
-Lista com bandeiras (`flag-icons`):
-- Português 🇵🇹
-- English 🇬🇧
-- Español 🇪🇸
-- Français 🇫🇷
-- Italiano 🇮🇹
-- Deutsch 🇩🇪
+O campo de línguas faladas usa um componente multi-select com bandeiras de cada país/língua, permitindo ao anfitrião comunicar em que idiomas consegue atender os clientes.
+
+Lista com bandeiras (biblioteca `flag-icons`):
+- Português
+- English
+- Español
+- Français
+- Italiano
+- Deutsch
 - E mais
 
 ### Social Links (SocialLinksField)
+
+O campo de links sociais suporta as principais redes sociais. A URL é normalizada automaticamente, pelo que o utilizador pode introduzir apenas o nome de utilizador e o link completo é gerado.
 
 Plataformas suportadas:
 - Facebook
@@ -48,9 +54,11 @@ Plataformas suportadas:
 - YouTube
 - Pinterest
 
-URL normalization automática (ex: `@user` → `https://instagram.com/user`).
+URL normalization automática (ex: `@user` passa a `https://instagram.com/user`).
 
 ## Diferença para "Configurações da conta"
+
+"Configurações do perfil" é a área pública do utilizador. "Configurações da conta" é a área privada com credenciais e pagamentos.
 
 | | Configurações do perfil | Configurações da conta |
 |---|---|---|

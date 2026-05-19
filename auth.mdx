@@ -3,7 +3,7 @@ title: "Autenticação"
 description: "Login, signup, recuperação de password e logins sociais."
 ---
 
-Sistema de login, signup, recuperação de password e logins sociais (Google).
+Sistema de login, signup, recuperação de password e logins sociais (Google). A autenticação é gerida pelo Sharetribe SDK, com páginas e formulários customizados pela V1H.
 
 ## Ficheiros principais
 
@@ -17,12 +17,16 @@ Sistema de login, signup, recuperação de password e logins sociais (Google).
 
 ## Login tradicional
 
+O login por email e password é o método principal de acesso. Após autenticação bem-sucedida, o utilizador é redirecionado para a página de onde veio ou para a homepage.
+
 - Campos: **email** + **password**
-- Opção "Remember me" → guarda token mais tempo via `localStorage`
-- Link "Recuperar password" → flow de password reset (email com token)
+- Opção "Remember me" — guarda token mais tempo via `localStorage`
+- Link "Recuperar password" — flow de password reset (email com token)
 - Errors: `loginError` no Redux state
 
 ## Signup
+
+O registo cria uma nova conta associada a um endereço de email. Todos os campos são validados antes de submissão, e o utilizador recebe um email de confirmação após criar a conta.
 
 Campos pedidos:
 - **Nome** (validação: só letras + acentos + apóstrofos + hífens, máx 50 chars)
@@ -40,11 +44,13 @@ Após submeter:
 
 ## Email Verification
 
-Após signup, o utilizador recebe email com link. Clicar no link confirma email.
+Após signup, o utilizador recebe um email com link de confirmação. Enquanto o email não for confirmado, certas ações ficam bloqueadas — criar listing, fazer reserva, etc. Esta validação é gerida nativamente pelo Sharetribe.
 
 Antes de confirmar, certas ações estão bloqueadas (criar listing, fazer reserva, etc.) — Sharetribe gere isto nativamente.
 
 ## Password Reset
+
+O fluxo de recuperação de password usa um token enviado por email. O token tem validade limitada e é verificado pelo Sharetribe antes de permitir a alteração.
 
 1. Utilizador carrega "Esqueci a password" na LoginForm
 2. Pede email
@@ -55,13 +61,13 @@ Antes de confirmar, certas ações estão bloqueadas (criar listing, fazer reser
 
 ## Social Logins
 
-### Google ✅ Configurado
+### Google — Configurado
 - `REACT_APP_GOOGLE_CLIENT_ID=923132772527-o0bnhjm5bn5pdkvjr7p48af64jto7e5f...`
 - `GOOGLE_CLIENT_SECRET=...` (no `.env`)
 - Endpoint server: `/api/auth/google` + callback
 - Botão "Continuar com Google" aparece nas páginas Login + Signup
 
-### Facebook ❌ Desativado
+### Facebook — Desativado
 - `REACT_APP_FACEBOOK_APP_ID=` (vazio)
 - Botão não aparece quando o ID não está configurado
 - Para ativar: pedir App ID ao Facebook Developers, preencher `.env`
@@ -70,6 +76,8 @@ Antes de confirmar, certas ações estão bloqueadas (criar listing, fazer reser
 - Apple Sign-In, GitHub, etc. não estão configurados
 
 ## SSO Flow
+
+O fluxo OAuth redireciona o utilizador para o provider externo (Google) e volta com uma sessão criada via Sharetribe Identity Provider.
 
 1. Carrega botão "Continuar com Google"
 2. Redirect para `/api/auth/google` (servidor)
@@ -95,9 +103,11 @@ Antes de confirmar, certas ações estão bloqueadas (criar listing, fazer reser
 
 ## TermsAndConditions modal
 
+O modal de Termos e Condições é exibido durante o signup para garantir que o utilizador aceita os termos antes de criar a conta. A aceitação é obrigatória para prosseguir.
+
 Modal acessível durante signup. Mostra:
 - **Termos de Serviço** (página)
 - **Política de Privacidade** (página)
 - Checkbox obrigatório para avançar com signup
 
-Atenção: **pendente** atualizar Termos+Privacidade com dados completos da empresa antes de go-live (NIF, capital, registo, DPO). Ver [Pendências para Go-Live](pendencias-para-go-live).
+Atenção: pendente atualizar Termos+Privacidade com dados completos da empresa antes de go-live (NIF, capital, registo, DPO). Ver [Pendências para Go-Live](pendencias-para-go-live).

@@ -3,7 +3,7 @@ title: "Homepage / Landing Page"
 description: "Estrutura, secções e funcionamento da página principal da V1H."
 ---
 
-A página principal do v1h.com renderizada via **PageBuilder** (sistema universal de páginas do Sharetribe).
+A página principal do v1h.com é renderizada via **PageBuilder** (sistema universal de páginas do Sharetribe). O conteúdo não está hardcoded no código — vem do Sharetribe Console, o que permite às chefes editar texto, imagens e secções sem programador.
 
 ## Ficheiros principais
 
@@ -13,11 +13,9 @@ A página principal do v1h.com renderizada via **PageBuilder** (sistema universa
 
 ## Sistema PageBuilder
 
-O conteúdo da homepage **não é hardcoded** no código — vem do **Sharetribe Console** ("hosted assets"). Lá as chefes podem editar texto, imagens, secções sem programador.
+O conteúdo da homepage vem de "hosted assets" no Sharetribe Console. Cada secção tem um `sectionType` (hero, carousel, listings, etc.) mapeado para um componente React. Se o asset falhar a carregar, é mostrada uma página de fallback.
 
 Cada **section** tem um `sectionType` (hero, carousel, listings, etc.) mapeado para um componente React em `src/containers/PageBuilder/SectionBuilder/`. Blocos dentro de cada secção renderizam via Field + Primitives (heading, paragraph, image, link, CTA).
-
-Se o asset falhar a carregar → fallback page.
 
 ## Secções principais
 
@@ -25,13 +23,15 @@ Se o asset falhar a carregar → fallback page.
 |---|---|---|
 | **Hero** | `SectionHero` | Carrossel com múltiplos backgrounds + barra de busca rápida (`HeroSearchBar`) |
 | **Carousel Categorias** | `SectionCarousel` | Layout 3-4 colunas, scroll horizontal com setas, 9 categorias |
-| **Highlighted Listing** | `SectionHighlightedListing` | Destaque de um anúncio específico com rating; **injetado programaticamente** logo após o hero |
+| **Highlighted Listing** | `SectionHighlightedListing` | Destaque de um anúncio específico com rating; injetado programaticamente logo após o hero |
 | **Why Us** | `SectionWhyUs` | Cards com benefícios da plataforma |
 | **Listings grid** | `SectionListings` | Grelha dinâmica com filtros (3-4 colunas conforme viewport) |
 | **Landing Map** | `SectionLandingMap` | Mapa interativo de localizações |
 | **Slideshow / Mobile Promo** | `SectionSlideshow`, `SectionMobilePromo` | Banners promocionais |
 
 ## Funcionalidades especiais
+
+A homepage tem várias funcionalidades que vão além da renderização simples de conteúdo CMS. Algumas são aplicadas automaticamente antes de passar o conteúdo ao PageBuilder.
 
 - **Busca rápida** (`HeroSearchBar`) integrada no hero
 - **Overlay de modo escuro** (contexto global)
@@ -42,10 +42,12 @@ Se o asset falhar a carregar → fallback page.
 
 ## Highlighted vs Featured Listings
 
+A V1H distingue dois tipos de anúncios em destaque na homepage. O "Highlighted" é escolhido pelo utilizador a partir da página "Destacar Anúncio"; o "Featured" é selecionado por query ou configuração do admin.
+
 | | Highlighted | Featured |
 |---|---|---|
-| **Onde** | Logo após o hero, **único** | Carrossel/grid em qualquer secção |
-| **Seleção** | Ação manual do utilizador "Destacar Anúncio" (página própria) | `listingSelection: newest / queryString / manual admin` |
+| **Onde** | Logo após o hero, único | Carrossel/grid em qualquer secção |
+| **Selecao** | Ação manual do utilizador "Destacar Anúncio" (página própria) | `listingSelection: newest / queryString / manual admin` |
 | **Persistência** | `localStorage` chave `sharetribe_highlighted_listings` (JSON array) | Server-side via SDK query |
 | **Duck** | `src/ducks/highlightedListings.duck.js` | `src/ducks/featuredListings.duck.js` |
 

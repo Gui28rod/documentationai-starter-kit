@@ -3,7 +3,7 @@ title: "Decisões Importantes"
 description: "Decisões tomadas durante o desenvolvimento do projeto V1H."
 ---
 
-Registo de decisões relevantes tomadas durante o desenvolvimento. Documentadas aqui para evitar reverter ou repetir trabalho.
+Registo de decisões relevantes tomadas durante o desenvolvimento. Documentadas aqui para evitar reverter ou repetir trabalho. Cada decisão inclui a razão que a motivou e o impacto na implementação.
 
 ## User rating só lado cliente
 
@@ -15,24 +15,24 @@ A "user rating" mostrada na sidebar do perfil e no card do anfitrião agrega **a
 
 ## Multi-booking auto-accept (process v10)
 
-O fluxo de múltiplas reservas usa o process v10 no ambiente `v1h4-test` com auto-aceitação por parte do anfitrião configurada.
+O fluxo de múltiplas reservas usa o process v10 no ambiente `v1h4-test` com auto-aceitação por parte do anfitrião configurada. Esta decisão simplifica o processo de reserva para o cliente, eliminando a espera pela aceitação manual do anfitrião em cada slot.
 
 ## Long-term booking
 
-Fluxo de reserva longo-prazo totalmente testado e pronto. Inclui validações de datas, preço e disponibilidade.
+Fluxo de reserva longo-prazo totalmente testado e pronto. Inclui validações de datas, preço e disponibilidade. O processo tem estados específicos e um timer de 90 dias para confirmação do anfitrião.
 
 ## Cookie consent GDPR-ready
 
-Banner + modal com 4 categorias separadas (essential, preferences, analytics, marketing) e gating no Google Analytics quando o utilizador recusa "analytics".
+Banner e modal com 4 categorias separadas (essential, preferences, analytics, marketing) e gating no Google Analytics quando o utilizador recusa "analytics". Esta implementação cumpre os requisitos do RGPD sem depender de plataformas de terceiros.
 
 ## Email i18n deferido
 
-A internacionalização completa dos emails (PT/EN consistente em todos os fluxos) requer upgrade Sharetribe Plus. Decisão: deferir até esse upgrade.
+A internacionalização completa dos emails (PT/EN consistente em todos os fluxos) requer upgrade Sharetribe Plus. Decisão: deferir até esse upgrade. Atualmente os emails respeitam o locale guardado no perfil, mas a persistência nem sempre é fiável.
 
 ## Mobile app pendente
 
-A decisão entre PWA (sem custo) e Capacitor (€124 + Apple Developer + Google Play Stores) ainda está pendente das chefes.
+A decisão entre PWA (sem custo) e Capacitor (valor a confirmar, mais Apple Developer e Google Play Stores) ainda está pendente das chefes. A PWA já está implementada e funcional; a app nativa requereria trabalho adicional.
 
 ## PWA counter git issue
 
-O contador de instalações PWA está num ficheiro trackeado pelo git, o que causa resets. Solução pendente de decisão.
+O contador de instalações PWA está num ficheiro trackeado pelo git, o que causa resets. Solução pendente de decisão (adicionar ao `.gitignore` ou migrar para metadata Sharetribe).

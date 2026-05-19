@@ -3,19 +3,19 @@ title: "Perfis de Utilizador"
 description: "Páginas de perfil público, edição de perfil próprio, e sistema de seguidores."
 ---
 
-A V1H tem 2 páginas de perfil + sistema de seguidores.
+A V1H tem 2 páginas de perfil e um sistema de seguidores integrado.
 
 ## Perfil público (`ProfilePage`)
 
 Ficheiro: `src/containers/ProfilePage/`
 
-Aparece quando outro utilizador clica no nome/avatar de alguém.
+Aparece quando outro utilizador clica no nome ou avatar de alguém. A sidebar lateral apresenta os dados sociais e profissionais do utilizador, enquanto o conteúdo principal lista os anúncios e as reviews.
 
 ### AsideContent (sidebar esquerda)
 
 - **AvatarLarge** (foto de perfil grande, redonda)
 - **Botão Seguir / A seguir** (toggle, ver [Follow](#sistema-de-seguidores))
-- **Rating ⭐ + review count** — só conta reviews recebidas como **cliente** (`type: ofCustomer`). Decisão das chefes em 2026-05 — ver [Decisões Importantes](decisoes-importantes)
+- **Rating e review count** — só conta reviews recebidas como **cliente** (`type: ofCustomer`). Decisão das responsáveis em 2026-05 — ver [Decisões Importantes](decisoes-importantes)
 - **Followers count** (com override server-side)
 - **Línguas faladas** (com bandeiras flag-icons, via `LanguagesField`)
 - **Social links** (Facebook, Instagram, etc.) via `SocialLinksField`
@@ -38,12 +38,12 @@ Ficheiro: `src/containers/ProfileSettingsPage/`
 
 ### Form: `ProfileSettingsForm`
 
-Campos com validação:
+Todos os campos têm validação client-side antes de enviar para o servidor. As regras de validação garantem consistência dos dados de perfil público.
 
 | Campo | Validação |
 |---|---|
-| `firstName` / `lastName` | Letras + acentos + apóstrofos + hífens, máx 50 chars |
-| `displayName` | Alfanumérico + símbolos, máx 60 chars |
+| `firstName` / `lastName` | Letras, acentos, apóstrofos e hífens, máx 50 chars |
+| `displayName` | Alfanumérico e símbolos, máx 60 chars |
 | `bio` | Textarea, máx 500 chars |
 | `profileLocation` | Autocomplete Mapbox |
 | `avatar` | Upload com transient state |
@@ -52,17 +52,19 @@ Campos com validação:
 | Custom user fields | Configurados em `userFields` |
 
 ### LanguagesField
-Componente custom com lista de idiomas + bandeiras (biblioteca `flag-icons`):
-- Português 🇵🇹
-- English 🇬🇧
-- Español 🇪🇸
-- Français 🇫🇷
-- Italiano 🇮🇹
-- Deutsch 🇩🇪
-- etc.
+
+Componente custom com lista de idiomas e bandeiras (biblioteca `flag-icons`). Os idiomas disponíveis são:
+- Português
+- English
+- Español
+- Français
+- Italiano
+- Deutsch
+- e outros
 
 ### SocialLinksField
-Lista editável de redes sociais. Plataformas suportadas:
+
+Lista editável de redes sociais com URL normalization automática (ex: `@user` converte para `https://instagram.com/user`). Plataformas suportadas:
 - Facebook
 - Instagram
 - Twitter
@@ -71,11 +73,10 @@ Lista editável de redes sociais. Plataformas suportadas:
 - YouTube
 - Pinterest
 
-URL normalization automática (ex: `@user` → `https://instagram.com/user`).
-
 ## AccountSettingsPage
 
-Página separada (`/account-settings`) para:
+Página separada (`/account-settings`) para configurações de segurança e conta. A eliminação de conta é uma operação irreversível gerida por endpoint dedicado no servidor.
+
 - Mudar email
 - Mudar password
 - Configurações de privacidade
@@ -83,9 +84,11 @@ Página separada (`/account-settings`) para:
 
 ## Sistema de Seguidores
 
+O sistema de seguidores permite acompanhar anfitriões e receber notificações quando publicam anúncios novos. O throttle de 24h garante que o anfitrião não recebe spam de notificações quando é seguido repetidamente.
+
 Ficheiros:
-- `src/ducks/follow.duck.js` — Redux state + thunks
-- `server/api/user-follow.js` — endpoint para registar follow + throttle 24h + email
+- `src/ducks/follow.duck.js` — Redux state e thunks
+- `server/api/user-follow.js` — endpoint para registar follow, throttle 24h e email
 - `src/components/FollowAlert/FollowAlert.js` — toast in-app
 
 ### Onde se vê
@@ -97,12 +100,13 @@ Ficheiros:
 ### Funcionamento
 1. Carrega "Seguir"
 2. `toggleFollowAndSync(targetUserId)` no Redux
-3. POST `/api/user-follow` → servidor adiciona entry em `metadata` do target + envia email + cria toast
+3. POST `/api/user-follow` — servidor adiciona entry em `metadata` do target, envia email e cria toast
 4. Throttle: mesmo fã só notifica 1x por 24h
 
 ## Custom user fields
 
-Configurados via `userFields` no `src/config/configUser.js`. Filtros aplicados:
+Configurados via `userFields` no `src/config/configUser.js`. O campo `pub_Location` é excluído da edição para evitar duplicação com `profileLocation`.
+
 - `pub_Location` — excluído da edição para evitar duplicação com `profileLocation`
 
 Cada campo pode aparecer no perfil público e/ou na edição.

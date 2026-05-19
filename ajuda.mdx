@@ -5,17 +5,17 @@ description: "Página de contacto + perguntas frequentes para ajuda ao utilizado
 
 ## O que é
 
-Página com **formulário de contacto** + **perguntas frequentes** (FAQ) para utilizadores tirarem dúvidas.
+Página com **formulário de contacto** e **perguntas frequentes** (FAQ) para utilizadores tirarem dúvidas. Qualquer pessoa, com ou sem conta, pode aceder a esta página para obter suporte.
 
 **URL**: `/contact`
 **Ficheiro**: `src/containers/ContactPage/`
 **Onde aceder**:
-- Dropdown do avatar → **"Ajuda"**
+- Dropdown do avatar, "Ajuda"
 - Ícone (?) no topbar
 
 ## Form de contacto
 
-Campos pedidos:
+O formulário recolhe as informações necessárias para a equipa da V1H responder à questão do utilizador. Após submissão, o email é enviado para o endereço configurado no servidor.
 
 | Campo | Validação |
 |---|---|
@@ -25,30 +25,31 @@ Campos pedidos:
 | **Assunto** | Texto |
 | **Mensagem** | Textarea |
 
-**Submit** → `POST /api/contact` → envia email para `admin@v1h.net` (configurável via env `CONTACT_RECIPIENT`).
+**Submit** envia `POST /api/contact` e encaminha para `admin@v1h.net` (configurável via env `CONTACT_RECIPIENT`).
 
 ## Países suportados no seletor de telefone
 
-PT 🇵🇹, ES 🇪🇸, FR 🇫🇷, GB 🇬🇧, DE 🇩🇪, IT 🇮🇹, NL 🇳🇱, BE 🇧🇪, CH 🇨🇭, US 🇺🇸, BR 🇧🇷, AO 🇦🇴, MZ 🇲🇿
+O seletor de prefixo telefónico suporta os seguintes países: PT, ES, FR, GB, DE, IT, NL, BE, CH, US, BR, AO, MZ.
 
 ## Informação de contacto direta
 
-Na lateral mostra cards com:
+Na lateral da página surgem cards com os dados de contacto direto da equipa V1H.
 
-- 📧 **Email**: `admin@v1h.net`
-- 📍 **Endereço**: Mira (Portugal)
-- 📞 **Telefone**: `+351 930 432 478`
-- 🕒 **Horário**: Segunda a Sexta, 9h–18h
+- **Email**: `admin@v1h.net`
+- **Endereço**: Mira (Portugal)
+- **Telefone**: `+351 930 432 478`
+- **Horário**: Segunda a Sexta, 9h-18h
 
 ## FAQ (Perguntas Frequentes)
 
-Lista de perguntas com respostas **expansíveis** (accordion):
+A secção de perguntas frequentes apresenta as dúvidas mais comuns com respostas expansíveis, facilitando a consulta rápida sem necessidade de contactar o suporte.
+
 - Componente: `FAQContent.js`
 - Suporte i18n PT/EN
 - Acessível também via âncora: `/como-funciona#faq`
 
 ## Quem vê este item no dropdown
 
-**Todos** — qualquer utilizador (logged-in ou guest) pode aceder.
+**Todos** os utilizadores, independentemente de estarem autenticados ou não, podem aceder a esta página.
 
-Detalhe completo: [Páginas Legais & Institucionais](paginas-footer).
+Detalhe completo: [Páginas Legais e Institucionais](paginas-footer).

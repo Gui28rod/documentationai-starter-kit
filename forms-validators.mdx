@@ -3,11 +3,11 @@ title: "Forms & Validators"
 description: "Forms de booking/inquiry/negotiation + validators do src/util/validators.js."
 ---
 
-Os forms da V1H usam **Final Form** (`react-final-form`). Validators reutilizáveis em `src/util/validators.js`.
+Os forms da V1H usam **Final Form** (`react-final-form`). Validators reutilizáveis em `src/util/validators.js`. Todos os validators seguem o padrão Final Form: retornam `undefined` se o valor é válido, ou uma string de mensagem de erro se não é.
 
 ## Forms do OrderPanel
 
-Localizados em `src/components/OrderPanel/`. O `OrderPanel` escolhe qual usar consoante o `transactionProcessAlias`.
+Localizados em `src/components/OrderPanel/`. O `OrderPanel` escolhe qual usar consoante o `transactionProcessAlias`. Cada form recolhe a informação necessária para iniciar o processo de reserva correspondente.
 
 ### BookingDatesForm
 **Quando**: reservas por dia / noite.
@@ -18,7 +18,7 @@ Localizados em `src/components/OrderPanel/`. O `OrderPanel` escolhe qual usar co
 
 **Validações**: `bookingDatesRequired`
 
-**Integrações**:
+**Integracoes**:
 - `EstimatedCustomerBreakdownMaybe` (preview de preço com line items)
 - `ShareBudgetButton` (partilhar orçamento)
 - `WaitlistButton` (se sem disponibilidade)
@@ -71,6 +71,8 @@ Integra `SubmitFinePrint` com termos.
 
 ## Outros forms importantes
 
+Estes forms estão distribuídos por vários containers e cobrem os principais fluxos de utilizador — desde o registo até ao pagamento e avaliação.
+
 | Form | Onde | Para que serve |
 |---|---|---|
 | `LoginForm` | AuthenticationPage | Login |
@@ -89,7 +91,7 @@ Integra `SubmitFinePrint` com termos.
 | `EditListingAvailabilityForm` | EditListingPage | Tab Availability |
 | `EditListingPhotosForm` | EditListingPage | Tab Photos (drag-to-reorder + YouTube URL) |
 | `EditListingDeliveryForm` | EditListingPage | Tab Delivery |
-| `EditListingPricingAndStockForm` | EditListingPage | Tab Pricing & Stock |
+| `EditListingPricingAndStockForm` | EditListingPage | Tab Pricing e Stock |
 | `EditListingStyleForm` | EditListingPage | Tab Style/categorias |
 | `SendMessageForm` | TransactionPage + DirectMessagePage | Enviar mensagem (texto + upload imagem) |
 | `ReviewForm` | TransactionPage | Submeter avaliação |
@@ -104,7 +106,7 @@ Integra `SubmitFinePrint` com termos.
 
 ## Validators (`src/util/validators.js`)
 
-Todos os validators retornam **`undefined` se válido** ou **string de erro se inválido** (padrão Final Form).
+Todos os validators retornam **`undefined` se válido** ou **string de erro se inválido** (padrão Final Form). Podem ser compostos com `composeValidators` para aplicar múltiplas regras a um mesmo campo.
 
 ### Validators básicos
 
@@ -192,7 +194,8 @@ Roda os validators em ordem; retorna o **primeiro erro** encontrado.
 
 ## Padrões V1H custom
 
-Alguns forms V1H adicionaram:
+Alguns forms V1H adicionaram funcionalidades extra para melhorar a experiência do utilizador ou suportar fluxos específicos da plataforma.
+
 - **Live validation** com feedback à medida que se escreve
 - **Botões CTA secundários** (ShareBudget, Waitlist) integrados no form
 - **Phone input com seletor de país** + flags (biblioteca `flag-icons`)
@@ -216,7 +219,7 @@ import { Form } from 'react-final-form';
 
 `submitting`, `pristine`, `valid` controlam o estado do botão.
 
-## SubmitButton & finalForm helpers
+## SubmitButton e finalForm helpers
 
 Padrão da V1H usa `PrimaryButton` com `inProgress` prop:
 

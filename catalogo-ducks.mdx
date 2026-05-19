@@ -3,7 +3,7 @@ title: "Catálogo de Redux Ducks"
 description: "Lista dos 26 ducks Redux com estado, actions principais e notas."
 ---
 
-Estado global da aplicação dividido em 26 "ducks" (Redux Toolkit / `createSlice`).
+O estado global da aplicação está dividido em 26 "ducks" (Redux Toolkit / `createSlice`). Cada duck é responsável por uma área de funcionalidade específica — autenticação, favoritos, notificações, etc. — e expõe thunks para operações assíncronas. Quinze dos 26 ducks foram criados ou significativamente customizados pela V1H.
 
 ## Tabela completa
 
@@ -11,34 +11,34 @@ Estado global da aplicação dividido em 26 "ducks" (Redux Toolkit / `createSlic
 |---|---|---|---|
 | **auth** | Autenticação, escopos, erros de login/logout/signup | `loginThunk`, `logoutThunk`, `signupThunk`, `signupWithIdpThunk`, `authInfoThunk` | Integra SDK; suporta IDP (Google/Facebook) e flow pós-signup |
 | **emailVerification** | Estado de verificação de email | `verifyEmail` | Faz `fetchCurrentUser` após verificação |
-| **extraAlerts** ⭐ V1H | 4 tipos de toasts novos | `setExtraAlerts`, `dismissExtraAlert`, `pollExtraAlerts` | Sincroniza com `user.metadata.unseenExtraAlerts`; poll 60s |
-| **favoriteAlerts** ⭐ V1H | Toasts "alguém favoritou" | `setAlerts`, `dismissFavoriteAlerts`, `pollFavoriteAlerts` | Source `user.metadata.unseenFavoriteAlerts` |
-| **favorites** ⭐ V1H | Lista de favoritos + contagens otimistas | `addToFavorites`, `removeFromFavorites`, `toggleFavoriteAndSync` | localStorage + server; chama `/api/listing-like` |
+| **extraAlerts** (V1H) | 4 tipos de toasts novos | `setExtraAlerts`, `dismissExtraAlert`, `pollExtraAlerts` | Sincroniza com `user.metadata.unseenExtraAlerts`; poll 60s |
+| **favoriteAlerts** (V1H) | Toasts "alguém favoritou" | `setAlerts`, `dismissFavoriteAlerts`, `pollFavoriteAlerts` | Source `user.metadata.unseenFavoriteAlerts` |
+| **favorites** (V1H) | Lista de favoritos + contagens otimistas | `addToFavorites`, `removeFromFavorites`, `toggleFavoriteAndSync` | localStorage + server; chama `/api/listing-like` |
 | **featuredListings** | Anúncios destaque por secção | `fetchFeaturedListings` | Suporta `newest` ou `queryString`; cache por sectionId |
-| **follow** ⭐ V1H | Following list + contagens followers | `toggleFollowLocal`, `toggleFollowAndSync`, `updateLastOnline` | localStorage + server; chama `/api/user-follow` |
-| **followAlerts** ⭐ V1H | Toasts "alguém te seguiu" | `setFollowAlerts`, `dismissFollowAlerts`, `pollFollowAlerts` | Padrão idêntico ao favoriteAlerts |
-| **highlightedListings** ⭐ V1H | Anúncios destacados pelo utilizador | `addHighlightedListing`, `clearHighlightedListings` | localStorage; reducer estilo antigo |
+| **follow** (V1H) | Following list + contagens followers | `toggleFollowLocal`, `toggleFollowAndSync`, `updateLastOnline` | localStorage + server; chama `/api/user-follow` |
+| **followAlerts** (V1H) | Toasts "alguém te seguiu" | `setFollowAlerts`, `dismissFollowAlerts`, `pollFollowAlerts` | Padrão idêntico ao favoriteAlerts |
+| **highlightedListings** (V1H) | Anúncios destacados pelo utilizador | `addHighlightedListing`, `clearHighlightedListings` | localStorage; reducer estilo antigo |
 | **hostedAssets** | Assets do Sharetribe CDN (configs, traduções, footer, pages) | `fetchAppAssets`, `fetchPageAssets`, `setCurrentPageAssets` | Versioning com alias "latest" |
-| **mapListings** ⭐ V1H | Anúncios geolocalizados em Portugal | `fetchMapListings` | Query bbox para PT continental + Madeira + Açores |
+| **mapListings** (V1H) | Anúncios geolocalizados em Portugal | `fetchMapListings` | Query bbox para PT continental + Madeira + Açores |
 | **marketplaceData** | Base de dados normalizada (listings, users, etc.) | `addMarketplaceEntities` | Storage central; suporta sanitização |
-| **notifications** ⭐ V1H | Novos anúncios de utilizadores seguidos | `checkNewListingsFromFollowed`, `setNewListings` | Cutoff per-user em localStorage; throttle 5min |
+| **notifications** (V1H) | Novos anúncios de utilizadores seguidos | `checkNewListingsFromFollowed`, `setNewListings` | Cutoff per-user em localStorage; throttle 5min |
 | **paymentMethods** | Métodos de pagamento Stripe | `createStripeCustomer`, `addPaymentMethod`, `deletePaymentMethod` | Wrapper `savePaymentMethod` escolhe a operação |
-| **ratings** ⭐ V1H | Ratings de listings e de utilizadores | `fetchListingRating`, `fetchUserRating`, `setListingRating`, `setUserRating` | User rating só `type=ofCustomer`; dedup automática |
-| **recentlyViewed** ⭐ V1H | Anúncios visualizados (MAX 20) | `addToRecentlyViewed`, `addToRecentlyViewedAndSync`, `fetchRecentlyViewedListings` | localStorage (auth) / sessionStorage (guest); expira 30 dias |
+| **ratings** (V1H) | Ratings de listings e de utilizadores | `fetchListingRating`, `fetchUserRating`, `setListingRating`, `setUserRating` | User rating só `type=ofCustomer`; dedup automática |
+| **recentlyViewed** (V1H) | Anúncios visualizados (MAX 20) | `addToRecentlyViewed`, `addToRecentlyViewedAndSync`, `fetchRecentlyViewedListings` | localStorage (auth) / sessionStorage (guest); expira 30 dias |
 | **routing** | Localização atual + canonical path | `locationChanged` | Simples — só rastreia navegação |
-| **savedSearchAlerts** ⭐ V1H | Matches novos para saved searches | `checkSavedSearchMatches`, `setMatches` | Poll 5min; filtra anúncios próprios |
-| **savedSearches** ⭐ V1H | Pesquisas guardadas no `privateData` | `toggleSavedSearchAndSync`, `dedupeSavedSearchesAndSync`, `removeSavedSearchAndSync` | MAX 25; dedup por canonical key |
-| **similarListings** ⭐ V1H | Anúncios similares por categoria | `fetchSimilarListings`, `setSimilarListings` | Retry exponencial em 429; MAX 20 |
+| **savedSearchAlerts** (V1H) | Matches novos para saved searches | `checkSavedSearchMatches`, `setMatches` | Poll 5min; filtra anúncios próprios |
+| **savedSearches** (V1H) | Pesquisas guardadas no `privateData` | `toggleSavedSearchAndSync`, `dedupeSavedSearchesAndSync`, `removeSavedSearchAndSync` | MAX 25; dedup por canonical key |
+| **similarListings** (V1H) | Anúncios similares por categoria | `fetchSimilarListings`, `setSimilarListings` | Retry exponencial em 429; MAX 20 |
 | **stripe** | Pagamentos (intents) | `confirmCardPaymentThunk`, `handleCardSetupThunk`, `retrievePaymentIntentThunk` | Integração Stripe.js; cache de intent |
 | **stripeConnectAccount** | Conta Stripe Connect | `createStripeAccountThunk`, `updateStripeAccountThunk`, `fetchStripeAccountThunk`, `getStripeConnectAccountLinkThunk` | Account tokens; collection_options |
 | **ui** | Estado de scroll global | `disableScrolling`, `manageDisableScrolling` | Vários componentes podem pedir disable em simultâneo |
 | **user** | currentUser + notifications counts + tem listings | `fetchCurrentUser`, `fetchCurrentUserHasListings`, `fetchCurrentUserNotifications` | Sincroniza favorites/follow/recently viewed/saved searches; cache notifications 5s TTL |
 
-⭐ = adicionado/customizado pela V1H. **15 dos 26 ducks** são customizações V1H.
+(V1H) indica adicionado/customizado pela V1H. **15 dos 26 ducks** são customizações V1H.
 
 ## Padrão dos ducks de notificação
 
-`favoriteAlerts`, `followAlerts`, `extraAlerts` seguem o mesmo padrão:
+Os ducks `favoriteAlerts`, `followAlerts` e `extraAlerts` seguem o mesmo padrão arquitetural. A fonte de verdade é sempre o servidor; o duck faz polling periódico e mantém uma lista de alertas dispensados localmente para evitar que voltem a aparecer durante a mesma sessão.
 
 1. Source de verdade: `user.metadata.unseen*Alerts` (server)
 2. Poll a cada 60s (`fetchCurrentUser` + extract alerts)
@@ -48,7 +48,7 @@ Estado global da aplicação dividido em 26 "ducks" (Redux Toolkit / `createSlic
 
 ## Padrão dos ducks de favoritos/follow
 
-`favorites`, `follow`:
+Os ducks `favorites` e `follow` usam um padrão de sincronização otimista. A ação é aplicada imediatamente no Redux (para feedback instantâneo ao utilizador), e sincronizada com o servidor em background.
 
 1. Source: `user.privateData.favorites` / `user.privateData.following`
 2. localStorage para guests
@@ -58,7 +58,7 @@ Estado global da aplicação dividido em 26 "ducks" (Redux Toolkit / `createSlic
 
 ## Util folder (`src/util/`)
 
-35 ficheiros de utilitários. Highlights:
+A pasta `src/util/` contém 35 ficheiros de utilitários stateless. São funções puras usadas em vários pontos da aplicação para manipulação de dados, formatação, validação e integração com APIs externas.
 
 | Ficheiro | Propósito |
 |---|---|

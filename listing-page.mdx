@@ -3,7 +3,7 @@ title: "Página de um Anúncio"
 description: "Estrutura, secções e funcionalidades da página de um listing individual."
 ---
 
-A página apresentada quando o utilizador carrega num anúncio. Ficheiro principal: [`src/containers/ListingPage/ListingPageCarousel.js`](https://github.com/Gui28rod/v1h---testes-dev) (~960 linhas).
+A página apresentada quando o utilizador carrega num anúncio. Ficheiro principal: [`src/containers/ListingPage/ListingPageCarousel.js`](https://github.com/Gui28rod/v1h---testes-dev) (~960 linhas). Esta página reúne a galeria de imagens, as informações do espaço, o OrderPanel para fazer reserva, o perfil do anfitrião e as avaliações recebidas.
 
 ## Layout geral
 
@@ -20,12 +20,12 @@ A página apresentada quando o utilizador carrega num anúncio. Ficheiro princip
 
 ## Galeria de Imagens
 
-Componente: `ListingImageGallery`. Características:
+Componente: `ListingImageGallery`. A galeria suporta vídeo YouTube como último slide, carregado apenas quando o slide está ativo para evitar que o som comece a tocar em background.
 
 - **Carrossel responsivo** com suporte a vídeo YouTube como último slide (se o host preencheu `publicData.youtubeUrl`)
 - **Thumbnails em carrossel** abaixo com scroll automático
 - **Modal fullscreen** com grid de thumbnails à direita (estilo eBay)
-- **Navegação**: clique nas thumbs, setas laterais, teclas ←/→, Esc para fechar
+- **Navegação**: clique nas thumbs, setas laterais, teclas setas, Esc para fechar
 - **Lazy-load do iframe YouTube** — só monta quando o slide está ativo (evita som a tocar em background)
 - **Aspect ratio dinâmico**: 16:9 para vídeos, calculado para fotos (máx 2:1 landscape, 4:3 portrait)
 - **Drag-to-reorder** disponível no Edit Listing, não no view público
@@ -36,6 +36,8 @@ Componente: `ListingImageGallery`. Características:
 Wrapper da `ListingImageGallery`. Passa as imagens com variantes `scaled-small/medium/large/xlarge`.
 
 ### SectionMapMaybe
+O mapa começa estático para melhorar a performance inicial da página. Ao clicar, ativa o modo interativo. As coordenadas do espaço são apresentadas com uma margem de erro intencional para proteger a privacidade do anfitrião.
+
 - Mapa **Mapbox** com coordenadas
 - Coordenadas **obfuscadas** se `fuzzy.enabled` (raio aleatório à volta do real)
 - Começa estático (clicável); ao clicar ativa modo interativo (pan/zoom)
@@ -49,7 +51,7 @@ Lista de reviews com contagem. Mensagens fallback para "sem avaliações" ou err
 
 ## OrderPanel (painel direito)
 
-Ficheiro: [`src/components/OrderPanel/OrderPanel.js`](https://github.com/Gui28rod/v1h---testes-dev) (~500+ linhas).
+Ficheiro: [`src/components/OrderPanel/OrderPanel.js`](https://github.com/Gui28rod/v1h---testes-dev) (~500+ linhas). O OrderPanel é o elemento principal de conversão da página — é aqui que o cliente seleciona datas/horas e inicia a reserva.
 
 ### Mostra
 - Preço formatado + unitType ("por dia", "por hora", "fixo")
@@ -71,16 +73,18 @@ Chips visuais (Wi-Fi, Casa de banho, Acessibilidade, etc.) gerados a partir dos 
 Custom fields tipo `enum`, `long`, `boolean` apresentados com labels formatados (ex: "Número de pessoas: 79").
 
 ### Descrição
-- Truncada por defeito com **"Ver mais"** → expande
-- Botão **"Traduzir"** ao lado (via `/api/translate` → MyMemory)
-- Botões ficam **inline** numa flex row, no canto inferior da descrição
+- Truncada por defeito com **"Ver mais"** que expande
+- Botão **"Traduzir"** ao lado (via `/api/translate` — MyMemory)
+- Botões ficam inline numa flex row, no canto inferior da descrição
 
 ## UserCard / Sobre o Autor
 
 Ficheiro: `src/containers/ListingPage/UserCard/UserCard.js`.
 
+O UserCard apresenta o perfil do anfitrião de forma compacta, com as informações mais relevantes para o cliente — tempo de resposta, avaliação e opção de seguir ou contactar.
+
 - **Avatar grande** + nome do anfitrião + ícone de localização (pin vermelho)
-- **Meta inline**: "Esteve online há Xd · Responde em ~Yh · N seguidores · ★ X.X (N avaliações)"
+- **Meta inline**: "Esteve online há Xd · Responde em ~Yh · N seguidores · X.X (N avaliações)"
 - **Botões**:
   - Enviar Mensagem (abre inquiry modal)
   - A Seguir / Seguir (toggle follow)
@@ -91,7 +95,7 @@ Ficheiro: `src/containers/ListingPage/UserCard/UserCard.js`.
 
 ## Reviews
 
-Componente: `src/components/Reviews/Reviews.js`. Cada review:
+Componente: `src/components/Reviews/Reviews.js`. Cada review tem botão de tradução próprio que usa a mesma API que a descrição do anúncio.
 
 - Avatar + displayName do autor
 - Rating em estrelas
@@ -101,7 +105,7 @@ Componente: `src/components/Reviews/Reviews.js`. Cada review:
 
 ## Botões e Features
 
-- **Favorito (❤️)** — `FavoriteButton` com contador; desabilitado em listings próprios
+- **Favorito** — `FavoriteButton` com contador; desabilitado em listings próprios
 - **Partilhar** — `ShareButtons` (Facebook, WhatsApp, copiar link)
 - **Denunciar anúncio** — `ReportListingModal` com formulário + attachments
 - **Lista de espera** — `WaitlistButton` quando o stock está esgotado
@@ -111,6 +115,8 @@ Componente: `src/components/Reviews/Reviews.js`. Cada review:
 ## Custom Fields (secção "Detalhes")
 
 Ficheiro: `src/containers/ListingPage/CustomListingFields.js`.
+
+Os custom fields da secção "Detalhes" mostram automaticamente todas as informações adicionais configuradas para cada anúncio, filtradas pela categoria do espaço.
 
 Mostra automaticamente todos os custom fields configurados no Sharetribe Console:
 - `enum` — dropdowns simples (ex: tipo de espaço)

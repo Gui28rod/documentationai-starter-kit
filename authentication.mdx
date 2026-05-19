@@ -17,7 +17,7 @@ This API uses OpenAPI to describe endpoints, parameters, and responses. The refe
 
 ## Authentication
 
-Use a bearer token in the `Authorization` header for authenticated requests. Replace the base URL and token with values for your own API.
+All authenticated requests require a bearer token in the `Authorization` header. Replace the base URL and token with values that match your own API environment.
 
 ```bash
 curl https://api.example.com/v1/example \
@@ -30,7 +30,7 @@ curl https://api.example.com/v1/example \
 
 ## Keep OpenAPI in sync
 
-Define your authentication and base settings in `openapi.yaml` so the API Reference stays accurate and consistent.
+Keeping `openapi.yaml` accurate ensures the generated API Reference always reflects the current authentication model. When your auth flow changes, update the spec file rather than each endpoint page individually.
 
 At a minimum, you should:
 

@@ -3,9 +3,11 @@ title: "Funcionalidades — Índice"
 description: "Resumo de alto nível de todas as funcionalidades, com links para a documentação detalhada de cada uma."
 ---
 
-Esta página é um **índice rápido**. Cada secção tem link para a página detalhada onde a funcionalidade é explicada a fundo.
+Esta página é um **índice rápido**. Cada secção tem link para a página detalhada onde a funcionalidade é explicada a fundo. Use este índice para encontrar rapidamente a documentação de uma funcionalidade específica.
 
-## 📋 Anúncios (Listings)
+## Anúncios (Listings)
+
+Os anúncios são o core da plataforma. Os anfitriões criam anúncios com fotos, descrição, preço, categoria e disponibilidade, e os clientes podem encontrá-los através da pesquisa.
 
 - Criação/edição com fotos, descrição, preço, categoria, comodidades, disponibilidade
 - Drag-to-reorder das fotos (mouse + touch)
@@ -13,56 +15,70 @@ Esta página é um **índice rápido**. Cada secção tem link para a página de
 - Badge da categoria sobre a imagem
 - Tradução automática da descrição
 
-👉 Detalhe em: [Página de um Anúncio](listing-page) · [Edit Listing Wizard](edit-listing-wizard)
+Detalhe em: [Página de um Anúncio](listing-page) e [Edit Listing Wizard](edit-listing-wizard)
 
-## 🔎 Pesquisa
+## Pesquisa
+
+O sistema de pesquisa permite encontrar espaços por localização, categoria, preço, datas e outras características. As pesquisas podem ser guardadas para receber notificações quando surgem novos anúncios compatíveis.
 
 - Filtros (localização, categoria, keyword, preço, capacidade, comodidades, datas)
 - Vista mapa vs grid
 - Pesquisas guardadas com dedup canónico + email + toast
 
-👉 Detalhe em: [Pesquisa e Filtros](pesquisa)
+Detalhe em: [Pesquisa e Filtros](pesquisa)
 
-## 📅 Reservas
+## Reservas
+
+O sistema de reservas suporta vários modelos — reserva única, múltiplas reservas simultâneas com auto-aceitação, e reservas de longa duração. Inclui ferramentas de gestão como lista de espera e calendário.
 
 - Reserva única, múltiplas (auto-aceitação), longo-prazo
 - "Adicionar ao calendário" Google
 - Lista de espera, partilha de orçamento
 - Dashboard do anfitrião
 
-👉 Detalhe em: [Reservas e Inbox](reservas)
+Detalhe em: [Reservas e Inbox](reservas)
 
-## 👤 Perfis
+## Perfis
+
+Os perfis públicos mostram informação detalhada sobre cada utilizador, incluindo línguas faladas, tempo de resposta, avaliações e anúncios. Os utilizadores podem seguir-se mutuamente.
 
 - Avatar, bio, línguas faladas (bandeiras), social links, response time
 - Avaliação só lado cliente
 - Sistema de seguidores, último online
 
-👉 Detalhe em: [Perfis de Utilizador](perfis)
+Detalhe em: [Perfis de Utilizador](perfis)
 
-## ⭐ Avaliações
+## Avaliacoes
+
+O sistema de avaliações usa o motor nativo do Sharetribe, com adições da V1H para rating por utilizador e tradução automática de cada review.
 
 - Sistema nativo Sharetribe
 - Rating por listing e por utilizador
 - Botão "Traduzir" em cada review
 
-👉 Detalhe em: [Avaliações (Reviews)](avaliacoes)
+Detalhe em: [Avaliações (Reviews)](avaliacoes)
 
-## 🔔 Notificações
+## Notificacoes
+
+A V1H tem um sistema de notificações com 8 tipos de toasts in-app, badge de contagem no topbar e 4 cron jobs que enviam emails automáticos.
 
 8 tipos de toasts + badge inbox + 4 cron jobs de email
 
-👉 Detalhe em: [Notificações (completo)](notificacoes-completas)
+Detalhe em: [Notificações (completo)](notificacoes-completas)
 
-## 🌐 Internacionalização
+## Internacionalizacao
+
+A interface da V1H está disponível em Português e Inglês. O conteúdo gerado pelos utilizadores (descrições, reviews) pode ser traduzido automaticamente via MyMemory.
 
 - Toggle PT/EN no topbar
 - Strings via `react-intl`
 - Tradução de conteúdo do utilizador via MyMemory
 
-👉 Detalhe em: [Tradução (i18n + MyMemory)](traducao)
+Detalhe em: [Tradução (i18n + MyMemory)](traducao)
 
-## 🎨 UI/UX
+## UI/UX
+
+Funcionalidades que melhoram a experiência visual e de usabilidade da plataforma.
 
 - Modo escuro
 - Cookie consent GDPR
@@ -70,41 +86,51 @@ Esta página é um **índice rápido**. Cada secção tem link para a página de
 - Recently viewed, highlighted, similar listings
 - Mobile category ticker
 
-👉 Detalhe em: [Modo Escuro & Theming](modo-escuro) · [Mobile & PWA](mobile-pwa) · [Cookies & Privacidade](cookies-privacidade) · [Recentemente Vistos](recently-viewed)
+Detalhe em: [Modo Escuro e Theming](modo-escuro), [Mobile e PWA](mobile-pwa), [Cookies e Privacidade](cookies-privacidade), [Recentemente Vistos](recently-viewed)
 
-## 💳 Pagamentos
+## Pagamentos
+
+Os pagamentos são processados via Stripe Connect, com onboarding hosted pelo Stripe para anfitriões. A comissão da V1H é configurada no Sharetribe Console.
 
 - Stripe Connect
 - Comissão V1H configurável
 - Onboarding hosted Stripe para anfitriões
 
-👉 Detalhe em: [Pagamentos (Stripe)](pagamentos)
+Detalhe em: [Pagamentos (Stripe)](pagamentos)
 
-## 🛡️ Segurança e Denúncias
+## Segurança e Denúncias
+
+A plataforma tem mecanismos de denúncia de anúncios e utilizadores com rate limiting para prevenir abusos. O modo login-as permite ao admin dar suporte sem partilhar credenciais.
 
 - Reportar anúncio com rate limiting
 - Reportar utilizador com cooldowns 60s/5dia/30d
 - Limited Access Banner quando admin entra como outro user
 
-👉 Detalhe em: [Catálogo de Containers](catalogo-containers) (ReportListingModal/ReportUserModal nos Componentes)
+Detalhe em: [Catálogo de Containers](catalogo-containers) (ReportListingModal/ReportUserModal nos Componentes)
 
-## 🔧 Admin / Operador
+## Admin / Operador
+
+Funcionalidades de administração e operação da plataforma, incluindo acesso ao painel Sharetribe Console.
 
 - Login-as user
 - Host stats endpoint
 - Recompute listing rating
 
-👉 Detalhe em: [Endpoints](endpoints)
+Detalhe em: [Endpoints](endpoints)
 
-## 🏗️ Páginas e Footer
+## Paginas e Footer
 
-- 41 containers (homepage, search, listing, profile, edit, inbox, …)
+A plataforma tem 41 containers cobrindo todas as páginas, com um footer completo e páginas legais e institucionais em PT e EN.
+
+- 41 containers (homepage, search, listing, profile, edit, inbox, ...)
 - Footer com 3 colunas + newsletter + social + PWA install
 - 6 páginas legais e institucionais (Termos, Privacidade, Cookies, About, Como Funciona, Contacto)
 
-👉 Detalhe em: [Catálogo de Containers](catalogo-containers) · [Footer](footer) · [Páginas do Footer](paginas-footer)
+Detalhe em: [Catálogo de Containers](catalogo-containers), [Footer](footer), [Páginas do Footer](paginas-footer)
 
-## 📊 Referência técnica
+## Referência técnica
+
+Documentação técnica detalhada de todos os componentes, endpoints, jobs e utilitários.
 
 - 16 endpoints customizados (`/api/*`)
 - 3 cron jobs (`server/jobs/*`)
@@ -112,13 +138,15 @@ Esta página é um **índice rápido**. Cada secção tem link para a página de
 - ~110 componentes reutilizáveis
 - 35 utilitários (`src/util/*`)
 
-👉 Detalhe em: [Endpoints](endpoints) · [Cron Jobs](cron-jobs) · [Catálogo de Redux Ducks](catalogo-ducks) · [Catálogo de Componentes](catalogo-componentes) · [Server, Config, Routing, Assets](server-config-routing)
+Detalhe em: [Endpoints](endpoints), [Cron Jobs](cron-jobs), [Catálogo de Redux Ducks](catalogo-ducks), [Catálogo de Componentes](catalogo-componentes), [Server, Config, Routing, Assets](server-config-routing)
 
-## 🚩 Estado do projeto
+## Estado do projeto
+
+Documentação sobre o estado atual do desenvolvimento, o que falta para ir para produção e as decisões tomadas.
 
 - Pendências para go-live (legal, Stripe live, etc.)
 - Problemas conhecidos
 - Decisões tomadas registadas
 - Próximas tarefas sugeridas
 
-👉 Detalhe em: [Pendências para Go-Live](pendencias-para-go-live) · [Problemas Conhecidos](problemas-conhecidos) · [Decisões Importantes](decisoes-importantes)
+Detalhe em: [Pendências para Go-Live](pendencias-para-go-live), [Problemas Conhecidos](problemas-conhecidos), [Decisões Importantes](decisoes-importantes)

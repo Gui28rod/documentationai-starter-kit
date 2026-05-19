@@ -13,11 +13,15 @@ Carrossel que mostra os últimos anúncios que o utilizador visitou. Persistido 
 
 ## Onde aparece
 
+O carrossel aparece em vários contextos do site, permitindo ao utilizador voltar rapidamente a anúncios que visitou antes.
+
 - **Carrossel próprio** (`RecentlyViewedSection`) com scroll horizontal e setas left/right
-- Renderizado em vários contextos (e.g. abaixo da ListingPage, possível na homepage)
+- Renderizado em vários contextos (por exemplo, abaixo da ListingPage e possivelmente na homepage)
 - **Página dedicada** `/vistos-recentemente` (ou similar) com lista completa
 
 ## Persistência
+
+A persistência funciona de forma diferente consoante o estado de autenticação. Ao fazer login, os entries pré-login são migrados automaticamente para o servidor.
 
 | Estado do utilizador | Onde guarda |
 |---|---|
@@ -34,7 +38,7 @@ Para não perder histórico durante o login: chave temporária `rv_prelogin` sal
 
 ## Lógica de adição
 
-Quando o utilizador abre uma `ListingPage`:
+Quando o utilizador abre uma `ListingPage`, o processo de adição é imediato e acontece em background, sem interação do utilizador.
 
 ```
 addToRecentlyViewedAndSync(listingId)
@@ -45,7 +49,8 @@ addToRecentlyViewedAndSync(listingId)
 
 ## Merge cross-device
 
-Quando o utilizador faz login num novo dispositivo:
+Quando o utilizador faz login num novo dispositivo, os entries locais e os do servidor são fundidos, resolvendo duplicados pelo timestamp mais recente.
+
 - Carrega do servidor
 - Faz merge com entries pré-login (se houver)
 - Resolve duplicados por `listingId`, mantendo o timestamp **mais recente**
@@ -55,12 +60,13 @@ Quando o utilizador faz login num novo dispositivo:
 - `src/components/RecentlyViewedSection/RecentlyViewedSection.module.css`
 - Setas left/right desativadas quando chega ao limite do scroll
 - Card wrapper: flex dinâmico
-  - Mobile: ~1.8 cards visíveis
+  - Mobile: cerca de 1.8 cards visíveis
   - Desktop: até 6 cards
 - Scroll suave (`scroll-behavior: smooth`)
 
 ## Bug conhecido
 
-Há uma memória [`project_recently_viewed_fix`](../../../memory/project_recently_viewed_fix.md) que documenta:
+Há uma nota de memória que documenta dois comportamentos a evitar na implementação do fetch:
+
 - O fetch é **incondicional ao mount**
 - Timing do Redux: gating em `recentlyViewedIds.length` quebrou em momento — não fazer isso de novo

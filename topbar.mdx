@@ -16,28 +16,28 @@ Barra superior fixa presente em todas as páginas (exceto algumas legais/auth).
 
 ## Topbar Desktop
 
-Layout horizontal (flex), da esquerda para a direita:
+Layout horizontal (flex), da esquerda para a direita. Cada elemento tem função específica na navegação e personalização do utilizador.
 
 1. **Logo** — `V1H-LOGO-BLACK.png`, clicável para a homepage
 2. **TopbarSearchForm** — campo de busca com autocomplete
 3. **Language Switcher (PT/EN)** — dropdown que preserva query params
-4. **Dark Mode Toggle** — ícones sol ☀️ / lua 🌙 contextualizados
-5. **Help Link** — ícone (?) → `ContactPage`
+4. **Dark Mode Toggle** — alterna entre modo claro e escuro
+5. **Help Link** — ícone (?) para `ContactPage`
 6. **Inbox Link** — ícone com **badge vermelho** (mostra "4+" se contagem > 4)
-7. **Publish Button** — "Publicar Anúncio" → `NewListingPage`
+7. **Publish Button** — "Publicar Anúncio" — `NewListingPage`
 8. **Profile Menu Dropdown** — avatar clicável
 
 ## Profile Menu Dropdown
 
-Items disponíveis (variam consoante o estado do utilizador):
+Os items do dropdown variam consoante o estado do utilizador. Um utilizador sem anúncios, por exemplo, não vê os itens de gestão de anúncios.
 
 | Item | Página |
 |---|---|
 | O meu perfil | `ProfilePage` (pública) |
 | Configurações de Perfil | `ProfileSettingsPage` |
 | Definições de Conta | `AccountSettingsPage` |
-| Destacar Anúncio | `DestacaAnuncioPage` *(só se tem anúncios)* |
-| Os meus anúncios | `ManageListingsPage` *(só se tem anúncios)* |
+| Destacar Anúncio | `DestacaAnuncioPage` (só se tem anúncios) |
+| Os meus anúncios | `ManageListingsPage` (só se tem anúncios) |
 | Favoritos | `FavoritesPage` |
 | Pesquisas guardadas | `SavedSearchesPage` |
 | A seguir | `FollowingPage` |
@@ -46,7 +46,8 @@ Items disponíveis (variam consoante o estado do utilizador):
 
 ## Topbar Mobile
 
-Diferenças do desktop:
+Em mobile, o topbar adapta-se a um layout mais compacto. O `MobileCategoryTicker` aparece acima da topbar, dando acesso direto às 9 categorias.
+
 - **Menu hambúrguer** (`TopbarMobileMenu`) — abre side panel com mesmos itens do profile dropdown
 - **Bottom action bar** — botões fixos no fundo do ecrã
 - **MobileCategoryTicker** — carrossel horizontal de categorias (Cultura, Trabalho, etc.) acima da topbar
@@ -54,7 +55,8 @@ Diferenças do desktop:
 
 ## Inbox badge
 
-Lógica:
+O badge agrega três contadores distintos num único número visível. O cap visual de "4+" evita que números longos quebrem o layout.
+
 - Soma de:
   - `currentUserSaleNotificationCount` (vendas/reservas novas como anfitrião)
   - `currentUserOrderNotificationCount` (pedidos novos como cliente)
@@ -65,14 +67,16 @@ Lógica:
 
 ## Language Switcher
 
-Dropdown PT / EN com persistência via `localeContext` + `localStorage`. Ao mudar:
+Dropdown PT / EN com persistência via `localeContext` e `localStorage`. Ao mudar, todas as strings da UI são re-renderizadas via `react-intl`, sem reload de página.
+
 - Re-renderiza todas as strings da UI (via `react-intl`)
 - Persiste no servidor (em curso — ver pendência email i18n)
 - Preserva URL e query params
 
 ## Dark Mode Toggle
 
-Componente `DarkModeToggle`. Ao alternar:
+Componente `DarkModeToggle`. Ao alternar, dois atributos são adicionados ou removidos do `<body>`, ativando os overrides CSS do modo escuro.
+
 - Adiciona/remove `data-dark-mode="true"` e `data-landing-dark="true"` no `<body>`
 - CSS global em [`src/styles/landingDark.css`](https://github.com/Gui28rod/v1h---testes-dev) reage e aplica tema escuro
 - Persiste preferência via `localStorage` (apenas se cookie consent "preferences" estiver dado)

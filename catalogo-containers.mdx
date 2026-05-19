@@ -3,7 +3,7 @@ title: "Catálogo de Containers (Páginas)"
 description: "Lista completa dos 41 containers/páginas com URL e função."
 ---
 
-Todos os containers em `src/containers/`. Container = página completa ou wrapper de alto nível.
+Todos os containers em `src/containers/`. Um container corresponde a uma página completa ou a um wrapper de alto nível que envolve outras páginas. No total são 41 containers, sendo 27 herdados do template Sharetribe e 14 criados ou significativamente customizados pela V1H.
 
 | Container | Rota / Tipo | O que faz |
 |---|---|---|
@@ -18,7 +18,7 @@ Todos os containers em `src/containers/`. Container = página completa ou wrappe
 | **DestacaAnuncioPage** | `/destaque-anuncio` | Destacar anúncio na homepage; pré-visualização + pagamento. |
 | **DirectMessagePage** | `/mensagens/:id` | Chat direto entre utilizadores (texto + imagens). |
 | **EditListingPage** | `/l/:slug/:id/edit/...` | Wizard de criação/edição de anúncios. |
-| **EmailVerificationPage** | `/email-verification` | Confirma email via token URL → redirect. |
+| **EmailVerificationPage** | `/email-verification` | Confirma email via token URL — redirect. |
 | **FavoritesPage** | `/favoritos` | Lista de anúncios favoritados. |
 | **FollowingPage** | `/a-seguir` | Lista de utilizadores seguidos com follow/unfollow. |
 | **FooterContainer** | wrapper | Renderiza footer via SectionBuilder com asset hosted. |
@@ -51,8 +51,9 @@ Todos os containers em `src/containers/`. Container = página completa ou wrappe
 
 ## Detalhes especiais
 
-### PageBuilder (não tem rota própria)
-Motor universal que renderiza páginas via assets hospedados no Sharetribe Console:
+### PageBuilder (sem rota própria)
+O PageBuilder é o motor universal que renderiza páginas cujo conteúdo é definido no Sharetribe Console, sem necessidade de programação. As chefes da V1H podem editar texto, imagens e secções diretamente no Console.
+
 - Lê asset (`pageAsset.{name}`)
 - Mapeia secções (`SectionHero`, `SectionCarousel`, etc.) para componentes
 - Suporta SEO schema + layouts customizados
@@ -62,9 +63,9 @@ Motor universal que renderiza páginas via assets hospedados no Sharetribe Conso
 Quando um asset CMS aponta para `content/pages/about`, esta página redireciona para `/sobre-nos`. Útil para preview de mudanças antes de publicar.
 
 ### StyleguidePage
-Página oculta de desenvolvedor — `localhost:3000/styleguide`. Mostra todos os componentes, ícones, cores, tipografia. Útil para designers e devs verem o sistema visual.
+Página oculta de desenvolvedor, acessível em `localhost:3000/styleguide`. Mostra todos os componentes, ícones, cores, tipografia. Útil para designers e devs verem o sistema visual completo sem percorrer o site.
 
-### Wrappers (não têm rota)
+### Wrappers (sem rota)
 - **TopbarContainer** — renderiza Topbar em todas as páginas
 - **FooterContainer** — renderiza Footer em todas as páginas
 - **PageBuilder** — usado dentro de outros containers
@@ -72,6 +73,8 @@ Página oculta de desenvolvedor — `localhost:3000/styleguide`. Mostra todos os
 ## Por origem
 
 ### Vindos do Sharetribe (base do template)
+Estes containers são herdados do Sharetribe Web Template e foram adaptados com pequenas customizações visuais e de conteúdo.
+
 - AuthenticationPage, CMSPage, CheckoutPage, ContactDetailsPage
 - EditListingPage, EmailVerificationPage, InboxPage, LandingPage
 - ListingPage, MakeOfferPage, ManageAccountPage, ManageListingsPage
@@ -82,6 +85,8 @@ Página oculta de desenvolvedor — `localhost:3000/styleguide`. Mostra todos os
 - TransactionPage
 
 ### Customizados pela V1H
+Estes containers foram criados de raiz ou substituídos na totalidade para servir as necessidades específicas da plataforma Venue1Hub.
+
 - **AboutPage** — página própria sobre nós
 - **ComoFuncionaPage** — como funciona com FAQ
 - **ContactPage** — formulário V1H

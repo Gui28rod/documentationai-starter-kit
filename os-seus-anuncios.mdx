@@ -9,23 +9,26 @@ Página onde o anfitrião gere **todos os seus anúncios** (publicados, rascunho
 
 **URL**: `/your-listings`
 **Ficheiro**: `src/containers/ManageListingsPage/`
-**Onde aceder**: dropdown do avatar → **"Os seus anúncios"** *(só aparece se tens pelo menos 1 anúncio, mesmo em rascunho)*
+**Onde aceder**: dropdown do avatar, na opção "Os seus anúncios" (só aparece se tens pelo menos 1 anúncio, mesmo em rascunho)
 
 ## O que mostra
 
-Cada anúncio aparece como **card**:
+Cada anúncio aparece como card com os seus dados principais. O badge de estado indica o ciclo de vida do anúncio no marketplace:
+
 - Foto principal
 - Título
 - Preço
 - Localização
 - Rating (com IconReviewStar)
 - **Badge de estado**:
-  - 🟢 **Published** — visível no marketplace
-  - 🟡 **Pending Approval** — admin tem de aprovar
-  - 🔘 **Draft** — em rascunho, ainda não publicado
-  - ⚫ **Closed** — escondido (mas dados preservados)
+  - **Published** — visível no marketplace
+  - **Pending Approval** — admin tem de aprovar
+  - **Draft** — em rascunho, ainda não publicado
+  - **Closed** — escondido (mas dados preservados)
 
-## Ações por anúncio (menu dropdown ⋯)
+## Ações por anúncio (menu dropdown)
+
+Cada card tem um menu de contexto com as ações disponíveis conforme o estado atual do anúncio.
 
 | Ação | O que faz |
 |---|---|
@@ -33,11 +36,11 @@ Cada anúncio aparece como **card**:
 | **Close** | Esconde do marketplace (sem deleção real) |
 | **Open** | Republica anúncio fechado |
 | **Discard draft** | Elimina rascunho (com modal de confirmação) |
-| **Delete** | Fecha + adiciona a `deletedListingIds` (localStorage + privateData server) |
+| **Delete** | Fecha e adiciona a `deletedListingIds` (localStorage e privateData server) |
 
 ## HostDashboard
 
-Componente complementar que mostra **stats do anfitrião** na mesma página:
+Componente complementar que mostra **stats do anfitrião** na mesma página. Os dados são agregados via API e apresentados ao anfitrião como resumo do desempenho dos seus espaços.
 
 - Total de bookings no mês
 - Revenue acumulado
@@ -49,13 +52,15 @@ Dados via `GET /api/host-stats` ([Endpoints](endpoints)).
 
 ## Flow de deleção
 
-1. Click "Delete" → `addDeletedListingId(id)` (localStorage)
+A deleção é um processo de dois passos que combina a marcação local com a sincronização no servidor, garantindo que o anúncio desaparece da vista sem necessitar de reload.
+
+1. Click "Delete" — `addDeletedListingId(id)` (localStorage)
 2. `onCloseListing(id)` (Sharetribe SDK)
 3. Sync `deletedListings` para `privateData` do user (server)
 4. Filtering local remove do view **sem reload**
 
 ## Paginação
 
-Se tiveres muitos anúncios (>20), aparece paginação no fundo (1, 2, 3, ...).
+Se tiveres muitos anúncios (mais de 20), aparece paginação no fundo (1, 2, 3, ...).
 
 Para mais detalhe técnico (ficheiro fonte, helpers, etc.) ver [Catálogo de Containers](catalogo-containers).

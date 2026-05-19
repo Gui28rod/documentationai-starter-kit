@@ -3,9 +3,11 @@ title: "Catálogo de Componentes"
 description: "Lista de ~110 componentes reutilizáveis em src/components/ organizados por categoria."
 ---
 
-Componentes em `src/components/`. ~110 ficheiros agrupados por função.
+Componentes em `src/components/`. Cerca de 110 ficheiros agrupados por função. Cada componente é reutilizável em vários pontos da aplicação, garantindo consistência visual e de comportamento.
 
-## 🎨 Layout & Estrutura
+## Layout e Estrutura
+
+Estes componentes definem a estrutura visual das páginas, controlam o scroll e gerem imagens responsivas.
 
 | Componente | Função |
 |---|---|
@@ -16,11 +18,13 @@ Componentes em `src/components/`. ~110 ficheiros agrupados por função.
 | `AspectRatioWrapper` | Wrapper que mantém aspect ratio (fotos, vídeos) |
 | `ResponsiveBackgroundImageContainer` | Background image responsivo com srcset |
 | `ResponsiveImage` | `<img>` com srcset e variantes scaled |
-| `Heading`, `H1`–`H6` | Headings semânticos com style |
+| `Heading`, `H1`-`H6` | Headings semânticos com style |
 | `OutsideClickHandler` | Fecha popup ao clicar fora |
 | `KeyboardListener` | Captura teclado (Esc, setas) |
 
-## 🔘 Botões & Navigation
+## Botões e Navigation
+
+Componentes de ação e navegação reutilizáveis em toda a aplicação.
 
 | Componente | Função |
 |---|---|
@@ -29,12 +33,14 @@ Componentes em `src/components/`. ~110 ficheiros agrupados por função.
 | `NamedRedirect` | Redirect server-side com nome de rota |
 | `TabNav`, `TabNavHorizontal`, `Tabs` | Sistema de tabs |
 | `UserNav` | Nav lateral do perfil/conta |
-| `PaginationLinks` | Paginação 1, 2, 3, … |
+| `PaginationLinks` | Paginação 1, 2, 3, ... |
 | `ScrollToTopButton` | Botão flutuante "voltar ao topo" |
 | `AddToCalendarButton` | Adicionar reserva ao Google Calendar |
 | `PwaInstallButton` | Trigger do install prompt PWA |
 
-## 📋 Form Fields (Final Form)
+## Form Fields (Final Form)
+
+Os form fields são construídos sobre a biblioteca React Final Form e incluem validação integrada. Cada componente encapsula o field do formulário com o respetivo feedback de erro.
 
 | Componente | Função |
 |---|---|
@@ -62,7 +68,9 @@ Componentes em `src/components/`. ~110 ficheiros agrupados por função.
 | `ValidationError` | Mensagem de erro de validação |
 | `ErrorMessage` | Mensagem de erro genérica |
 
-## 🎭 Modais & Overlays
+## Modais e Overlays
+
+Modais usados para confirmações, reportes, consentimentos e mensagens de boas-vindas. Cada modal tem comportamento de foco acessível e fecha ao pressionar Esc.
 
 | Componente | Função |
 |---|---|
@@ -75,7 +83,9 @@ Componentes em `src/components/`. ~110 ficheiros agrupados por função.
 | `FeedbackPromptModal` | Modal NPS pós-review |
 | `WelcomeModal` | Modal de boas-vindas pós-signup |
 
-## 🔔 Toasts & Banners
+## Toasts e Banners
+
+O sistema de toasts in-app da V1H tem 5 tipos de notificações que aparecem no canto inferior direito. O cap visual é de 6 banners simultâneos, com os restantes em fila.
 
 | Componente | Função |
 |---|---|
@@ -88,7 +98,9 @@ Componentes em `src/components/`. ~110 ficheiros agrupados por função.
 | `LimitedAccessBanner` | Banner permanente quando admin login-as |
 | `MaintenanceMode` | Página de manutenção |
 
-## 🖼️ Cards & Listings
+## Cards e Listings
+
+Componentes que apresentam anúncios em formato de card, usados na pesquisa, carrosséis e secções da homepage.
 
 | Componente | Função |
 |---|---|
@@ -100,7 +112,9 @@ Componentes em `src/components/`. ~110 ficheiros agrupados por função.
 | `OrderPanel` | Painel direito do listing (reserva) |
 | `OrderBreakdown` | Detalhe de preço (preço + comissão + total) |
 
-## 👤 Utilizador / Avatar
+## Utilizador e Avatar
+
+Componentes relacionados com a identidade do utilizador, favoritos e avaliações.
 
 | Componente | Função |
 |---|---|
@@ -110,7 +124,9 @@ Componentes em `src/components/`. ~110 ficheiros agrupados por função.
 | `Reviews` | Lista de reviews |
 | `ReviewRating` | Estrelas de rating |
 
-## 💳 Stripe
+## Stripe
+
+Componentes que integram o Stripe para onboarding de anfitriões e gestão de cartões de pagamento.
 
 | Componente | Função |
 |---|---|
@@ -119,14 +135,16 @@ Componentes em `src/components/`. ~110 ficheiros agrupados por função.
 | `StripePaymentAddress` | Form de morada de pagamento |
 | `SavedCardDetails` | Detalhe do cartão guardado |
 
-## 🌍 Mapas
+## Mapas
 
 | Componente | Função |
 |---|---|
 | `Map` | Wrapper de mapa (Mapbox ou Google) |
 | `LocationAutocompleteInput` | Input com autocomplete |
 
-## ⏰ Datas & Tempo
+## Datas e Tempo
+
+Componentes de seleção de datas para formulários de reserva, com suporte a ranges e horas.
 
 | Componente | Função |
 |---|---|
@@ -137,7 +155,7 @@ Componentes em `src/components/`. ~110 ficheiros agrupados por função.
 | `FieldSingleDatePicker` | Single date picker |
 | `TimeRange` | Display de range de horas |
 
-## 📤 Sharing & External
+## Sharing e External
 
 | Componente | Função |
 |---|---|
@@ -148,23 +166,25 @@ Componentes em `src/components/`. ~110 ficheiros agrupados por função.
 | `Promised` | Wrapper para Promise pending state |
 | `PropertyGroup` | Group de chips (amenities) |
 
-## 🎨 Ícones (40+ ícones SVG)
+## Icones (40+ icones SVG)
 
-| Categoria | Ícones |
+A biblioteca de ícones SVG cobre ações, comunicação, ratings, UI e funcionalidades específicas da V1H. Os ícones de categoria têm designs próprios criados para a plataforma.
+
+| Categoria | Icones |
 |---|---|
-| **Ações** | IconAdd, IconClose, IconDelete, IconEdit, IconCheckmark |
-| **Comunicação** | IconEmailAttention, IconEmailSent, IconEmailSuccess, IconInquiry |
+| **Acoes** | IconAdd, IconClose, IconDelete, IconEdit, IconCheckmark |
+| **Comunicacao** | IconEmailAttention, IconEmailSent, IconEmailSuccess, IconInquiry |
 | **Reviews/Rating** | IconReviewStar, IconReviewUser |
 | **UI** | IconAlert, IconArrowHead, IconSpinner, IconSuccess, IconSynchronize, IconSearch, IconDate, IconLocation |
 | **Account** | IconKeys, IconKeysSuccess, IconBannedUser |
 | **Heart** | IconHeart (favoritos) |
 | **Disputes** | IconDisputeOrder |
 | **Social** | IconSocialMediaFacebook, IconSocialMediaInstagram, IconSocialMediaTwitter |
-| **Custom V1H** | `CategoryIcons/` — 9 ícones (Cultura, Trabalho, Eventos, etc.) |
+| **Custom V1H** | `CategoryIcons/` — 9 icones (Cultura, Trabalho, Eventos, etc.) |
 
-## 🆕 Componentes V1H (não vinham do Sharetribe)
+## Componentes V1H (nao vinham do Sharetribe)
 
-Estes foram criados especificamente para a V1H:
+Estes componentes foram criados especificamente para a V1H e não fazem parte do template base do Sharetribe. Representam as funcionalidades novas adicionadas pela equipa.
 
 - `ExtraAlerts` — 4 novos tipos de toast (edits + reviews)
 - `FavoriteAlert`, `FollowAlert`, `SavedSearchAlert`, `NewListingNotification`

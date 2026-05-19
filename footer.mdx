@@ -3,7 +3,7 @@ title: "Footer"
 description: "Rodapé do site — links, newsletter, social, PWA install."
 ---
 
-Rodapé fixo no fundo de todas as páginas.
+Rodapé fixo no fundo de todas as páginas. O footer é gerido via PageBuilder com asset hosted no Sharetribe Console, o que permite às chefes editar texto e links sem necessidade de programador.
 
 ## Ficheiros principais
 
@@ -18,22 +18,26 @@ Rodapé fixo no fundo de todas as páginas.
 
 ### Links em 3 colunas
 
+O footer tem três colunas de links organizadas por tema. A coluna "Empresa" está parcialmente pendente, aguardando decisão das chefes sobre que páginas adicionais incluir.
+
 | Coluna | Links |
 |---|---|
 | **Plataforma** | Como funciona, Procurar anúncios, Publicar anúncio, FAQ (perguntas frequentes) |
-| **Empresa** | Sobre nós, Contacto *(pendente: Imprensa, Trust & Safety, Carreiras — chefes decidirem)* |
-| **Suporte** | Termos de serviço, Política de privacidade, Política de cookies, **Definições de cookies** *(abre o modal cookie consent)* |
+| **Empresa** | Sobre nós, Contacto (pendente: Imprensa, Trust and Safety, Carreiras) |
+| **Suporte** | Termos de serviço, Política de privacidade, Política de cookies, **Definições de cookies** (abre o modal cookie consent) |
 
 ### Newsletter Signup
 
+O formulário de newsletter envia o email para a API da V1H, que pode integrar com Resend ou Substack. O botão tem três estados visuais para dar feedback imediato ao utilizador.
+
 - Input de email + botão "Subscrever" / "Subscribe"
-- Estados visuais: idle → loading → success / error
+- Estados visuais: idle — loading — success / error
 - Endpoint: `POST /api/newsletter` com `{email}` em JSON
-- Success: mostra ✓ "Subscrito com sucesso! Obrigado."
+- Success: mostra confirmação "Subscrito com sucesso! Obrigado."
 
 ### Social Media Links
 
-Ícones com **hover effect** (troca de imagem normal/hover):
+Ícones com hover effect (troca de imagem normal/hover):
 - Facebook (`@venue1hub`)
 - Instagram (`@venue1hub`)
 - LinkedIn
@@ -54,7 +58,7 @@ Em paralelo à newsletter integrada, a V1H tem **conta Substack** em `venue1hub.
 
 ## Configurações de cookies
 
-O link **"Definições de cookies"** abre o modal `CookieConsent` em modo modal (`window.__v1hOpenCookiePrefs()`), permitindo ao utilizador rever/alterar consentimento por categoria.
+O link "Definições de cookies" abre o modal `CookieConsent` em modo modal (`window.__v1hOpenCookiePrefs()`), permitindo ao utilizador rever/alterar consentimento por categoria.
 
 ## CSS
 
@@ -68,6 +72,6 @@ O link **"Definições de cookies"** abre o modal `CookieConsent` em modo modal 
 
 ## Variabilidade via PageBuilder
 
-O footer é renderizado via PageBuilder com asset hosted no Sharetribe Console. As chefes podem **mudar texto e links sem programador** indo ao Console → Pages → footer.
+O footer é renderizado via PageBuilder com asset hosted no Sharetribe Console. As chefes podem mudar texto e links sem programador indo ao Console, Pages, footer.
 
 A estrutura visual (3 colunas, newsletter, social, PWA) é fixa no código mas os textos vêm do CMS.

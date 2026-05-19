@@ -5,49 +5,49 @@ description: "Página com as pesquisas que o utilizador guardou + notificações
 
 ## O que é
 
-Página com **todas as pesquisas** que guardaste — útil para repetir buscas frequentes ou receber notificação quando há novos anúncios que coincidem.
+Página com **todas as pesquisas** que guardaste. É útil para repetir buscas frequentes ou receber notificação quando há novos anúncios que coincidem com os teus filtros.
 
 **URL**: `/pesquisas-guardadas`
 **Ficheiro**: `src/containers/SavedSearchesPage/`
-**Onde aceder**: dropdown do avatar → **"Pesquisas guardadas"**
+**Onde aceder**: dropdown do avatar, na opção "Pesquisas guardadas"
 
 ## Como guardar uma pesquisa
 
+O botão de guardar pesquisa está disponível na página de pesquisa, ao lado da contagem de resultados. O estado visual (preenchido vs vazio) indica se a pesquisa atual já está guardada.
+
 1. Vai à página de pesquisa (`/s`) e aplica filtros (categoria, localização, preço, etc.)
-2. Carrega no **botão coração ❤️** ao lado da contagem de resultados
-3. Pesquisa fica guardada (a vermelho = guardada / a branco = não guardada)
+2. Carrega no **botão coração** ao lado da contagem de resultados
+3. Pesquisa fica guardada (a vermelho = guardada, a branco = não guardada)
 4. Aparece nesta página
 
 ## O que mostra
 
-Cada pesquisa guardada aparece como **card** com:
+Cada pesquisa guardada aparece como card com o resumo dos filtros aplicados e as ações disponíveis.
+
 - **Label** (descrição da pesquisa, ex: "Eventos em Lisboa < 100€")
 - **Filtros aplicados** (categoria, localização, preço, etc.)
-- **Botão "Repetir pesquisa"** → vai para `/s` com os filtros
-- **Botão "Remover"** → elimina da lista
+- **Botão "Repetir pesquisa"** — vai para `/s` com os filtros
+- **Botão "Remover"** — elimina da lista
 
 ## Dedup canónico
 
-A V1H **detecta duplicados** automaticamente:
-- A mesma pesquisa não é guardada 2x
-- Comparação por "chave canónica" (params normalizados sem `page`, `sort`, `mapSearch`, `bounds`)
-- Se tentas guardar duplicado → toggle remove em vez de criar
+A V1H **deteta duplicados** automaticamente, comparando por "chave canónica" (params normalizados sem `page`, `sort`, `mapSearch`, `bounds`). Se tentares guardar uma pesquisa já existente, o sistema remove-a em vez de criar um duplicado.
 
 ## Notificações de novos resultados
 
-A cada **5 minutos**, o cron `notifySavedSearchesJob` verifica se há **anúncios novos** que correspondem às tuas pesquisas:
+A cada **5 minutos**, o cron `notifySavedSearchesJob` verifica se há **anúncios novos** que correspondem às tuas pesquisas. Quando há correspondência, tanto o email como o toast in-app são enviados.
 
-- Se sim → **email**: "X novos resultados para a tua pesquisa Y"
-- Top 6 anúncios novos + link para "Ver todos"
+- Se sim, **email**: "X novos resultados para a tua pesquisa Y"
+- Top 6 anúncios novos com link para "Ver todos"
 - Também aparece **toast in-app** ao abrir o site
 
 ## Limite
 
-Máximo **25 pesquisas guardadas** por utilizador. Se atingires, tens de remover alguma para guardar nova.
+Máximo **25 pesquisas guardadas** por utilizador. Se atingires o limite, tens de remover uma para guardar nova.
 
 ## Persistência
 
 - Server-side em `currentUser.privateData.savedSearches`
-- Não há versão guest — só disponível para logged-in users
+- Não há versão guest — só disponível para utilizadores com sessão iniciada
 
 Detalhe completo: [Pesquisa e Filtros](pesquisa).

@@ -3,21 +3,21 @@ title: "Sharetribe vs Customizações V1H"
 description: "O que veio do template Sharetribe vs o que foi programado para a V1H."
 ---
 
-A V1H **não foi construída do zero**. Partiu do [Sharetribe Web Template](https://github.com/sharetribe/web-template) (open-source, MIT) e foi adaptada/expandida no VS Code.
+A V1H **não foi construída do zero**. Partiu do [Sharetribe Web Template](https://github.com/sharetribe/web-template) (open-source, MIT) e foi adaptada e expandida em VS Code.
 
 Esta página explica o que veio pronto vs o que foi feito.
 
 ## O que é o Sharetribe
 
-**Sharetribe** é uma plataforma SaaS para construir marketplaces (Airbnb-likes, eBay-likes, etc.). Fornece:
+**Sharetribe** é uma plataforma SaaS para construir marketplaces (do tipo Airbnb ou eBay). Fornece:
 - **Backend gerido** (BD, autenticação, transações, mensagens, pagamentos)
-- **API e SDKs** (Marketplace SDK + Integration SDK)
+- **API e SDKs** (Marketplace SDK e Integration SDK)
 - **Console** (painel admin no `console.sharetribe.com`)
 - **Web Template open-source** (React + Redux + Express SSR) como ponto de partida do frontend
 
-O Sharetribe **trata da complexidade** de marketplace (Stripe Connect, KYC, anti-fraude, payouts) — a V1H apenas customiza UI/UX e adiciona features próprias.
+O Sharetribe **trata da complexidade** de marketplace (Stripe Connect, KYC, anti-fraude, payouts). A V1H apenas customiza UI/UX e adiciona features próprias.
 
-## ✅ O que veio do Sharetribe (não programado pela V1H)
+## O que veio do Sharetribe (não programado pela V1H)
 
 ### Backend (gerido pelo Sharetribe SaaS)
 - Base de dados (utilizadores, listings, transactions, reviews, messages)
@@ -36,31 +36,31 @@ O Sharetribe **trata da complexidade** de marketplace (Stripe Connect, KYC, anti
 - **OrderPanel** (date pickers, time slots, line items)
 - **InboxPage** (Sales / Orders tabs)
 - **TransactionPage** (ActivityFeed, ReviewForm, SendMessageForm)
-- **ProfilePage** + **ProfileSettingsPage** base
-- **SearchPage** com filtros + mapa Mapbox
+- **ProfilePage** e **ProfileSettingsPage** base
+- **SearchPage** com filtros e mapa Mapbox
 - **Stripe Payout Page** (onboarding hosted)
-- Sharetribe SDK + Integration SDK clients
+- Sharetribe SDK e Integration SDK clients
 - I18n (react-intl)
 - CSS Modules
 
 ### Processos de transação
 - `default-booking`, `default-purchase`, `default-inquiry`, `default-negotiation` — definidos pelo Sharetribe
 
-## 🛠️ O que foi feito **localmente em VS Code** (custom V1H)
+## O que foi feito localmente em VS Code (custom V1H)
 
-Adaptado/criado sobre o template:
+Adaptado e criado sobre o template:
 
 ### Branding e visual
-- 9 categorias V1H + **ícones próprios** (`src/components/CategoryIcons/`)
+- 9 categorias V1H com **ícones próprios** (`src/components/CategoryIcons/`)
 - Cores V1H (`#5C3317`, `#BAA38A`, `#f0ece6`, etc.)
 - Fontes customizadas (Britannic Bold, Century Gothic)
 - Logo V1H
 - Modo escuro com 200+ linhas de overrides ([landingDark.css](modo-escuro))
 
 ### Funcionalidades novas
-- **Sistema de favoritos** completo (❤️ heart button + página própria + email diário) — `favorites.duck.js`, `FavoritesPage`, `favoriteAlerts`
+- **Sistema de favoritos** completo (heart button, página própria e email diário) — `favorites.duck.js`, `FavoritesPage`, `favoriteAlerts`
 - **Sistema de seguidores** completo — `follow.duck.js`, `FollowingPage`, `followAlerts`
-- **5 tipos de toasts in-app** com per-entry dismiss + sync entre dispositivos
+- **5 tipos de toasts in-app** com per-entry dismiss e sync entre dispositivos
 - **3 cron jobs** server-side ([Cron Jobs](cron-jobs))
 - **16 endpoints customizados** (`server/api/`) — [Endpoints](endpoints)
 - **Tradução automática** de conteúdo do utilizador via MyMemory ([Tradução](traducao))
@@ -68,14 +68,14 @@ Adaptado/criado sobre o template:
 - **Long-term booking** (estados especiais, timer 90 dias)
 - **Recently Viewed** com persistência cross-device ([Recently Viewed](recently-viewed))
 - **Highlighted Listings** (utilizador destaca o próprio anúncio)
-- **Lista de espera** (WaitlistButton + email confirmation)
+- **Lista de espera** (WaitlistButton e email confirmation)
 - **Partilha de orçamento** com URL único
 - **Dashboard do anfitrião** com stats
-- **Linguas faladas** (campo no perfil com bandeiras)
+- **Línguas faladas** (campo no perfil com bandeiras)
 - **Response time** auto-tracking
 - **WhatsApp button** no UserCard
 - **Avaliação só lado cliente** (decisão V1H — ver [Decisões Importantes](decisoes-importantes))
-- **PWA** com service worker + install prompt + counter
+- **PWA** com service worker, install prompt e counter
 - **Cookie consent GDPR** com 4 categorias
 - **Reportar anúncio/utilizador** com rate limiting
 - **NPS feedback** modal pós-review
@@ -104,7 +104,7 @@ Adaptado/criado sobre o template:
 - Toggle dark mode no topbar
 - Newsletter signup no footer (`/api/newsletter`)
 - Botão "Adicionar ao calendário" pós-reserva (Google)
-- Mais...
+- E mais
 
 ## Resumo numérico
 
@@ -130,18 +130,18 @@ React frontend (src/) ← UI customizada V1H sobre template Sharetribe
 Stripe (cloud) ← pagamentos
 ```
 
-A V1H **não tem base de dados própria** — toda a persistência é via Sharetribe (incluindo metadata customizada como favoritos, seguidores, alertas pendentes).
+A V1H **não tem base de dados própria** — toda a persistência é via Sharetribe (incluindo metadata customizada como favoritos, seguidores e alertas pendentes).
 
 ## Vantagens desta arquitetura
 
-- **Time-to-market rápido**: não há de construir backend nem sistema de pagamentos
+- **Time-to-market rápido**: não há necessidade de construir backend nem sistema de pagamentos
 - **Manutenção focada**: V1H mexe só no UX e features de marketplace
 - **Conformidade**: Stripe trata de KYC, PSD2, etc.
-- **Escalabilidade**: Sharetribe gere infrastructure
+- **Escalabilidade**: Sharetribe gere a infraestrutura
 
 ## Limitações
 
 - **Dependência de fornecedor**: se o Sharetribe sobe preços ou descontinua, é difícil mudar
-- **Customização limitada**: certas coisas só dão para fazer com upgrade Sharetribe Plus
+- **Customização limitada**: certas coisas só são possíveis com upgrade Sharetribe Plus
 - **i18n de emails** parcialmente bloqueado (resolução requer Plus)
 - **Rate limits** podem ser apertados em planos baixos (ver [Problemas Conhecidos](problemas-conhecidos))

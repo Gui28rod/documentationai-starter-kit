@@ -3,7 +3,7 @@ title: "Pagamentos (Stripe Connect)"
 description: "Stripe Connect, comissões, payouts e onboarding de anfitriões."
 ---
 
-A V1H usa **Stripe Connect** (modelo "Express") — o Stripe trata de toda a complexidade de KYC, anti-fraude e payouts; a V1H apenas medeia.
+A V1H usa **Stripe Connect** (modelo "Express"). O Stripe trata de toda a complexidade de KYC, anti-fraude e payouts; a V1H apenas medeia as transações entre clientes e anfitriões.
 
 ## Ficheiros principais
 
@@ -14,14 +14,16 @@ A V1H usa **Stripe Connect** (modelo "Express") — o Stripe trata de toda a com
 
 ## Modelo
 
+O fluxo financeiro segue quatro etapas, com a V1H a reter a comissão antes de repassar o restante ao anfitrião.
+
 1. **Cliente** paga V1H (Stripe Connect Platform)
-2. **V1H** retira **comissão** (% configurada no Sharetribe Console)
+2. **V1H** retira **comissão** (percentagem configurada no Sharetribe Console)
 3. **Anfitrião** recebe o resto no seu Stripe Connect Account
 4. Payouts automáticos do Stripe para o IBAN do anfitrião
 
 ## Onboarding do anfitrião
 
-Primeira vez que um anfitrião quer criar um anúncio com preço:
+Antes de poder receber pagamentos, o anfitrião tem de completar o processo de verificação Stripe. Este processo é gerido inteiramente pela Stripe e não requer intervenção da V1H.
 
 1. Redireciona para **Stripe Connect onboarding** (hosted)
 2. Stripe recolhe:
@@ -30,9 +32,9 @@ Primeira vez que um anfitrião quer criar um anúncio com preço:
    - Verificação de identidade (foto BI/CC)
 3. Stripe valida e devolve via callback
 4. V1H mostra `StripeConnectAccountStatusBox`:
-   - ✅ Verde se tudo OK
-   - ⚠️ Amarelo se faltam documentos (`requirements.past_due`, `currently_due`)
-   - ❌ Vermelho se rejeitado
+   - Verde se tudo OK
+   - Amarelo se faltam documentos (`requirements.past_due`, `currently_due`)
+   - Vermelho se rejeitado
 
 ### URLs de redirect
 - Success: `/payouts?success=true`
@@ -40,18 +42,21 @@ Primeira vez que um anfitrião quer criar um anúncio com preço:
 
 ## Mostrar IBAN do anfitrião
 
-Após onboarding, V1H mostra os **últimos 4 dígitos do IBAN** registado:
+Após o onboarding, a V1H exibe apenas os últimos quatro dígitos do IBAN para confirmação visual, sem expor o número completo.
+
 - Fetch via `external_accounts.data` da Stripe Account
 - Visual: "Conta terminada em ****1234"
 
 ## Comissão V1H
 
-Configurada no **Sharetribe Console → Marketplace → Commission**:
+A percentagem de comissão é configurada centralmente no Console e aplicada a cada transação via cálculo privilegiado no servidor.
+
+Configurada no **Sharetribe Console, em Marketplace, em Commission**:
 - Percentagem fixa sobre cada transação
 - Aplicada via Sharetribe `transaction-line-items` privileged
 - Endpoint server: `POST /api/transaction-line-items`
 
-Atualmente em modo teste — a percentagem final precisa de ser confirmada antes de go-live e refletida nos Termos.
+Atualmente em modo teste. A percentagem final precisa de ser confirmada antes de go-live e refletida nos Termos.
 
 ## Test vs Live
 
@@ -70,8 +75,9 @@ Estas vivem na conta Stripe da V1H. Ver [Pendências para Go-Live](pendencias-pa
 
 ## LineItems
 
-Os "line items" de uma transação incluem:
-- Preço base (do listing) × quantidade
+Os "line items" de uma transação incluem todos os componentes do preço final, calculados server-side antes de o cliente confirmar o pagamento.
+
+- Preço base (do listing) multiplicado pela quantidade
 - Comissão V1H (negativa do lado do provider)
 - Total
 
@@ -79,18 +85,20 @@ Calculados server-side em `server/api/line-items.js` (endpoint privileged).
 
 ## Negotiation flow
 
-Processo `default-negotiation` permite **oferta personalizada** antes do pagamento:
+O processo `default-negotiation` permite **oferta personalizada** antes do pagamento. O cliente e o anfitrião negoceiam o preço diretamente antes de qualquer cobrança.
+
 - Customer faz **request quote**
 - Provider envia **offer** (com preço custom)
-- Customer aceita (paga) ou contra-oferece (`MakeCounterOfferModal`)
+- Customer aceita (paga) ou contra-oferece via `MakeCounterOfferModal`
 
 ## Stripe Webhook
 
-Sharetribe gere os webhooks Stripe nativamente. V1H não precisa de webhook próprio para pagamentos.
+O Sharetribe gere os webhooks Stripe nativamente. A V1H não precisa de webhook próprio para pagamentos.
 
 ## Multi-booking pagamento
 
-No flow `default-multi-booking-v10`:
+No flow `default-multi-booking-v10`, o cliente paga uma única vez para cobrir múltiplas reservas simultâneas, com confirmação imediata.
+
 - Customer escolhe múltiplas datas
 - **Pagamento único** que cobre todas as reservas
-- Auto-aceitação do host → confirmação imediata
+- Auto-aceitação do host — confirmação imediata

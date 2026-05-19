@@ -3,7 +3,7 @@ title: "I18n Keys Catalogue"
 description: "Catálogo das ~1383 chaves de tradução em pt.json organizadas por secção."
 ---
 
-A V1H tem dois ficheiros de tradução principais:
+A V1H tem dois ficheiros de tradução principais. O ficheiro PT é o de referência para o desenvolvimento; o EN tem mais variantes porque inclui strings herdadas do template Sharetribe que não são usadas ativamente na V1H.
 
 - `src/translations/pt.json` — **1.383 chaves** (português europeu)
 - `src/translations/en.json` — **1.764 chaves** (inglês)
@@ -12,7 +12,7 @@ A diferença de tamanho é porque o EN tem mais variantes do template original S
 
 ## 113 secções totais
 
-As chaves estão organizadas por **namespace** (prefixo `ComponenteName.`). Há **113 namespaces** distintos no `pt.json`.
+As chaves estão organizadas por **namespace** (prefixo `ComponenteName.`). Há **113 namespaces** distintos no `pt.json`. Cada namespace corresponde a um componente ou página da aplicação.
 
 ## Top 15 namespaces (mais chaves)
 
@@ -57,7 +57,7 @@ As chaves estão organizadas por **namespace** (prefixo `ComponenteName.`). Há 
 ### Reservas / Transações
 - `CheckoutPage.*` — checkout (28)
 - `InboxPage.*` — inbox (67)
-- `TransactionPage.*` — detalhe de transação (114 — maior)
+- `TransactionPage.*` — detalhe de transação (114, o maior)
 - `TransactionPanel.*` — painel lateral
 - `OrderBreakdown.*` — line items
 - `BookingDatesForm.*` / `BookingTimeForm.*` / `BookingFixedDurationForm.*`
@@ -143,6 +143,8 @@ As chaves estão organizadas por **namespace** (prefixo `ComponenteName.`). Há 
 
 ## Como adicionar nova chave
 
+Para adicionar uma nova string traduzível, é necessário adicioná-la em ambos os ficheiros de tradução e usá-la no código via `FormattedMessage` ou o hook `useIntl`.
+
 1. **Adicionar ao `pt.json`**:
    ```json
    "MyComponent.myKey": "Texto em português"
@@ -175,9 +177,9 @@ As chaves estão organizadas por **namespace** (prefixo `ComponenteName.`). Há 
    />
    ```
 
-## Sincronização PT ↔ EN
+## Sincronização PT e EN
 
-Não há script automático que garanta paridade. Para verificar:
+Não há script automático que garanta paridade entre PT e EN. Para verificar o estado de sincronização, podem ser usados os seguintes comandos.
 
 ```bash
 # Conta chaves
@@ -188,7 +190,7 @@ jq 'keys | length' src/translations/en.json
 diff <(jq -r 'keys[]' src/translations/en.json | sort) <(jq -r 'keys[]' src/translations/pt.json | sort)
 ```
 
-⚠️ **Gap atual**: ~381 chaves em EN não estão em PT. São do template Sharetribe original (componentes não usados pela V1H). Sem impacto prático.
+**Gap atual**: ~381 chaves em EN não estão em PT. São do template Sharetribe original (componentes não usados pela V1H). Sem impacto prático.
 
 ## Manutenção das traduções
 
@@ -196,7 +198,7 @@ diff <(jq -r 'keys[]' src/translations/en.json | sort) <(jq -r 'keys[]' src/tran
 **Não**. O Sharetribe `Pages` (PageBuilder) tem conteúdo em CMS que pode ser editado por idioma, mas as **strings de UI** (`pt.json`, `en.json`) são responsabilidade do dev.
 
 ### `yarn run translate`
-Script que ajuda a comparar PT vs EN e detectar chaves em falta. Não traduz automaticamente — apenas reporta.
+Script que ajuda a comparar PT vs EN e detetar chaves em falta. Não traduz automaticamente — apenas reporta.
 
 ### MyMemory (tradução automática)
 Para **conteúdo do utilizador** (descrições, reviews), usamos MyMemory via `/api/translate`. Ver [Tradução](traducao).

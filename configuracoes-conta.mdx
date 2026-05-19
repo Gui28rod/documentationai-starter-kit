@@ -5,12 +5,14 @@ description: "Email, palavra-passe, dados de contacto, métodos de pagamento, el
 
 ## O que é
 
-Painel com as **definições privadas** da conta (não visíveis ao público).
+Painel com as **definições privadas** da conta, não visíveis ao público. Aqui o utilizador pode alterar credenciais de acesso, gerir métodos de pagamento e, se necessário, eliminar a conta.
 
 **URL**: `/account`
-**Onde aceder**: dropdown do avatar → **"Configurações da conta"**
+**Onde aceder**: dropdown do avatar, "Configurações da conta"
 
 ## Sub-páginas dentro de "Configurações da conta"
+
+Cada sub-página está acessível a partir do menu lateral da área de conta. As alterações feitas nesta área afetam apenas dados privados da conta.
 
 | Sub-página | URL | O que faz |
 |---|---|---|
@@ -22,6 +24,8 @@ Painel com as **definições privadas** da conta (não visíveis ao público).
 
 ## Contact Details
 
+Esta sub-página permite alterar o email associado à conta e o número de telemóvel. A alteração de email exige confirmação através de um link enviado para o novo endereço.
+
 - Editar **email** (envia confirmação para o novo)
 - Editar **telemóvel**
 - Botão "Reenviar email de verificação"
@@ -29,11 +33,15 @@ Painel com as **definições privadas** da conta (não visíveis ao público).
 
 ## Password Change
 
+O formulário de alteração de password exige a password atual como confirmação de segurança. Se o registo foi feito via Google SSO, este formulário não está disponível.
+
 - Form: password antiga + nova
 - **Regras password nova**: 8-64 chars + pelo menos 1 letra + 1 dígito
 - Se signup foi via Google (SSO), mostra mensagem em vez do form
 
 ## Payment Methods
+
+Aqui o utilizador pode gerir os cartões de crédito/débito guardados para pagamentos futuros. Os cartões são armazenados pelo Stripe de forma segura.
 
 - Lista cartões guardados (últimos 4 dígitos + brand + expiry)
 - **Adicionar cartão** via Stripe `SetupIntent` (3D Secure se necessário)
@@ -41,21 +49,27 @@ Painel com as **definições privadas** da conta (não visíveis ao público).
 
 ## Payouts (Stripe Connect)
 
+Esta secção é relevante para anfitriões que querem receber pagamentos das reservas. O onboarding é gerido pelo Stripe e inclui verificação de identidade e conta bancária.
+
 - Status box visual:
-  - 🟢 Verde se onboarding completo
-  - 🟡 Amarelo se faltam dados
-  - 🔴 Vermelho se rejeitado
+  - Verde se onboarding completo
+  - Amarelo se faltam dados
+  - Vermelho se rejeitado
 - **Redirect para Stripe** para preencher dados (KYC + IBAN)
 - Mostra últimos 4 dígitos do IBAN registado
 
 ## Eliminar conta
 
+A eliminação de conta é uma operação irreversível. Todos os anúncios do utilizador são fechados e os dados são removidos permanentemente do sistema.
+
 - Confirmação com **password**
-- `POST /api/delete-account` → Sharetribe SDK `deleteUser`
-- ⚠️ **Irreversível** — listings do user também são fechados
+- `POST /api/delete-account` — Sharetribe SDK `deleteUser`
+- **Irreversível** — listings do user também são fechados
 - Logout automático após sucesso
 
 ## Diferença para "Configurações do perfil"
+
+A distinção entre "Configurações da conta" e "Configurações do perfil" é importante: a primeira gere dados privados e de segurança, enquanto a segunda gere o que é visível publicamente.
 
 | | Configurações da conta | Configurações do perfil |
 |---|---|---|

@@ -3,7 +3,7 @@ title: "Modo Escuro e Theming"
 description: "Sistema de modo escuro, cores e padrões visuais."
 ---
 
-A V1H tem **modo claro** (default) + **modo escuro** alternável pelo topbar.
+A V1H tem **modo claro** (default) e **modo escuro** alternável pelo topbar. A implementação usa dois atributos no elemento `<body>` para cobrir componentes com variáveis CSS e componentes com cores hardcoded.
 
 ## Ficheiro principal
 
@@ -19,6 +19,8 @@ Componente `DarkModeToggle` no `TopbarDesktop`. Ao clicar:
 3. Persiste preferência via `localStorage` (se consent "preferences" dado)
 
 ## Estratégia dual-attribute
+
+A necessidade de dois atributos distintos surge porque a codebase tem componentes que usam variáveis CSS e componentes que têm cores hardcoded. Cada atributo serve uma estratégia de override diferente.
 
 ### `data-landing-dark` (variáveis CSS)
 Para componentes que usam **variáveis** (`var(--colorWhite)`, etc.):
@@ -52,7 +54,7 @@ Para componentes que têm **cores hardcoded** (`background-color: #ffffff` liter
 
 ## Componentes patched
 
-Lista resumida de componentes com overrides em `landingDark.css`:
+Lista resumida de componentes com overrides em `landingDark.css`. Estes overrides garantem que o componente fica legível e visualmente correto em modo escuro.
 
 - **Topbar** (background + links + language switcher + dark toggle)
 - **Footer** (mantém escuro em ambos os modos)
@@ -68,7 +70,9 @@ Lista resumida de componentes com overrides em `landingDark.css`:
 
 ## Hero search bar
 
-**Exceção**: a barra de busca do hero **mantém inputs brancos** em modo escuro (decisão visual — fica mais legível sobre o background).
+A barra de busca do hero mantém inputs brancos em modo escuro por decisão visual. Esta exceção melhora a legibilidade sobre o background da imagem do hero.
+
+**Exceção**: a barra de busca do hero mantém inputs brancos em modo escuro — fica mais legível sobre o background.
 
 ## Logo em modo escuro
 
@@ -83,13 +87,15 @@ Resultado: logo branco em modo escuro automaticamente.
 
 ## CSS Modules vs landingDark.css
 
-A maioria dos componentes usa **CSS Modules** (`*.module.css`) com classes hashed (`MyComponent_root__abc123`).
+A maioria dos componentes usa **CSS Modules** (`*.module.css`) com classes hashed (`MyComponent_root__abc123`). O `landingDark.css` usa seletores de substring para referenciar essas classes dinamicamente.
 
 Para o `landingDark.css` (global) referenciar essas classes, usa o seletor `[class*="MyComponent_root"]` (matches qualquer hash).
 
 Cuidado: `[class*="X"]` matches **substring** — pode apanhar classes não desejadas. Para precisão, usa `[class*="X__"]` (com duplo underscore antes do hash) ou `[class*="X_root"]`.
 
 ## Adicionar suporte dark a um novo componente
+
+Para adicionar suporte a modo escuro num componente novo, segue estes passos. O teste em ambos os modos é essencial para garantir que não há elementos invisíveis ou ilegíveis.
 
 1. Identifica as cores hardcoded
 2. Adiciona override em `landingDark.css`:

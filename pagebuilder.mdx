@@ -3,7 +3,7 @@ title: "PageBuilder & SectionBuilder"
 description: "Sistema universal de páginas via assets hosted no Sharetribe Console."
 ---
 
-Motor de renderização universal de páginas. Permite às chefes da V1H **editar conteúdo de páginas (Homepage, Footer, About, FAQs) no Sharetribe Console sem programador**.
+Motor de renderização universal de páginas. Permite às responsáveis da V1H **editar conteúdo de páginas (Homepage, Footer, About, FAQs) no Sharetribe Console sem programador**.
 
 ## O que é
 
@@ -12,7 +12,7 @@ O Sharetribe Console permite **alojar "page assets"** — ficheiros JSON com est
 ## Como funciona
 
 ```
-1. Chefe vai ao Sharetribe Console → Pages → edita "Landing Page"
+1. Responsável vai ao Sharetribe Console → Pages → edita "Landing Page"
 2. Salva → Sharetribe gera asset JSON
 3. V1H frontend (ao carregar a página):
    - fetch do asset via SDK
@@ -23,6 +23,8 @@ O Sharetribe Console permite **alojar "page assets"** — ficheiros JSON com est
 ```
 
 ## Estrutura JSON dos assets
+
+Cada asset é um objeto JSON com uma lista de sections. Cada section tem um tipo, um ID e uma lista de blocks com o conteúdo real.
 
 ```json
 {
@@ -35,13 +37,12 @@ O Sharetribe Console permite **alojar "page assets"** — ficheiros JSON com est
           "blockType": "default-block",
           "blockId": "main",
           "title": { "content": "Encontre o espaço ideal..." },
-          "callToAction": {...}
+          "callToAction": {}
         }
       ]
     },
     {
-      "sectionType": "carousel",
-      ...
+      "sectionType": "carousel"
     }
   ]
 }
@@ -51,7 +52,7 @@ O Sharetribe Console permite **alojar "page assets"** — ficheiros JSON com est
 
 Ficheiro: `src/containers/PageBuilder/SectionBuilder/SectionBuilder.js`
 
-Mapeamento `sectionType` → componente:
+O mapeamento de `sectionType` para componente React define que componente visual é instanciado para cada secção do asset.
 
 | sectionType | Componente | Função |
 |---|---|---|
@@ -60,7 +61,7 @@ Mapeamento `sectionType` → componente:
 | `columns` | `SectionColumns` | Grid de N colunas |
 | `features` | `SectionFeatures` | Lista de features com ícone |
 | `footer` | `SectionFooter` | Renderiza o footer |
-| `hero` | `SectionHero` | Hero banner com background + CTA |
+| `hero` | `SectionHero` | Hero banner com background e CTA |
 | `highlightedListing` | `SectionHighlightedListing` | Destaque de 1 listing |
 | `landingMap` | `SectionLandingMap` | Mapa interativo |
 | `listings` | `SectionListings` | Grid de anúncios |
@@ -68,35 +69,37 @@ Mapeamento `sectionType` → componente:
 | `slideshow` | `SectionSlideshow` | Slideshow de imagens |
 | `whyUs` | `SectionWhyUs` | Cards de benefícios |
 
-Cada section tem o seu sub-folder com `.js` + `.module.css` + componentes auxiliares.
+Cada section tem o seu sub-folder com `.js`, `.module.css` e componentes auxiliares.
 
 ## Block types
 
-Dentro de cada section há **blocks**. Mapeados em `BlockBuilder/BlockBuilder.js`:
+Dentro de cada section há **blocks**. Os block types são mapeados em `BlockBuilder/BlockBuilder.js` e definem a estrutura interna de cada secção.
 
 | blockType | Componente | Função |
 |---|---|---|
-| `default-block` | `BlockDefault` | Block genérico com título + texto + CTA |
+| `default-block` | `BlockDefault` | Block genérico com título, texto e CTA |
 | `footer-block` | `BlockFooter` | Block específico do footer |
 | `social-media-link` | `BlockSocialMediaLink` | Link social com ícone |
 
 ## Fields & Primitives
 
-Dentro de cada block há **fields** (texto, imagem, link, etc.). Mapeados em `Field/Field.js`:
+Dentro de cada block há **fields** (texto, imagem, link, etc.), mapeados em `Field/Field.js`. Os primitives são os componentes React de baixo nível que renderizam cada field.
 
 | Field type | Primitive | Função |
 |---|---|---|
-| `heading1` `heading2` ... | `Heading` | Cabeçalhos H1–H6 |
+| `heading1` `heading2` ... | `Heading` | Cabeçalhos H1 a H6 |
 | `paragraph` | `Markdown` | Texto longo com Markdown |
 | `ingress` | `Ingress` | Texto introdutório destacado |
 | `image` | `Image` | Imagem responsiva |
 | `link` `internalLink` `externalLink` | `Link` | Link interno ou externo |
 | `youtube` | `YoutubeEmbed` | Embed YouTube |
 | `code` | `Code` | Bloco de código |
-| `customAppearance` | `CustomAppearance` | Customização de cores/fundos |
+| `customAppearance` | `CustomAppearance` | Customização de cores e fundos |
 | `searchCTA` | `SearchCTA` | Caixa de busca CTA |
 
 ## Páginas que usam o PageBuilder
+
+Algumas páginas são renderizadas dinamicamente pelo PageBuilder a partir dos assets do Console, enquanto outras são hardcoded em React.
 
 - **LandingPage** — `/`
 - **CMSPage** — `/p/:pageId` (Sobre Nós, Como Funciona se forem CMS)
@@ -118,11 +121,11 @@ Classes partilhadas entre todas as sections:
 - `blockContainer` — wrapper de blocks
 - `defaultLink` — link estilizado
 
-Mais **overrides para modo escuro** dentro deste mesmo ficheiro.
+Mais overrides para modo escuro dentro deste mesmo ficheiro.
 
 ## Como adicionar uma nova section
 
-Quero criar `SectionTestimonials`:
+Para criar `SectionTestimonials`, segue os passos abaixo. O registo em `SectionBuilder.js` é o passo crítico que liga o `sectionType` ao componente React.
 
 1. **Criar pasta** `src/containers/PageBuilder/SectionBuilder/SectionTestimonials/`
 2. **Criar componente** `SectionTestimonials.js` (recebe props `{ sectionId, blocks, ... }`)
@@ -137,11 +140,11 @@ Quero criar `SectionTestimonials`:
      testimonials: { component: SectionTestimonials, ... }
    };
    ```
-6. **No Sharetribe Console** → criar asset com `sectionType: 'testimonials'`
+6. **No Sharetribe Console** — criar asset com `sectionType: 'testimonials'`
 
 ## Como adicionar uma nova primitive (field)
 
-Quero campo `mapEmbed`:
+Para criar um campo `mapEmbed`:
 
 1. Criar `src/containers/PageBuilder/Primitives/MapEmbed/MapEmbed.js`
 2. Registar em `Field/Field.js` mapping
@@ -156,7 +159,8 @@ Se o asset falhar a carregar:
 
 ## Customizações V1H ao PageBuilder
 
-A V1H adicionou:
+A V1H adicionou processamento extra antes de passar o asset ao PageBuilder, garantindo consistência ortográfica e integridade visual dos conteúdos vindos do CMS.
+
 - **Normalização PT** — converte ortografia pré-1990 para moderna nos textos vindos do CMS
 - **Em-dash cleanup** — substitui `" — "` por `", "` em textos
 - **Injeção programática** de Highlighted Listing após hero
@@ -168,9 +172,9 @@ Implementado em `LandingPage.js` antes de passar o asset ao PageBuilder.
 
 Para editar a Landing Page:
 1. Login no Sharetribe Console
-2. Pages → Landing Page
-3. Edita sections / blocks via UI
-4. Save → publica em produção
-5. Frontend faz fetch do novo asset em ~1 min (cache)
+2. Pages, Landing Page
+3. Edita sections e blocks via UI
+4. Save — publica em produção
+5. Frontend faz fetch do novo asset em cerca de 1 minuto (cache)
 
-**Para testar local**: alterar asset via Console → reload `localhost:3000`.
+**Para testar local**: alterar asset via Console e fazer reload em `localhost:3000`.

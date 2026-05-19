@@ -9,14 +9,14 @@ A página pública do teu perfil, visível para qualquer pessoa (logged-in ou gu
 
 **URL**: `/u/:userId`
 **Ficheiro**: `src/containers/ProfilePage/`
-**Onde aceder**: dropdown do avatar (canto superior direito) → **"O meu perfil"**
+**Onde aceder**: dropdown do avatar (canto superior direito), na opção "O meu perfil"
 
 ## O que mostra
 
 ### Sidebar (lateral)
 - **Avatar grande** (foto de perfil)
 - **Botão Seguir / A seguir** — outros podem seguir-te
-- **Rating ⭐** + número de avaliações recebidas como cliente
+- **Rating** + número de avaliações recebidas como cliente
 - **Followers count** — quantos te seguem
 - **Línguas faladas** (com bandeiras)
 - **Social links** (Facebook, Instagram, etc.)
@@ -31,9 +31,11 @@ A página pública do teu perfil, visível para qualquer pessoa (logged-in ou gu
 
 ## Diferença para "Configurações do perfil"
 
+A página de perfil público e a página de configurações de perfil servem propósitos distintos. A tabela abaixo resume a diferença principal.
+
 | | O meu perfil | Configurações do perfil |
 |---|---|---|
-| **Para que serve** | **Ver** o teu perfil público | **Editar** o teu perfil |
+| **Para que serve** | Ver o teu perfil público | Editar o teu perfil |
 | **Quem vê** | Toda a gente | Só tu |
 | **URL** | `/u/:userId` | `/profile-settings` |
 

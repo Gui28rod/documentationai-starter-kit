@@ -3,7 +3,7 @@ title: "Edit Listing Wizard"
 description: "Flow de criação e edição de anúncios — todos os passos."
 ---
 
-Flow multi-step que o anfitrião usa para **criar** ou **editar** um anúncio (`/publicar-anuncio` e `/l/:slug/:id/edit/...`).
+Flow multi-step que o anfitrião usa para **criar** ou **editar** um anúncio (`/publicar-anuncio` e `/l/:slug/:id/edit/...`). O wizard guia o anfitrião por vários tabs sequenciais, cada um com a sua própria validação, garantindo que o anúncio fica completo antes de ser publicado.
 
 ## Ficheiros principais
 
@@ -30,23 +30,27 @@ Os tabs aparecem conforme o **processo de transação** escolhido. Cada processo
 
 | Processo | Tabs |
 |---|---|
-| `default-booking` | Details → Location → Pricing → Availability → Photos |
-| `default-purchase` | Details → Pricing and Stock → Delivery → Photos |
-| `default-inquiry` | Details → Photos (sem pricing) |
-| `default-negotiation` | Details → Location → Pricing → Photos |
+| `default-booking` | Details — Location — Pricing — Availability — Photos |
+| `default-purchase` | Details — Pricing and Stock — Delivery — Photos |
+| `default-inquiry` | Details — Photos (sem pricing) |
+| `default-negotiation` | Details — Location — Pricing — Photos |
 
 ## Panels (cada tab)
 
 ### EditListingDetailsPanel
+O primeiro tab recolhe as informações essenciais do anúncio. O título, a descrição e a categoria são obrigatórios.
+
 Campos:
 - **Título** (obrigatório)
 - **Descrição** (obrigatório, textarea)
-- **Categoria** (Trabalho & Reuniões / Cultura / Eventos / etc.)
+- **Categoria** (Trabalho e Reunioes / Cultura / Eventos / etc.)
 - **Custom fields** definidos por categoria (capacidade, comodidades, etc.)
 
 ### EditListingLocationPanel
+O tab de localização usa autocomplete Mapbox para encontrar o endereço com precisão. As coordenadas reais são guardadas, mas apresentadas com obfuscação no mapa público para proteger a privacidade do anfitrião.
+
 - **Endereço** com autocomplete via Mapbox
-- **Building** (opcional, ex: "2º andar")
+- **Building** (opcional, ex: "2 andar")
 - Coordenadas guardadas + fuzzy obfuscation no display público
 
 ### EditListingPricingPanel
@@ -61,6 +65,8 @@ Para items físicos:
 - Stock infinito vs limitado
 
 ### EditListingAvailabilityPanel
+O calendário de disponibilidade permite ao anfitrião definir os horários em que o espaço pode ser reservado. Suporta slots múltiplos no mesmo horário para espaços com capacidade para vários grupos simultâneos.
+
 - **Calendário semanal** — slots por dia da semana
 - **Excepções** (date ranges blocked/extra available)
 - Multi-seats: vários slots no mesmo horário (`AVAILABILITY_MULTIPLE_SEATS`)
@@ -72,6 +78,8 @@ Para items físicos:
 - Toggle de cada opção
 
 ### EditListingPhotosPanel
+O tab de fotos suporta drag-to-reorder para o anfitrião organizar as imagens na ordem que preferir. O vídeo YouTube é adicionado como último slide da galeria.
+
 - Upload de até **25 fotos**
 - **Drag-to-reorder** com `pointer events` (mouse + touch, sem dependências externas)
 - Validação de tamanho (~20MB max por foto)
@@ -83,7 +91,8 @@ Para items físicos:
 
 ## Multi-booking (auto-aceitação)
 
-Processo customizado `default-multi-booking-v10` no `v1h4-test`:
+Processo customizado `default-multi-booking-v10` no `v1h4-test`. Este processo elimina a necessidade de aprovação manual de cada reserva, ideal para anfitriões com alta procura.
+
 - Cliente pode reservar **múltiplas datas/horas** num único pedido
 - Anfitrião configurado para **auto-aceitação** — não precisa de aprovar manualmente cada um
 - Listing tem que estar configurado para suportar este flow
@@ -92,13 +101,16 @@ Ver [Decisões Importantes](decisoes-importantes) para mais detalhe.
 
 ## Long-term booking
 
-Flow para reservas de meses/anos:
+Flow para reservas de meses/anos. Inclui um período de validação de 90 dias durante o qual o anfitrião pode confirmar ou recusar antes do pagamento ser processado.
+
 - Estados especiais: `LONG_TERM_PENDING_APPROVAL`, `LONG_TERM_RESERVED`, etc.
 - Timer 90 dias para confirmação
 - Provider aprova antes de fechar
 - Ver [Reservas](reservas) para detalhe dos estados
 
 ## Fluxo de save
+
+Cada tab guarda os dados ao avançar. Se o anúncio for novo, fica em `pending-approval` até o admin aprovar. Se for uma edição de anúncio já publicado, a alteração fica imediatamente visível.
 
 1. Utilizador preenche tab
 2. Carrega "Próximo" ou "Save and exit"

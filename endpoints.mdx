@@ -3,13 +3,13 @@ title: "Endpoints"
 description: "Endpoints HTTP customizados do servidor Express com body e response."
 ---
 
-Servidos pelo servidor Express em `server/api/`. Registados no `server/apiRouter.js`.
+Servidos pelo servidor Express em `server/api/`. Registados no `server/apiRouter.js`. Estes endpoints complementam a API nativa do Sharetribe, tratando de funcionalidades específicas da V1H como favoritos, notificações, tradução e relatórios.
 
-## 📋 Lista resumida
+## Lista resumida
 
 | Endpoint | Método | Função |
 |---|---|---|
-| `/api/contact` | POST | Formulário de contacto → email |
+| `/api/contact` | POST | Formulário de contacto — email |
 | `/api/newsletter` | POST | Subscrever newsletter |
 | `/api/report-listing` | POST | Reportar anúncio |
 | `/api/report-listing-status` | GET | Status de reports (admin) |
@@ -36,7 +36,7 @@ Servidos pelo servidor Express em `server/api/`. Registados no `server/apiRouter
 | `/api/auth/facebook`, `/api/auth/facebook/callback` | GET | OAuth Facebook |
 | `/api/auth/google`, `/api/auth/google/callback` | GET | OAuth Google |
 
-## 📨 Endpoints custom V1H (detalhados)
+## Endpoints custom V1H (detalhados)
 
 ### `POST /api/contact`
 **Body**: `{ name, email, phone?, country?, subject, message }`
@@ -91,7 +91,7 @@ Servidos pelo servidor Express em `server/api/`. Registados no `server/apiRouter
 **Throttle**: 24h por (fã, listing) — só cria alerta server-side se passar o throttle.
 **Função**:
 1. Atualiza counter de favoritos do listing
-2. Se passar throttle → adiciona alerta a `metadata.unseenFavoriteAlerts` do owner
+2. Se passar throttle — adiciona alerta a `metadata.unseenFavoriteAlerts` do owner
 3. Acumula para email diário (`dailyFavoriteDigest`)
 
 ### `POST /api/dismiss-favorite-alerts`
@@ -103,7 +103,7 @@ Servidos pelo servidor Express em `server/api/`. Registados no `server/apiRouter
 **Throttle**: 24h por (fã, target).
 **Função**:
 1. Atualiza followers count do target
-2. Se passar throttle → adiciona alerta a `metadata.unseenFollowAlerts` + envia email imediato (via Resend)
+2. Se passar throttle — adiciona alerta a `metadata.unseenFollowAlerts` + envia email imediato (via Resend)
 
 ### `POST /api/dismiss-follow-alerts`
 **Body**: `{ fanUserId }` (per-entry) ou `{}` (clear all)
@@ -118,7 +118,7 @@ Servidos pelo servidor Express em `server/api/`. Registados no `server/apiRouter
 **Response**: `{ translated, detectedSource, sameAsTarget? }`.
 **Função**: proxy para MyMemory API. Trata caso "PLEASE SELECT TWO DISTINCT LANGUAGES" devolvendo original.
 
-## 🔐 Endpoints de auth e privileged
+## Endpoints de auth e privileged
 
 ### `GET /api/initiate-login-as` + `GET /api/login-as`
 **Função**: permite a admin entrar como outro user (suporte). Cria sessão com escopo limitado. Mostra `LimitedAccessBanner` à pessoa logada.
@@ -136,23 +136,23 @@ Servidos pelo servidor Express em `server/api/`. Registados no `server/apiRouter
 ### `POST /api/delete-account`
 **Função**: elimina permanentemente a conta do utilizador autenticado.
 
-## 🌐 OAuth providers
+## OAuth providers
 
 ### Facebook
 - `GET /api/auth/facebook` — inicia OAuth
 - `GET /api/auth/facebook/callback` — recebe callback do Facebook
 
-**Estado**: ❌ desativado (`REACT_APP_FACEBOOK_APP_ID` vazio).
+**Estado**: desativado (`REACT_APP_FACEBOOK_APP_ID` vazio).
 
 ### Google
 - `GET /api/auth/google` — inicia OAuth
 - `GET /api/auth/google/callback` — recebe callback
 
-**Estado**: ✅ ativo.
+**Estado**: ativo.
 
 ## Padrão de resposta de erro
 
-Todos os endpoints custom devolvem:
+Todos os endpoints custom devolvem um objeto de erro consistente, com o código HTTP apropriado.
 
 ```json
 { "error": "code-or-message" }

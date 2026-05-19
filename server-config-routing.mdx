@@ -5,21 +5,21 @@ description: "Estrutura completa do servidor Express, ficheiros de configuraçã
 
 Detalhe técnico das fundações do projeto.
 
-## 🖥️ Server (`server/`)
+## Server (`server/`)
 
 ### Entry point
 
 | Ficheiro | Função |
 |---|---|
 | `index.js` | Entry principal. Configura Express com middlewares (Helmet, compression, SSL enforce), carrega env, inicia Passport (auth), SSR renderer, mapeia rotas. Arranca cron jobs no final. |
-| `apiRouter.js` | Express router com **~23 endpoints** prefixados `/api/*`. Tudo no [Endpoints](endpoints). |
+| `apiRouter.js` | Express router com cerca de 23 endpoints prefixados `/api/*`. Tudo em [Endpoints](endpoints). |
 | `auth.js` | Middleware basic auth (username/password) para staging |
-| `csp.js` | Content Security Policy com **nonce por request**; whitelist Sharetribe + Mapbox + Stripe + Google CDN |
+| `csp.js` | Content Security Policy com **nonce por request**; whitelist Sharetribe, Mapbox, Stripe e Google CDN |
 | `dataLoader.js` | Carrega dados server-side para SSR (Redux store, translations, hosted config) |
 | `renderer.js` | Renderiza app com Helmet (SSR); injeta assets dinâmicos no HTML template |
 | `log.js` | Logging com integração Sentry |
 | `env.js` | Configura env vars a partir de ficheiros `.env.*` |
-| `importer.js` | Loadable extractors para code-splitting (node + web builds) |
+| `importer.js` | Loadable extractors para code-splitting (node e web builds) |
 | `wellKnownRouter.js` | Rotas `/.well-known/*` (OAuth challenge, autenticação) |
 | `metricsServer.js` | Servidor de métricas (Prometheus/observabilidade) |
 
@@ -29,7 +29,7 @@ Ver [Endpoints](endpoints) para a lista detalhada. Resumo:
 
 - **Sharetribe Auth bridges**: login-as, transaction-line-items, initiate-privileged, transition-privileged, delete-account
 - **Forms**: contact, newsletter, report-listing, report-user, feedback, waitlist
-- **PWA**: pwa-counter (get + increment)
+- **PWA**: pwa-counter (get e increment)
 - **Sistemas custom V1H**: listing-like, dismiss-favorite-alerts, user-follow, dismiss-follow-alerts, dismiss-extra-alert, translate, recompute-listing-rating, host-stats
 - **Auth providers**: auth/facebook, auth/google (callback)
 
@@ -39,15 +39,15 @@ Ver [Endpoints](endpoints) para a lista detalhada. Resumo:
 |---|---|---|
 | `notifyFavoritesJob` | `0 8 * * *` (diário 08:00) | Email resumo diário de favoritos |
 | `notifySavedSearchesJob` | `*/5 * * * *` (cada 5min) | Email "novos resultados na pesquisa guardada" |
-| `notifyExtraAlertsJob` | `*/5 * * * *` (cada 5min) | Detecta edits + reviews → 4 alertas + email de review |
+| `notifyExtraAlertsJob` | `*/5 * * * *` (cada 5min) | Deteta edits e reviews — 4 alertas e email de review |
 
 ### `server/api-util/` — 18 helpers
 
-Helpers internos do servidor:
+Helpers internos do servidor que encapsulam lógica reutilizada pelos endpoints e cron jobs:
 - Cache com TTL
 - Currency (Decimal.js)
 - Dates (moment)
-- SDK proxy (Marketplace + Integration)
+- SDK proxy (Marketplace e Integration)
 - Negotiation helpers
 - Line items computation
 - ID tokens
@@ -63,13 +63,15 @@ Helpers internos do servidor:
 
 ### `server/data/`
 
-- `pwa-counter.json` — contador de instalações PWA (⚠️ bug git: ver [Problemas Conhecidos](problemas-conhecidos))
+- `pwa-counter.json` — contador de instalações PWA (bug git: ver [Problemas Conhecidos](problemas-conhecidos))
 
-## ⚙️ Config (`src/config/`)
+## Config (`src/config/`)
+
+Os ficheiros de configuração centralizam todos os parâmetros do marketplace, desde a identidade visual até às regras de pesquisa e pagamento.
 
 | Ficheiro | Propósito |
 |---|---|
-| `configDefault.js` | Raiz de config — agrega todos os outros + marketplaceName, URL, currency, Stripe |
+| `configDefault.js` | Raiz de config — agrega todos os outros e define marketplaceName, URL e currency |
 | `configBranding.js` | Logo (24/36/48px), brand image, FB sharing (1200x630), Twitter (600x314), cor `#BAA38A` |
 | `configLayout.js` | Variant SearchPage (map/grid), variant ListingPage (carousel/coverPhoto), aspect ratio fotos |
 | `configListing.js` | **Custom fields** (enum/multi-enum/text/long/boolean), filter config, show/save labels |
@@ -84,7 +86,7 @@ Helpers internos do servidor:
 | `landingPageConfigExamples.js` | Exemplos de config landing |
 | `configDefaultLocationSearches.js` | Localizações padrão no mapa |
 
-## 🛣️ Routing (`src/routing/`)
+## Routing (`src/routing/`)
 
 | Ficheiro | Conteúdo |
 |---|---|
@@ -112,7 +114,7 @@ Helpers internos do servidor:
 | `/l/:slug/:id/edit/...` | EditListingPage (com sub-rotas para cada tab) |
 | `/p/:pageId` | CMSPage (páginas hosted Sharetribe) |
 
-## 🎨 Assets (`src/assets/`)
+## Assets (`src/assets/`)
 
 ### Fontes (3 famílias)
 
@@ -120,7 +122,7 @@ Helpers internos do servidor:
 |---|---|---|
 | **Britannic Bold** | `fonts/britannic-bold-regular-font/` | Headings (h1, h2 dos hero) |
 | **Century Gothic** | `fonts/century-gothic-similar-fonts/` (várias variantes: Dominik, OPTI-DemiBold, SansSerifFLF, WeezerFont) | Body, UI |
-| **Red Hat Text** | `fonts/Red_Hat_Text/` (variável + 11 weights estáticas) | Fallback / texto longo |
+| **Red Hat Text** | `fonts/Red_Hat_Text/` (variável e 11 weights estáticas) | Fallback / texto longo |
 
 ### Imagens
 
@@ -133,8 +135,8 @@ Localização: `src/assets/images/`
 | **Sharing** | FB (1200x630), Twitter (600x314) para meta tags |
 | **Equipa** | 7 fotos (Beatriz, Lídia, Clara, Teresa, Marta, Alexandre, Anabela) usadas em AboutPage |
 | **Categorias** | 9 SVGs (Trabalho, Cultura, Gastronomia, Eventos, Criatividade, Saúde, Desporto, Ar Livre, Inusitados) |
-| **Social** | 5 redes × 3 versões = 15 ícones (Facebook, Instagram, LinkedIn, TikTok, YouTube) |
-| **Figma elements** | 6 rectangles + 3 buttons (designs originais) |
+| **Social** | 5 redes com 3 versões cada: 15 ícones (Facebook, Instagram, LinkedIn, TikTok, YouTube) |
+| **Figma elements** | 6 rectangles e 3 buttons (designs originais) |
 
 ### CSS
 
@@ -192,9 +194,9 @@ Ver [Variáveis de Ambiente](variaveis-de-ambiente) para detalhe completo.
 
 | Pasta | Conteúdo |
 |---|---|
-| `src/transactions/` | Definições dos processos Sharetribe (default-booking, purchase, inquiry, negotiation) + variants V1H (multi-booking, long-term) |
-| `src/translations/` | `pt.json` (~1.383 strings), `en.json` (~1.764), fr/es/de.json (herdados, não usados) |
+| `src/transactions/` | Definições dos processos Sharetribe (default-booking, purchase, inquiry, negotiation) e variants V1H (multi-booking, long-term) |
+| `src/translations/` | `pt.json` (cerca de 1.383 strings), `en.json` (cerca de 1.764), fr/es/de.json (herdados, não usados) |
 | `src/context/` | React Contexts: `localeContext`, `darkModeContext`, `configurationContext`, `routeConfigurationContext` |
-| `src/analytics/` | Google Analytics + Plausible integrations |
+| `src/analytics/` | Google Analytics e Plausible integrations |
 | `scripts/` | Scripts auxiliares (backfill-response-times.js, etc.) |
 | `public/` | Static files servidos diretamente: favicon, manifest, service-worker, robots |

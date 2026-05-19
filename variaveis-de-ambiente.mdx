@@ -12,19 +12,19 @@ Configuração da aplicação via `.env` (em dev) ou variáveis no servidor (Her
 | `.env` | Base, sempre carregado |
 | `.env.development` | Quando `REACT_APP_ENV=development` |
 | `.env.test` | Quando `REACT_APP_ENV=test` (npm test) |
-| `.env-template` | Template para copy → não usado em runtime |
+| `.env-template` | Template para copy — não usado em runtime |
 
-## 🔑 Sharetribe Marketplace SDK
+## Sharetribe Marketplace SDK
+
+Estas variáveis são obrigatórias. Sem elas o site não arranca.
 
 | Variável | Exemplo | Onde se usa |
 |---|---|---|
-| `REACT_APP_SHARETRIBE_SDK_CLIENT_ID` | `7196197a-...` | Frontend SDK + SSR |
+| `REACT_APP_SHARETRIBE_SDK_CLIENT_ID` | `7196197a-...` | Frontend SDK e SSR |
 | `SHARETRIBE_SDK_CLIENT_SECRET` | `75279c4a59ca...` | Server-side privileged calls |
 | `REACT_APP_SHARETRIBE_SDK_BASE_URL` | `https://flex-api.sharetribe.com` | API base URL |
 
-**Obrigatórias**. Sem estas o site não arranca.
-
-## 🔧 Sharetribe Integration SDK (operator)
+## Sharetribe Integration SDK (operator)
 
 | Variável | Exemplo |
 |---|---|
@@ -33,17 +33,17 @@ Configuração da aplicação via `.env` (em dev) ou variáveis no servidor (Her
 
 **Usadas por**: cron jobs (`notify*Job.js`), endpoints que precisam de acesso operator (recompute-listing-rating, dismiss-alerts).
 
-⚠️ **Pendente troca para Live em produção** (atualmente são creds do test env).
+**Pendente troca para Live em produção** (atualmente são creds do test env).
 
-## 💳 Stripe
+## Stripe
 
 | Variável | Exemplo |
 |---|---|
 | `REACT_APP_STRIPE_PUBLISHABLE_KEY` | `pk_test_51IDRRz...` (test mode) |
 
-**Para produção**: trocar por `pk_live_...`. Stripe Secret Key fica configurada **no Sharetribe Console**, não no `.env`.
+**Para produção**: trocar por `pk_live_...`. A Stripe Secret Key fica configurada **no Sharetribe Console**, não no `.env`.
 
-## 🗺️ Mapas
+## Mapas
 
 | Variável | Exemplo |
 |---|---|
@@ -51,16 +51,16 @@ Configuração da aplicação via `.env` (em dev) ou variáveis no servidor (Her
 
 **Alternativa**: `REACT_APP_GOOGLE_MAPS_API_KEY` (comentada, não usada).
 
-## 🔐 OAuth (Social Logins)
+## OAuth (Social Logins)
 
 | Variável | Exemplo | Estado |
 |---|---|---|
-| `REACT_APP_GOOGLE_CLIENT_ID` | `923132772527-...apps.googleusercontent.com` | ✅ Ativo |
-| `GOOGLE_CLIENT_SECRET` | `GOCSPX-...` | ✅ Ativo |
-| `REACT_APP_FACEBOOK_APP_ID` | (vazio) | ❌ Desativado |
-| `FACEBOOK_APP_SECRET` | (vazio) | ❌ Desativado |
+| `REACT_APP_GOOGLE_CLIENT_ID` | `923132772527-...apps.googleusercontent.com` | Ativo |
+| `GOOGLE_CLIENT_SECRET` | `GOCSPX-...` | Ativo |
+| `REACT_APP_FACEBOOK_APP_ID` | (vazio) | Desativado |
+| `FACEBOOK_APP_SECRET` | (vazio) | Desativado |
 
-## 📧 Email (Resend)
+## Email (Resend)
 
 | Variável | Exemplo |
 |---|---|
@@ -68,25 +68,25 @@ Configuração da aplicação via `.env` (em dev) ou variáveis no servidor (Her
 | `REPORTS_TO_EMAIL` | `admin@venue1hub.com` |
 | `CONTACT_RECIPIENT` | `admin@venue1hub.com` |
 
-**Para emails do cron + contacto + reports** funcionarem.
+**Para emails do cron, contacto e reports** funcionarem.
 
-## 🏪 Marketplace
+## Marketplace
 
 | Variável | Exemplo |
 |---|---|
 | `REACT_APP_MARKETPLACE_NAME` | `v1h` |
 | `REACT_APP_MARKETPLACE_ROOT_URL` | `http://localhost:3000` |
 
-⚠️ **Atualizar `MARKETPLACE_ROOT_URL` para produção**: `https://venue1hub.com` ou similar.
+**Atualizar `MARKETPLACE_ROOT_URL` para produção**: `https://venue1hub.com` ou similar.
 
-## 📊 Analytics
+## Analytics
 
 | Variável | Exemplo | Estado |
 |---|---|---|
 | `REACT_APP_GOOGLE_ANALYTICS_ID` | `G-CE4QX3X8RV` | Configurado em test, pendente "Copy to live" |
 | `REACT_APP_PLAUSIBLE_DOMAINS` | (comentada) | Não usado |
 
-## 🚀 Server / Deploy
+## Server / Deploy
 
 | Variável | Exemplo |
 |---|---|
@@ -100,7 +100,9 @@ Configuração da aplicação via `.env` (em dev) ou variáveis no servidor (Her
 | `REACT_APP_CSP` | `report` ou `block` |
 | `REACT_APP_SENTRY_DSN` | (opcional para error tracking) |
 
-## ⏰ Cron Jobs (override)
+## Cron Jobs (override)
+
+Estas variáveis permitem ajustar ou desativar cada cron job individualmente, sem alterar o código.
 
 | Variável | Default | Função |
 |---|---|---|
@@ -111,7 +113,7 @@ Configuração da aplicação via `.env` (em dev) ou variáveis no servidor (Her
 | `DISABLE_SAVED_SEARCH_NOTIFIER` | (não definida) | `true` para desativar |
 | `DISABLE_EXTRA_ALERTS` | (não definida) | `true` para desativar |
 
-## 🛠️ Cache e Performance
+## Cache e Performance
 
 | Variável | Exemplo |
 |---|---|
@@ -120,7 +122,7 @@ Configuração da aplicação via `.env` (em dev) ou variáveis no servidor (Her
 | `VERBOSE` | `true` para logging detalhado |
 | `PREVENT_DATA_LOADING_IN_SSR` | `true` para desativar SSR data loading |
 
-## ⚠️ Pendências de produção
+## Pendências de produção
 
 Ver [Pendências para Go-Live](pendencias-para-go-live).
 
@@ -134,7 +136,7 @@ Ver [Pendências para Go-Live](pendencias-para-go-live).
 
 ## Mandatory check no boot
 
-`server/index.js` verifica no arranque:
+O servidor verifica quatro variáveis no arranque. Se alguma faltar, o processo termina com código de saída 9.
 
 ```js
 const MANDATORY_ENV_VARIABLES = [
@@ -145,4 +147,4 @@ const MANDATORY_ENV_VARIABLES = [
 ];
 ```
 
-Se alguma faltar → `process.exit(9)`. As outras são opcionais (com fallback ou feature flag).
+Se alguma faltar — `process.exit(9)`. As outras são opcionais (com fallback ou feature flag).
