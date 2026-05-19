@@ -27,7 +27,7 @@ Em qualquer parte do site onde aparece o avatar/nome de um anfitrião (página d
 
 1. Click em **"Seguir"** ao lado do nome
 2. Servidor regista (`POST /api/user-follow`)
-3. **Throttle 24h** — mesmo fã só notifica 1x por dia
+3. **Throttle 24h** - mesmo fã só notifica 1x por dia
 4. Se passar throttle:
    - Toast in-app aparece à pessoa seguida
    - **Email imediato** ("Alguém começou a seguir-te")
@@ -36,9 +36,9 @@ Em qualquer parte do site onde aparece o avatar/nome de um anfitrião (página d
 
 Quando segues alguém, passas a receber notificações quando essa pessoa realiza determinadas ações na plataforma. Estas notificações chegam como toasts in-app e são geradas pelo cron `notifyExtraAlertsJob` (5 min).
 
-- **Publica anúncio novo** — toast in-app "X publicou um novo anúncio"
-- **Edita anúncio** — toast "X atualizou o anúncio Y"
-- **Recebe avaliação** — toast "X recebeu uma nova avaliação" (excluindo se for tu o autor da review)
+- **Publica anúncio novo** - toast in-app "X publicou um novo anúncio"
+- **Edita anúncio** - toast "X atualizou o anúncio Y"
+- **Recebe avaliação** - toast "X recebeu uma nova avaliação" (excluindo se for tu o autor da review)
 
 Ver [Notificações](notificacoes-completas).
 

@@ -7,14 +7,14 @@ Página de busca de anúncios (`/s`) com filtros avançados, mapa interativo e g
 
 ## Ficheiros principais
 
-Diretório: `src/containers/SearchPage/` — mais de 60 ficheiros, arquitetura modular.
+Diretório: `src/containers/SearchPage/` - mais de 60 ficheiros, arquitetura modular.
 
 Principais:
-- `SearchPageWithMap.js` — layout com mapa lateral
-- `SearchPageWithGrid.js` — layout grid (sem mapa)
-- `SearchResultsPanel.js` — painel de resultados
-- `NoSearchResultsMaybe.js` — placeholder quando 0 resultados
-- `MainPanelHeader.js` — header com contagem, sort e save button
+- `SearchPageWithMap.js` - layout com mapa lateral
+- `SearchPageWithGrid.js` - layout grid (sem mapa)
+- `SearchResultsPanel.js` - painel de resultados
+- `NoSearchResultsMaybe.js` - placeholder quando 0 resultados
+- `MainPanelHeader.js` - header com contagem, sort e save button
 
 ## Filtros disponíveis
 
@@ -33,9 +33,9 @@ Cada filtro tem o seu próprio componente, com renderização diferente em deskt
 | Unit type | `UnitTypeFilter` | Day, hour, night, fixed |
 
 ### Camadas de abstração
-- `FilterForm.js` — wrapper genérico
-- `FilterPopup.js` — render desktop (dropdown popup)
-- `FilterPlain.js` — render mobile/sidebar (sempre visível)
+- `FilterForm.js` - wrapper genérico
+- `FilterPopup.js` - render desktop (dropdown popup)
+- `FilterPlain.js` - render mobile/sidebar (sempre visível)
 
 ## Vista Mapa vs Grid
 
@@ -45,7 +45,7 @@ O utilizador pode alternar entre dois modos de visualização. O mapa mostra os 
 - Mapa Mapbox na metade direita
 - Pins agrupados (`SearchMapGroupLabel`)
 - Pins de preço individuais (`SearchMapPriceLabel`)
-- Click no pin — `SearchMapInfoCard` (mini-card com foto e preço)
+- Click no pin - `SearchMapInfoCard` (mini-card com foto e preço)
 
 ### Grid (`SearchPageWithGrid`)
 - Sem mapa
@@ -55,15 +55,15 @@ Toggle entre os dois com o botão "Ver mapa" / "Ver lista".
 
 ## Sort e paginação
 
-- `SortBy.js` — opções: relevância, mais recentes, preço ascendente/descendente, rating
+- `SortBy.js` - opções: relevância, mais recentes, preço ascendente/descendente, rating
 - Paginação tradicional (página 1, 2, 3...) ou infinite scroll consoante config
 
 ## Save Search
 
 Componente `SaveSearchButton.js` (botão coração ao lado da contagem de resultados). A pesquisa guardada fica associada ao utilizador no servidor e pode gerar notificações quando há novos resultados correspondentes.
 
-- Carregar — guarda os filtros atuais via `savedSearches.duck.js`
-- Re-clicar — remove dos guardados
+- Carregar - guarda os filtros atuais via `savedSearches.duck.js`
+- Re-clicar - remove dos guardados
 - Visual: heart preenchido vs vazio
 - Sincroniza com `currentUser.privateData.savedSearches` (server)
 

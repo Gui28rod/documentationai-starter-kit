@@ -1,6 +1,6 @@
 ---
 title: "Tradução (i18n + MyMemory)"
-description: "Sistema de internacionalização — PT/EN UI + tradução de conteúdo do utilizador."
+description: "Sistema de internacionalização - PT/EN UI + tradução de conteúdo do utilizador."
 ---
 
 A V1H suporta **2 idiomas de UI** (Português europeu e English) e **tradução automática de conteúdo gerado pelo utilizador**.
@@ -12,13 +12,13 @@ A V1H suporta **2 idiomas de UI** (Português europeu e English) e **tradução 
 As strings de UI são geridas via react-intl e carregadas no boot da aplicação. Os ficheiros fr, es e de foram herdados do template Sharetribe e não são usados ativamente.
 
 Ficheiros:
-- `src/translations/pt.json` — **~1.383 strings**
-- `src/translations/en.json` — **~1.764 strings**
-- `src/translations/fr.json`, `es.json`, `de.json` — herdados Sharetribe (não usados ativamente)
+- `src/translations/pt.json` - **~1.383 strings**
+- `src/translations/en.json` - **~1.764 strings**
+- `src/translations/fr.json`, `es.json`, `de.json` - herdados Sharetribe (não usados ativamente)
 
 Usadas via:
-- `<FormattedMessage id="..." />` — componente
-- `useIntl().formatMessage({id: '...'})` — hook
+- `<FormattedMessage id="..." />` - componente
+- `useIntl().formatMessage({id: '...'})` - hook
 
 ### 2. Configuração estática (translateConfig.js)
 
@@ -36,7 +36,7 @@ Usado quando a string vem da configuração Sharetribe (não do CMS, não traduz
 
 ### 3. Conteúdo gerado pelo utilizador
 
-Descrições de listings, reviews, etc. — tradução **on-demand** via MyMemory API. Esta tradução é feita em tempo real, por pedido explícito do utilizador, sem custo de API key.
+Descrições de listings, reviews, etc. - tradução **on-demand** via MyMemory API. Esta tradução é feita em tempo real, por pedido explícito do utilizador, sem custo de API key.
 
 ## Locale context
 
@@ -66,14 +66,14 @@ Ficheiro: `src/components/TranslateButton/TranslateButton.js`
 Componente reutilizável para traduzir conteúdo do utilizador. O cache local evita que a API seja chamada duas vezes para o mesmo texto na mesma sessão.
 
 **Props**:
-- `text` — string original
-- `onResult(translatedString | null)` — callback
-- `isShowingOriginal` — estado parent (toggle)
+- `text` - string original
+- `onResult(translatedString | null)` - callback
+- `isShowingOriginal` - estado parent (toggle)
 
 **Comportamento**:
-- Carrega "Traduzir" — fetch `/api/translate` — mostra tradução, botão muda para "Ver original"
-- Carrega "Ver original" — reverte ao texto original
-- **Cache local** — segundo toggle não re-hit a API
+- Carrega "Traduzir" - fetch `/api/translate` - mostra tradução, botão muda para "Ver original"
+- Carrega "Ver original" - reverte ao texto original
+- **Cache local** - segundo toggle não re-hit a API
 
 **Usado em**:
 - Descrição do listing (desktop e mobile)
@@ -96,10 +96,10 @@ Response: { translated, detectedSource, sameAsTarget? }
 
 ### Tratamento especial
 - Se o MyMemory devolve `"PLEASE SELECT TWO DISTINCT LANGUAGES"` (source = target), o servidor devolve o texto original como `translated`, sem warning
-- O cliente trata como tradução bem-sucedida — botão muda para "Ver original"
+- O cliente trata como tradução bem-sucedida - botão muda para "Ver original"
 - Sem mensagens de erro vermelhas
 
-## Emails — i18n parcial
+## Emails - i18n parcial
 
 Os emails respeitam `user.publicData.locale`. Cada cron job tem templates PT e EN, e a escolha é feita com base no locale guardado no perfil do utilizador.
 

@@ -1,6 +1,6 @@
 ---
 title: "Cron Jobs"
-description: "Tarefas automáticas executadas pelo servidor — schedule, função, throttle e envvars."
+description: "Tarefas automáticas executadas pelo servidor - schedule, função, throttle e envvars."
 ---
 
 Tarefas automáticas executadas pelo servidor (`node-cron` dentro do processo Express). Arrancam no `server/index.js` no final do boot. Cada job pode ser desativado individualmente por variável de ambiente, o que é útil em desenvolvimento para evitar envio de emails de teste.
@@ -11,7 +11,7 @@ Tarefas automáticas executadas pelo servidor (`node-cron` dentro do processo Ex
 |---|---|---|---|---|
 | `notifyFavoritesJob` | `0 8 * * *` (diário 08:00) | Email resumo diário de favoritos | `DISABLE_FAVORITE_DIGEST=true` | `FAVORITE_DIGEST_CRON` |
 | `notifySavedSearchesJob` | `*/5 * * * *` (cada 5 min) | Email "novos resultados na pesquisa" | `DISABLE_SAVED_SEARCH_NOTIFIER=true` | `SAVED_SEARCH_NOTIFY_CRON` |
-| `notifyExtraAlertsJob` | `*/5 * * * *` (cada 5 min) | Detecta edits + reviews — 4 alertas + email de review | `DISABLE_EXTRA_ALERTS=true` | `EXTRA_ALERTS_CRON` |
+| `notifyExtraAlertsJob` | `*/5 * * * *` (cada 5 min) | Detecta edits + reviews - 4 alertas + email de review | `DISABLE_EXTRA_ALERTS=true` | `EXTRA_ALERTS_CRON` |
 
 ## 1. `notifyFavoritesJob`
 
@@ -28,8 +28,8 @@ O job percorre todos os utilizadores e verifica quais têm dados de favoritos pe
 2. Filtra os que têm `metadata.dailyFavoriteDigest.listings` não vazio
 3. Para cada, monta email HTML bilíngue (PT/EN consoante `publicData.locale`)
 4. Envia via **Resend**
-5. Após sucesso — limpa o `dailyFavoriteDigest` (reset para o próximo dia)
-6. Se falhar — deixa intocado, tenta amanhã
+5. Após sucesso - limpa o `dailyFavoriteDigest` (reset para o próximo dia)
+6. Se falhar - deixa intocado, tenta amanhã
 
 ### O `dailyFavoriteDigest` é populado por
 `POST /api/listing-like` cada vez que alguém favorita um listing (após passar throttle 24h).
@@ -57,7 +57,7 @@ A cada 5 min, verifica se as pesquisas guardadas dos utilizadores têm **novos m
    - Lê last-check timestamp de `metadata.savedSearchesNotified[searchId]` (ou `savedAt` se primeira vez)
    - Query listings com `createdAtStart` = timestamp + filtros da pesquisa
    - Exclui anúncios do próprio user (não notifica sobre os próprios)
-3. Se há novos — envia email
+3. Se há novos - envia email
 4. Atualiza `metadata.savedSearchesNotified[searchId]` para `now`
 
 ### Email contém
@@ -74,33 +74,33 @@ A cada 5 min, verifica se as pesquisas guardadas dos utilizadores têm **novos m
 **Ficheiro**: `server/jobs/notifyExtraAlertsJob.js`
 
 ### O que faz
-A cada 5 min, deteta eventos passivos que não têm endpoint próprio — listings editados e reviews novas — e cria os alertas correspondentes para seguidores e para o subject da review.
+A cada 5 min, deteta eventos passivos que não têm endpoint próprio - listings editados e reviews novas - e cria os alertas correspondentes para seguidores e para o subject da review.
 
-- **Listings editados** — notifica seguidores do autor + quem favoritou
-- **Reviews novas** — notifica subject (in-app + email) + seguidores do subject
+- **Listings editados** - notifica seguidores do autor + quem favoritou
+- **Reviews novas** - notifica subject (in-app + email) + seguidores do subject
 
 ### Tipos de alerta criados
-- `followed-listing-edit` — anúncio de quem sigo foi editado
-- `favorite-listing-edit` — anúncio que favoritei foi editado
-- `review-received` — recebi avaliação (+ email)
-- `followed-listing-review` — anúncio de quem sigo recebeu review (excluindo se review for minha)
+- `followed-listing-edit` - anúncio de quem sigo foi editado
+- `favorite-listing-edit` - anúncio que favoritei foi editado
+- `review-received` - recebi avaliação (+ email)
+- `followed-listing-review` - anúncio de quem sigo recebeu review (excluindo se review for minha)
 
 ### Lógica
 
 O job usa cursores em memória para processar apenas eventos novos desde o último tick. Se o servidor reiniciar, os cursores resetam e o job pode processar alguns eventos repetidos, o que é aceitável.
 
-1. Fetch all users (paginado, MAX 50 páginas = 5000 users — proteção rate limit)
+1. Fetch all users (paginado, MAX 50 páginas = 5000 users - proteção rate limit)
 2. Indexa em `byId`, `followersOf`, `favouritersOf`
 3. **EDITS**:
    - Fetch listings ordenados por `-createdAt` com early-break em `updatedAt > cursor`
    - Para cada listing editado:
-     - Para cada follower do autor — push `followed-listing-edit`
-     - Para cada user que favoritou o listing — push `favorite-listing-edit`
+     - Para cada follower do autor - push `followed-listing-edit`
+     - Para cada user que favoritou o listing - push `favorite-listing-edit`
 4. **REVIEWS**:
    - Fetch reviews `state=public` com early-break em `createdAt > cursor`
    - Para cada review nova:
      - Push `review-received` para o subject + envia **email imediato** via Resend
-     - Para cada follower do subject (excluindo o autor da review) — push `followed-listing-review`
+     - Para cada follower do subject (excluindo o autor da review) - push `followed-listing-review`
 5. **Throttle 1h** por combinação `(user, kind, targetId)` em `metadata.extraAlertsThrottle`
 6. Flush updates: 1 `updateProfile` por user afetado (não 1 por alerta)
 
@@ -110,7 +110,7 @@ O job usa cursores em memória para processar apenas eventos novos desde o últi
 
 ### Cursores
 - `editsCursor` e `reviewsCursor` em memória do processo
-- Reset no restart — perde eventos durante downtime (aceitável)
+- Reset no restart - perde eventos durante downtime (aceitável)
 
 ### Email de review
 Template HTML rico:
@@ -128,14 +128,14 @@ Todos os jobs seguem o mesmo padrão de inicialização e logging, facilitando a
 2. Loggam ao arrancar: `[jobName] scheduled (cron: "...")` ou `[jobName] disabled via env`
 3. Loggam cada tick: `[jobName] tick done. sent=X skipped=Y`
 4. Falhas isoladas (1 user falhar não bloqueia os outros)
-5. Não retry imediato — esperam próximo tick
+5. Não retry imediato - esperam próximo tick
 
 ## Notificações in-app sem cron
 
 Algumas notificações funcionam server-side instantaneamente, sem depender de um cron job. São acionadas diretamente pelo endpoint no momento da ação do utilizador.
 
-- **`POST /api/listing-like`** — adiciona alerta imediato ao owner
-- **`POST /api/user-follow`** — adiciona alerta + envia email imediato
+- **`POST /api/listing-like`** - adiciona alerta imediato ao owner
+- **`POST /api/user-follow`** - adiciona alerta + envia email imediato
 
 O cron `notifyExtraAlertsJob` é o único que deteta eventos passivos (edits + reviews) que não disparam endpoint próprio.
 

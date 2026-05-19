@@ -1,6 +1,6 @@
 ---
 title: "Os seus anúncios"
-description: "Página de gestão dos anúncios do utilizador — editar, fechar, abrir, eliminar."
+description: "Página de gestão dos anúncios do utilizador - editar, fechar, abrir, eliminar."
 ---
 
 ## O que é
@@ -21,10 +21,10 @@ Cada anúncio aparece como card com os seus dados principais. O badge de estado 
 - Localização
 - Rating (com IconReviewStar)
 - **Badge de estado**:
-  - **Published** — visível no marketplace
-  - **Pending Approval** — admin tem de aprovar
-  - **Draft** — em rascunho, ainda não publicado
-  - **Closed** — escondido (mas dados preservados)
+  - **Published** - visível no marketplace
+  - **Pending Approval** - admin tem de aprovar
+  - **Draft** - em rascunho, ainda não publicado
+  - **Closed** - escondido (mas dados preservados)
 
 ## Ações por anúncio (menu dropdown)
 
@@ -54,7 +54,7 @@ Dados via `GET /api/host-stats` ([Endpoints](endpoints)).
 
 A deleção é um processo de dois passos que combina a marcação local com a sincronização no servidor, garantindo que o anúncio desaparece da vista sem necessitar de reload.
 
-1. Click "Delete" — `addDeletedListingId(id)` (localStorage)
+1. Click "Delete" - `addDeletedListingId(id)` (localStorage)
 2. `onCloseListing(id)` (Sharetribe SDK)
 3. Sync `deletedListings` para `privateData` do user (server)
 4. Filtering local remove do view **sem reload**

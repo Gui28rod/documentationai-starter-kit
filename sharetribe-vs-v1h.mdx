@@ -28,7 +28,7 @@ O Sharetribe **trata da complexidade** de marketplace (Stripe Connect, KYC, anti
 - Notificações nativas (emails de transações)
 
 ### Frontend (template open-source)
-- **PageBuilder + SectionBuilder** — motor universal de páginas
+- **PageBuilder + SectionBuilder** - motor universal de páginas
 - **Hooks Redux** (auth, marketplaceData, user, stripe, etc.)
 - **AuthenticationPage** com forms de login/signup
 - **EditListingWizard** base (Details, Pricing, Availability, Photos)
@@ -44,7 +44,7 @@ O Sharetribe **trata da complexidade** de marketplace (Stripe Connect, KYC, anti
 - CSS Modules
 
 ### Processos de transação
-- `default-booking`, `default-purchase`, `default-inquiry`, `default-negotiation` — definidos pelo Sharetribe
+- `default-booking`, `default-purchase`, `default-inquiry`, `default-negotiation` - definidos pelo Sharetribe
 
 ## O que foi feito localmente em VS Code (custom V1H)
 
@@ -58,11 +58,11 @@ Adaptado e criado sobre o template:
 - Modo escuro com 200+ linhas de overrides ([landingDark.css](modo-escuro))
 
 ### Funcionalidades novas
-- **Sistema de favoritos** completo (heart button, página própria e email diário) — `favorites.duck.js`, `FavoritesPage`, `favoriteAlerts`
-- **Sistema de seguidores** completo — `follow.duck.js`, `FollowingPage`, `followAlerts`
+- **Sistema de favoritos** completo (heart button, página própria e email diário) - `favorites.duck.js`, `FavoritesPage`, `favoriteAlerts`
+- **Sistema de seguidores** completo - `follow.duck.js`, `FollowingPage`, `followAlerts`
 - **5 tipos de toasts in-app** com per-entry dismiss e sync entre dispositivos
 - **3 cron jobs** server-side ([Cron Jobs](cron-jobs))
-- **16 endpoints customizados** (`server/api/`) — [Endpoints](endpoints)
+- **16 endpoints customizados** (`server/api/`) - [Endpoints](endpoints)
 - **Tradução automática** de conteúdo do utilizador via MyMemory ([Tradução](traducao))
 - **Multi-booking** customizado (processo v10 com auto-aceitação)
 - **Long-term booking** (estados especiais, timer 90 dias)
@@ -74,24 +74,24 @@ Adaptado e criado sobre o template:
 - **Línguas faladas** (campo no perfil com bandeiras)
 - **Response time** auto-tracking
 - **WhatsApp button** no UserCard
-- **Avaliação só lado cliente** (decisão V1H — ver [Decisões Importantes](decisoes-importantes))
+- **Avaliação só lado cliente** (decisão V1H - ver [Decisões Importantes](decisoes-importantes))
 - **PWA** com service worker, install prompt e counter
 - **Cookie consent GDPR** com 4 categorias
 - **Reportar anúncio/utilizador** com rate limiting
 - **NPS feedback** modal pós-review
 
 ### Páginas adicionadas
-- `ComoFuncionaPage` — Como funciona
-- `AboutPage` — Sobre nós
-- `ContactPage` — Contacto
-- `TermsOfServicePage` — Termos
-- `PrivacyPolicyPage` — Privacidade
-- `CookiePolicyPage` — Política de cookies
-- `FavoritesPage` — Os meus favoritos
-- `SavedSearchesPage` — Pesquisas guardadas
-- `FollowingPage` — A seguir
-- `DestacaAnuncioPage` — Destacar anúncio
-- `RecentlyViewedPage` — Recentemente vistos
+- `ComoFuncionaPage` - Como funciona
+- `AboutPage` - Sobre nós
+- `ContactPage` - Contacto
+- `TermsOfServicePage` - Termos
+- `PrivacyPolicyPage` - Privacidade
+- `CookiePolicyPage` - Política de cookies
+- `FavoritesPage` - Os meus favoritos
+- `SavedSearchesPage` - Pesquisas guardadas
+- `FollowingPage` - A seguir
+- `DestacaAnuncioPage` - Destacar anúncio
+- `RecentlyViewedPage` - Recentemente vistos
 
 ### Mobile
 - `MobileCategoryTicker` (carrossel categorias acima da topbar)
@@ -130,7 +130,7 @@ React frontend (src/) ← UI customizada V1H sobre template Sharetribe
 Stripe (cloud) ← pagamentos
 ```
 
-A V1H **não tem base de dados própria** — toda a persistência é via Sharetribe (incluindo metadata customizada como favoritos, seguidores e alertas pendentes).
+A V1H **não tem base de dados própria** - toda a persistência é via Sharetribe (incluindo metadata customizada como favoritos, seguidores e alertas pendentes).
 
 ## Vantagens desta arquitetura
 

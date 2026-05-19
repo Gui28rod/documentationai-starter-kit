@@ -16,7 +16,7 @@ Página com **todos os anúncios** que marcaste com o botão de coração no sit
 A lista de favoritos usa o mesmo layout visual da pesquisa, com o coração já preenchido em cada card para indicar que o anúncio está guardado.
 
 - Lista visual igual à da pesquisa (cards com foto, título, preço, localização e rating)
-- Coração preenchido em cada card — clicar remove dos favoritos
+- Coração preenchido em cada card - clicar remove dos favoritos
 
 ## Como funciona
 
@@ -24,9 +24,9 @@ A lista de favoritos usa o mesmo layout visual da pesquisa, com o coração já 
 
 Em qualquer lado do site (cards na pesquisa, página do anúncio), o processo é o seguinte:
 
-1. Click no coração — fica vermelho
+1. Click no coração - fica vermelho
 2. Servidor regista via `POST /api/listing-like`
-3. Throttle 24h por (fã, anúncio) — evita spam
+3. Throttle 24h por (fã, anúncio) - evita spam
 4. Se passar o throttle, toast in-app aparece ao anfitrião
 5. Acumula em `dailyFavoriteDigest` para email diário às 08:00
 

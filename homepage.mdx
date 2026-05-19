@@ -3,13 +3,13 @@ title: "Homepage / Landing Page"
 description: "Estrutura, secções e funcionamento da página principal da V1H."
 ---
 
-A página principal do v1h.com é renderizada via **PageBuilder** (sistema universal de páginas do Sharetribe). O conteúdo não está hardcoded no código — vem do Sharetribe Console, o que permite às chefes editar texto, imagens e secções sem programador.
+A página principal do v1h.com é renderizada via **PageBuilder** (sistema universal de páginas do Sharetribe). O conteúdo não está hardcoded no código - vem do Sharetribe Console, o que permite às chefes editar texto, imagens e secções sem programador.
 
 ## Ficheiros principais
 
-- `src/containers/LandingPage/LandingPage.js` — container que orquestra a página (Redux, assets)
-- `src/containers/PageBuilder/PageBuilder.js` — motor universal de renderização
-- `src/config/landingPageConfigExamples.js` — exemplos de secções
+- `src/containers/LandingPage/LandingPage.js` - container que orquestra a página (Redux, assets)
+- `src/containers/PageBuilder/PageBuilder.js` - motor universal de renderização
+- `src/config/landingPageConfigExamples.js` - exemplos de secções
 
 ## Sistema PageBuilder
 
@@ -35,8 +35,8 @@ A homepage tem várias funcionalidades que vão além da renderização simples 
 
 - **Busca rápida** (`HeroSearchBar`) integrada no hero
 - **Overlay de modo escuro** (contexto global)
-- **Normalização de PT** — converte ortografia pré-1990 para moderna nos textos vindos do CMS
-- **Em-dash cleanup** — substitui `" — "` por `", "` em textos do CMS para leitura mais limpa
+- **Normalização de PT** - converte ortografia pré-1990 para moderna nos textos vindos do CMS
+- **Em-dash cleanup** - substitui `" - "` por `", "` em textos do CMS para leitura mais limpa
 - **Injeção programática** do "Highlighted Listing" logo após o hero (não vem do CMS)
 - **Scroll automático** para âncoras `#espacos-disponiveis` e CTAs para `/inbox`
 

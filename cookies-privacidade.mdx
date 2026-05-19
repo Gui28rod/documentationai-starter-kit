@@ -46,7 +46,7 @@ Conteúdo:
 
 A escolha de consentimento é guardada em localStorage, não num cookie real. O campo inclui a versão do sistema de consentimento para permitir forçar nova aceitação quando a política mudar.
 
-- `localStorage.v1h_cookie_consent` — JSON com versão + timestamp + escolhas
+- `localStorage.v1h_cookie_consent` - JSON com versão + timestamp + escolhas
 
 ## Versioning
 
@@ -61,8 +61,8 @@ Quando se adiciona um novo tracker ou se muda a tabela de cookies, incrementa-se
 O Google Analytics só é carregado após o utilizador aceitar a categoria "analytics". Se recusar, o script não é injetado e nenhum dado de tracking é enviado.
 
 Ao **aceitar analytics**:
-- Se `!window.gtag` (GA não injetado) — recarrega a página para injetar
-- Se já injetado — ativa eventos
+- Se `!window.gtag` (GA não injetado) - recarrega a página para injetar
+- Se já injetado - ativa eventos
 
 Ao **recusar analytics**:
 - GA script não é injetado de todo
@@ -110,4 +110,4 @@ Modal: centrado, fundo branco/escuro consoante modo, lista vertical de categoria
 
 ## CSS
 
-`src/components/CookieConsent/CookieConsent.module.css` — animações slide-in, modal overlay, toggles.
+`src/components/CookieConsent/CookieConsent.module.css` - animações slide-in, modal overlay, toggles.

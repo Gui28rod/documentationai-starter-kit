@@ -15,7 +15,7 @@ Aparece quando outro utilizador clica no nome ou avatar de alguém. A sidebar la
 
 - **AvatarLarge** (foto de perfil grande, redonda)
 - **Botão Seguir / A seguir** (toggle, ver [Follow](#sistema-de-seguidores))
-- **Rating e review count** — só conta reviews recebidas como **cliente** (`type: ofCustomer`). Decisão das responsáveis em 2026-05 — ver [Decisões Importantes](decisoes-importantes)
+- **Rating e review count** - só conta reviews recebidas como **cliente** (`type: ofCustomer`). Decisão das responsáveis em 2026-05 - ver [Decisões Importantes](decisoes-importantes)
 - **Followers count** (com override server-side)
 - **Línguas faladas** (com bandeiras flag-icons, via `LanguagesField`)
 - **Social links** (Facebook, Instagram, etc.) via `SocialLinksField`
@@ -87,26 +87,26 @@ Página separada (`/account-settings`) para configurações de segurança e cont
 O sistema de seguidores permite acompanhar anfitriões e receber notificações quando publicam anúncios novos. O throttle de 24h garante que o anfitrião não recebe spam de notificações quando é seguido repetidamente.
 
 Ficheiros:
-- `src/ducks/follow.duck.js` — Redux state e thunks
-- `server/api/user-follow.js` — endpoint para registar follow, throttle 24h e email
-- `src/components/FollowAlert/FollowAlert.js` — toast in-app
+- `src/ducks/follow.duck.js` - Redux state e thunks
+- `server/api/user-follow.js` - endpoint para registar follow, throttle 24h e email
+- `src/components/FollowAlert/FollowAlert.js` - toast in-app
 
 ### Onde se vê
 - **Lista pública de seguidores** no perfil
-- **Página `/a-seguir` (FollowingPage)** — lista de quem o utilizador segue
-- **Sidebar do ProfilePage** — botão Seguir / A seguir
-- **UserCard na ListingPage** — botão Seguir
+- **Página `/a-seguir` (FollowingPage)** - lista de quem o utilizador segue
+- **Sidebar do ProfilePage** - botão Seguir / A seguir
+- **UserCard na ListingPage** - botão Seguir
 
 ### Funcionamento
 1. Carrega "Seguir"
 2. `toggleFollowAndSync(targetUserId)` no Redux
-3. POST `/api/user-follow` — servidor adiciona entry em `metadata` do target, envia email e cria toast
+3. POST `/api/user-follow` - servidor adiciona entry em `metadata` do target, envia email e cria toast
 4. Throttle: mesmo fã só notifica 1x por 24h
 
 ## Custom user fields
 
 Configurados via `userFields` no `src/config/configUser.js`. O campo `pub_Location` é excluído da edição para evitar duplicação com `profileLocation`.
 
-- `pub_Location` — excluído da edição para evitar duplicação com `profileLocation`
+- `pub_Location` - excluído da edição para evitar duplicação com `profileLocation`
 
 Cada campo pode aparecer no perfil público e/ou na edição.

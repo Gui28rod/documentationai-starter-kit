@@ -7,21 +7,21 @@ Sistema de login, signup, recuperação de password e logins sociais (Google). A
 
 ## Ficheiros principais
 
-- `src/containers/AuthenticationPage/` — páginas e forms
-  - `LoginForm/` — login tradicional
-  - `SignupForm/` — registo de novo utilizador
-  - `ConfirmSignupForm/` — confirmação após signup
-  - `EmailVerificationInfo/` — info sobre verificação de email
-  - `TermsAndConditions/` — modal de Termos + Privacidade
-- `src/ducks/auth.duck.js` — Redux state + thunks
+- `src/containers/AuthenticationPage/` - páginas e forms
+  - `LoginForm/` - login tradicional
+  - `SignupForm/` - registo de novo utilizador
+  - `ConfirmSignupForm/` - confirmação após signup
+  - `EmailVerificationInfo/` - info sobre verificação de email
+  - `TermsAndConditions/` - modal de Termos + Privacidade
+- `src/ducks/auth.duck.js` - Redux state + thunks
 
 ## Login tradicional
 
 O login por email e password é o método principal de acesso. Após autenticação bem-sucedida, o utilizador é redirecionado para a página de onde veio ou para a homepage.
 
 - Campos: **email** + **password**
-- Opção "Remember me" — guarda token mais tempo via `localStorage`
-- Link "Recuperar password" — flow de password reset (email com token)
+- Opção "Remember me" - guarda token mais tempo via `localStorage`
+- Link "Recuperar password" - flow de password reset (email com token)
 - Errors: `loginError` no Redux state
 
 ## Signup
@@ -34,8 +34,8 @@ Campos pedidos:
 - **Display name** (máx 60 chars, alfanumérico + símbolos)
 - **Email**
 - **Password** + confirmação
-- **User type** (dropdown) — define se é Cliente ou Anfitrião
-- **Termos e Privacidade** — checkbox obrigatório
+- **User type** (dropdown) - define se é Cliente ou Anfitrião
+- **Termos e Privacidade** - checkbox obrigatório
 
 Após submeter:
 - Cria conta via Sharetribe SDK
@@ -44,9 +44,9 @@ Após submeter:
 
 ## Email Verification
 
-Após signup, o utilizador recebe um email com link de confirmação. Enquanto o email não for confirmado, certas ações ficam bloqueadas — criar listing, fazer reserva, etc. Esta validação é gerida nativamente pelo Sharetribe.
+Após signup, o utilizador recebe um email com link de confirmação. Enquanto o email não for confirmado, certas ações ficam bloqueadas - criar listing, fazer reserva, etc. Esta validação é gerida nativamente pelo Sharetribe.
 
-Antes de confirmar, certas ações estão bloqueadas (criar listing, fazer reserva, etc.) — Sharetribe gere isto nativamente.
+Antes de confirmar, certas ações estão bloqueadas (criar listing, fazer reserva, etc.) - Sharetribe gere isto nativamente.
 
 ## Password Reset
 
@@ -61,13 +61,13 @@ O fluxo de recuperação de password usa um token enviado por email. O token tem
 
 ## Social Logins
 
-### Google — Configurado
+### Google - Configurado
 - `REACT_APP_GOOGLE_CLIENT_ID=923132772527-o0bnhjm5bn5pdkvjr7p48af64jto7e5f...`
 - `GOOGLE_CLIENT_SECRET=...` (no `.env`)
 - Endpoint server: `/api/auth/google` + callback
 - Botão "Continuar com Google" aparece nas páginas Login + Signup
 
-### Facebook — Desativado
+### Facebook - Desativado
 - `REACT_APP_FACEBOOK_APP_ID=` (vazio)
 - Botão não aparece quando o ID não está configurado
 - Para ativar: pedir App ID ao Facebook Developers, preencher `.env`
@@ -90,16 +90,16 @@ O fluxo OAuth redireciona o utilizador para o provider externo (Google) e volta 
 ## Redux Duck (`auth.duck.js`)
 
 ### Thunks principais
-- `authInfoThunk` — fetch info de auth (chamado no boot)
-- `loginThunk(email, password)` — login tradicional
-- `logoutThunk()` — limpa sessão local + server
-- `signup(payload)` — signup tradicional
-- `signupWithIdp(idpToken, payload)` — signup via SSO
+- `authInfoThunk` - fetch info de auth (chamado no boot)
+- `loginThunk(email, password)` - login tradicional
+- `logoutThunk()` - limpa sessão local + server
+- `signup(payload)` - signup tradicional
+- `signupWithIdp(idpToken, payload)` - signup via SSO
 
 ### Estado
 - `isAuthenticated: boolean`
-- `authScopes: string[]` — escopos do token atual
-- `loginError`, `signupError`, `confirmError` — para mostrar feedback
+- `authScopes: string[]` - escopos do token atual
+- `loginError`, `signupError`, `confirmError` - para mostrar feedback
 
 ## TermsAndConditions modal
 

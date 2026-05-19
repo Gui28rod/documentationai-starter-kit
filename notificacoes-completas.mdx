@@ -1,6 +1,6 @@
 ---
 title: "Notificações (completo)"
-description: "Sistema de notificações in-app, emails e badge — todos os 5+ tipos."
+description: "Sistema de notificações in-app, emails e badge - todos os 5+ tipos."
 ---
 
 A V1H tem 3 camadas de notificações: **toasts in-app**, **badge no topbar** e **emails**. As notificações in-app aparecem em tempo real enquanto o utilizador está no site; os emails chegam mesmo quando o utilizador não está online.
@@ -17,14 +17,14 @@ Todos no canto inferior direito. Cap visual de **6 banners simultâneos**; o res
 | Anúncio novo de quem segues | `notifications.duck.js` | Alguém que segues publica | Check 5min |
 | Extra alerts (4 sub-tipos) | `extraAlerts.duck.js` | Edits + reviews (ver abaixo) | 1h |
 
-### Extra Alerts — 4 sub-tipos
+### Extra Alerts - 4 sub-tipos
 
-Adicionados em 2026-05 via `extraAlerts.duck.js` + cron `notifyExtraAlertsJob`. Estes alertas cobrem eventos passivos que não têm endpoint próprio — as edições a anúncios e as avaliações novas.
+Adicionados em 2026-05 via `extraAlerts.duck.js` + cron `notifyExtraAlertsJob`. Estes alertas cobrem eventos passivos que não têm endpoint próprio - as edições a anúncios e as avaliações novas.
 
-1. **followed-listing-edit** — anúncio de quem sigo foi editado
-2. **favorite-listing-edit** — anúncio que favoritei foi editado
-3. **review-received** — recebi avaliação (também envia **email imediato**)
-4. **followed-listing-review** — anúncio de quem sigo recebeu avaliação (excluindo se a review for minha)
+1. **followed-listing-edit** - anúncio de quem sigo foi editado
+2. **favorite-listing-edit** - anúncio que favoritei foi editado
+3. **review-received** - recebi avaliação (também envia **email imediato**)
+4. **followed-listing-review** - anúncio de quem sigo recebeu avaliação (excluindo se a review for minha)
 
 ## Componentes visuais
 
@@ -34,13 +34,13 @@ Cada tipo de alerta tem o seu próprio componente React que define a aparência 
 - `src/components/FollowAlert/`
 - `src/components/SavedSearchAlert/`
 - `src/components/NewListingNotification/`
-- `src/components/ExtraAlerts/` — unificado para os 4 sub-tipos
+- `src/components/ExtraAlerts/` - unificado para os 4 sub-tipos
 
 Todos têm:
 - Ícone + texto bilingue (PT/EN consoante `useLocale()`)
 - Botão X para dismiss individual
-- Click no banner — navega para o listing/perfil
-- `MAX_VISIBLE = 6` — extras ficam em fila
+- Click no banner - navega para o listing/perfil
+- `MAX_VISIBLE = 6` - extras ficam em fila
 
 ## Dismiss per-entry (sincronização)
 
@@ -52,7 +52,7 @@ Cada toast pode ser dispensado individualmente. O dismiss é sincronizado com o 
 | `POST /api/dismiss-follow-alerts` | `{fanUserId}` | Remove só esse fã dos alerts |
 | `POST /api/dismiss-extra-alert` | `{id}` | Remove uma entrada específica |
 
-Sem body — "limpar tudo" (legacy fallback).
+Sem body - "limpar tudo" (legacy fallback).
 
 ## Polling client-side
 
@@ -61,11 +61,11 @@ Cada duck faz polling periódico ao servidor para verificar se há novos alertas
 - Fetch `currentUser` a cada **60 segundos**
 - Lê `metadata.unseen*Alerts`
 - Filtra contra `dismissedIds` da sessão (anti-flicker)
-- Dispatcha para Redux — componente re-render
+- Dispatcha para Redux - componente re-render
 
 ## Badge no Topbar
 
-O badge numérico no ícone Inbox não é um toast — é um contador persistente de notificações não lidas relacionadas com transações e mensagens diretas.
+O badge numérico no ícone Inbox não é um toast - é um contador persistente de notificações não lidas relacionadas com transações e mensagens diretas.
 
 Conta:
 - `currentUserSaleNotificationCount` (reservas novas como host)
@@ -80,7 +80,7 @@ Três jobs em `server/jobs/` enviam emails em diferentes momentos. O `notifyExtr
 
 ### `notifyFavoritesJob`
 - Cron: `0 8 * * *` (diário às 08:00)
-- Envia email "Resumo diário de favoritos" — top 10 listings que tiveram favoritos no dia anterior
+- Envia email "Resumo diário de favoritos" - top 10 listings que tiveram favoritos no dia anterior
 - Para: anfitriões
 
 ### `notifySavedSearchesJob`
@@ -91,8 +91,8 @@ Três jobs em `server/jobs/` enviam emails em diferentes momentos. O `notifyExtr
 ### `notifyExtraAlertsJob` (novo, 2026-05)
 - Cron: `*/5 * * * *` (cada 5 min)
 - Deteta:
-  - Listings editados — cria alerts para seguidores + quem favoritou
-  - Reviews novas — cria alerts para subject + seguidores do subject
+  - Listings editados - cria alerts para seguidores + quem favoritou
+  - Reviews novas - cria alerts para subject + seguidores do subject
 - **Envia email imediato para `review-received`** (não acumula em digest)
 - Throttle 1h por (utilizador, kind, targetId)
 
@@ -107,7 +107,7 @@ Para além dos crons custom, o Sharetribe Console envia emails nativos para:
 - Review solicitado
 - Etc.
 
-Configurados em **Sharetribe Console — Email notifications** (não no nosso código).
+Configurados em **Sharetribe Console - Email notifications** (não no nosso código).
 
 ## Anti-spam (throttle)
 
@@ -119,4 +119,4 @@ Todos os toasts in-app têm throttle 24h por combinação `(fã, alvo)` ou 1h pa
 
 ## Email i18n (parcial)
 
-Os emails atualmente respeitam `user.publicData.locale` (PT ou EN). Pendência: persistência fiável do locale do topbar — requer upgrade Sharetribe Plus. Ver [Problemas Conhecidos](problemas-conhecidos).
+Os emails atualmente respeitam `user.publicData.locale` (PT ou EN). Pendência: persistência fiável do locale do topbar - requer upgrade Sharetribe Plus. Ver [Problemas Conhecidos](problemas-conhecidos).

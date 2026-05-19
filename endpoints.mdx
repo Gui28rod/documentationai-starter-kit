@@ -9,7 +9,7 @@ Servidos pelo servidor Express em `server/api/`. Registados no `server/apiRouter
 
 | Endpoint | Método | Função |
 |---|---|---|
-| `/api/contact` | POST | Formulário de contacto — email |
+| `/api/contact` | POST | Formulário de contacto - email |
 | `/api/newsletter` | POST | Subscrever newsletter |
 | `/api/report-listing` | POST | Reportar anúncio |
 | `/api/report-listing-status` | GET | Status de reports (admin) |
@@ -88,10 +88,10 @@ Servidos pelo servidor Express em `server/api/`. Registados no `server/apiRouter
 
 ### `POST /api/listing-like`
 **Body**: `{ listingId, action: 'like' | 'unlike' }`
-**Throttle**: 24h por (fã, listing) — só cria alerta server-side se passar o throttle.
+**Throttle**: 24h por (fã, listing) - só cria alerta server-side se passar o throttle.
 **Função**:
 1. Atualiza counter de favoritos do listing
-2. Se passar throttle — adiciona alerta a `metadata.unseenFavoriteAlerts` do owner
+2. Se passar throttle - adiciona alerta a `metadata.unseenFavoriteAlerts` do owner
 3. Acumula para email diário (`dailyFavoriteDigest`)
 
 ### `POST /api/dismiss-favorite-alerts`
@@ -103,7 +103,7 @@ Servidos pelo servidor Express em `server/api/`. Registados no `server/apiRouter
 **Throttle**: 24h por (fã, target).
 **Função**:
 1. Atualiza followers count do target
-2. Se passar throttle — adiciona alerta a `metadata.unseenFollowAlerts` + envia email imediato (via Resend)
+2. Se passar throttle - adiciona alerta a `metadata.unseenFollowAlerts` + envia email imediato (via Resend)
 
 ### `POST /api/dismiss-follow-alerts`
 **Body**: `{ fanUserId }` (per-entry) ou `{}` (clear all)
@@ -139,14 +139,14 @@ Servidos pelo servidor Express em `server/api/`. Registados no `server/apiRouter
 ## OAuth providers
 
 ### Facebook
-- `GET /api/auth/facebook` — inicia OAuth
-- `GET /api/auth/facebook/callback` — recebe callback do Facebook
+- `GET /api/auth/facebook` - inicia OAuth
+- `GET /api/auth/facebook/callback` - recebe callback do Facebook
 
 **Estado**: desativado (`REACT_APP_FACEBOOK_APP_ID` vazio).
 
 ### Google
-- `GET /api/auth/google` — inicia OAuth
-- `GET /api/auth/google/callback` — recebe callback
+- `GET /api/auth/google` - inicia OAuth
+- `GET /api/auth/google/callback` - recebe callback
 
 **Estado**: ativo.
 

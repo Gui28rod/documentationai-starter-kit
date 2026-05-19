@@ -1,15 +1,15 @@
 ---
 title: "Edit Listing Wizard"
-description: "Flow de criação e edição de anúncios — todos os passos."
+description: "Flow de criação e edição de anúncios - todos os passos."
 ---
 
 Flow multi-step que o anfitrião usa para **criar** ou **editar** um anúncio (`/publicar-anuncio` e `/l/:slug/:id/edit/...`). O wizard guia o anfitrião por vários tabs sequenciais, cada um com a sua própria validação, garantindo que o anúncio fica completo antes de ser publicado.
 
 ## Ficheiros principais
 
-- `src/containers/EditListingPage/EditListingWizard/EditListingWizard.js` — orquestrador dos tabs
-- `src/containers/EditListingPage/EditListingWizard/EditListingWizardTab.js` — wrapper de cada tab
-- `src/containers/EditListingPage/EditListingPage.duck.js` — Redux state
+- `src/containers/EditListingPage/EditListingWizard/EditListingWizard.js` - orquestrador dos tabs
+- `src/containers/EditListingPage/EditListingWizard/EditListingWizardTab.js` - wrapper de cada tab
+- `src/containers/EditListingPage/EditListingPage.duck.js` - Redux state
 
 ## Passos (tabs) configuráveis
 
@@ -30,10 +30,10 @@ Os tabs aparecem conforme o **processo de transação** escolhido. Cada processo
 
 | Processo | Tabs |
 |---|---|
-| `default-booking` | Details — Location — Pricing — Availability — Photos |
-| `default-purchase` | Details — Pricing and Stock — Delivery — Photos |
-| `default-inquiry` | Details — Photos (sem pricing) |
-| `default-negotiation` | Details — Location — Pricing — Photos |
+| `default-booking` | Details - Location - Pricing - Availability - Photos |
+| `default-purchase` | Details - Pricing and Stock - Delivery - Photos |
+| `default-inquiry` | Details - Photos (sem pricing) |
+| `default-negotiation` | Details - Location - Pricing - Photos |
 
 ## Panels (cada tab)
 
@@ -55,7 +55,7 @@ O tab de localização usa autocomplete Mapbox para encontrar o endereço com pr
 
 ### EditListingPricingPanel
 - **Preço por unidade** (day / night / hour / fixed)
-- **Variantes de preço** (BookingPriceVariants) — ex: "fim-de-semana mais caro"
+- **Variantes de preço** (BookingPriceVariants) - ex: "fim-de-semana mais caro"
 - Currency: EUR
 
 ### EditListingPricingAndStockPanel
@@ -67,14 +67,14 @@ Para items físicos:
 ### EditListingAvailabilityPanel
 O calendário de disponibilidade permite ao anfitrião definir os horários em que o espaço pode ser reservado. Suporta slots múltiplos no mesmo horário para espaços com capacidade para vários grupos simultâneos.
 
-- **Calendário semanal** — slots por dia da semana
+- **Calendário semanal** - slots por dia da semana
 - **Excepções** (date ranges blocked/extra available)
 - Multi-seats: vários slots no mesmo horário (`AVAILABILITY_MULTIPLE_SEATS`)
 - **Long-term booking**: agendamento de longa duração (90 dias)
 
 ### EditListingDeliveryPanel
-- **Pickup** — onde o cliente vai buscar
-- **Shipping** — preço por país/região
+- **Pickup** - onde o cliente vai buscar
+- **Shipping** - preço por país/região
 - Toggle de cada opção
 
 ### EditListingPhotosPanel
@@ -83,7 +83,7 @@ O tab de fotos suporta drag-to-reorder para o anfitrião organizar as imagens na
 - Upload de até **25 fotos**
 - **Drag-to-reorder** com `pointer events` (mouse + touch, sem dependências externas)
 - Validação de tamanho (~20MB max por foto)
-- **YouTube URL field** — adiciona vídeo como último slide da galeria
+- **YouTube URL field** - adiciona vídeo como último slide da galeria
 - Reorder visual em real-time
 
 ### EditListingStylePanel
@@ -94,7 +94,7 @@ O tab de fotos suporta drag-to-reorder para o anfitrião organizar as imagens na
 Processo customizado `default-multi-booking-v10` no `v1h4-test`. Este processo elimina a necessidade de aprovação manual de cada reserva, ideal para anfitriões com alta procura.
 
 - Cliente pode reservar **múltiplas datas/horas** num único pedido
-- Anfitrião configurado para **auto-aceitação** — não precisa de aprovar manualmente cada um
+- Anfitrião configurado para **auto-aceitação** - não precisa de aprovar manualmente cada um
 - Listing tem que estar configurado para suportar este flow
 
 Ver [Decisões Importantes](decisoes-importantes) para mais detalhe.

@@ -7,26 +7,26 @@ Todos os containers em `src/containers/`. Um container corresponde a uma página
 
 | Container | Rota / Tipo | O que faz |
 |---|---|---|
-| **AboutPage** | `/sobre-nos` | Página "Sobre nós" — missão, visão, valores, equipa, CTA. |
-| **AuthenticationPage** | `/login`, `/signup` | Autenticação — login, signup, social (Google), confirmação IDP. |
+| **AboutPage** | `/sobre-nos` | Página "Sobre nós" - missão, visão, valores, equipa, CTA. |
+| **AuthenticationPage** | `/login`, `/signup` | Autenticação - login, signup, social (Google), confirmação IDP. |
 | **CMSPage** | `/p/:pageId` | Páginas dinâmicas via PageBuilder + assets hospedados Sharetribe. |
-| **CheckoutPage** | `/checkout` | Checkout com Stripe — pagamento, inquiry, negotiation. |
-| **ComoFuncionaPage** | `/como-funciona` | Como funciona o site — steps por audiência (host/guest), FAQ. |
+| **CheckoutPage** | `/checkout` | Checkout com Stripe - pagamento, inquiry, negotiation. |
+| **ComoFuncionaPage** | `/como-funciona` | Como funciona o site - steps por audiência (host/guest), FAQ. |
 | **ContactDetailsPage** | `/account/contact-details` | Editar email/telemóvel; verificação email; reset password. |
 | **ContactPage** | `/contact` | Formulário de contacto com seletor de país; envia `/api/contact`. |
 | **CookiePolicyPage** | `/cookie-policy` | Política cookies em PT/EN com tabela detalhada. |
 | **DestacaAnuncioPage** | `/destaque-anuncio` | Destacar anúncio na homepage; pré-visualização + pagamento. |
 | **DirectMessagePage** | `/mensagens/:id` | Chat direto entre utilizadores (texto + imagens). |
 | **EditListingPage** | `/l/:slug/:id/edit/...` | Wizard de criação/edição de anúncios. |
-| **EmailVerificationPage** | `/email-verification` | Confirma email via token URL — redirect. |
+| **EmailVerificationPage** | `/email-verification` | Confirma email via token URL - redirect. |
 | **FavoritesPage** | `/favoritos` | Lista de anúncios favoritados. |
 | **FollowingPage** | `/a-seguir` | Lista de utilizadores seguidos com follow/unfollow. |
 | **FooterContainer** | wrapper | Renderiza footer via SectionBuilder com asset hosted. |
-| **InboxPage** | `/inbox` | Inbox de transações — Sales / Orders, filtros, paginação. |
-| **LandingPage** | `/` | Homepage — hero, secções, mapa, feedback. |
-| **ListingPage** | `/l/:slug/:id` | Página do anúncio — galeria, descrição, reservas, reviews. |
+| **InboxPage** | `/inbox` | Inbox de transações - Sales / Orders, filtros, paginação. |
+| **LandingPage** | `/` | Homepage - hero, secções, mapa, feedback. |
+| **ListingPage** | `/l/:slug/:id` | Página do anúncio - galeria, descrição, reservas, reviews. |
 | **MakeOfferPage** | `/l/:slug/:id/make-offer` | Submeter oferta numa negotiation. |
-| **ManageAccountPage** | `/account` | Painel de conta — edita perfil, user type fields, eliminar conta. |
+| **ManageAccountPage** | `/account` | Painel de conta - edita perfil, user type fields, eliminar conta. |
 | **ManageListingsPage** | `/your-listings` | Gestão dos anúncios do utilizador (lista + ações). |
 | **NoAccessPage** | `/no-access` | Acesso negado (pending approval, falta permissões). |
 | **NotFoundPage** | `/404` | Página 404 com link para voltar. |
@@ -34,20 +34,20 @@ Todos os containers em `src/containers/`. Um container corresponde a uma página
 | **PasswordChangePage** | `/account/password-change` | Alterar password com validação de força. |
 | **PasswordRecoveryPage** | `/password-recovery` | Pede email para recuperação. |
 | **PasswordResetPage** | `/password-reset` | Redefine password com token de email. |
-| **PaymentMethodsPage** | `/account/payment-methods` | Gestão de cartões Stripe — adicionar/remover. |
+| **PaymentMethodsPage** | `/account/payment-methods` | Gestão de cartões Stripe - adicionar/remover. |
 | **PreviewResolverPage** | resolver | Redireciona asset paths CMS (`content/pages/about`) para rotas reais. |
 | **PrivacyPolicyPage** | `/privacy-policy` | Política de privacidade RGPD em PT/EN. |
-| **ProfilePage** | `/u/:id` | Perfil público — avatar, bio, listings, reviews, follow. |
+| **ProfilePage** | `/u/:id` | Perfil público - avatar, bio, listings, reviews, follow. |
 | **ProfileSettingsPage** | `/profile-settings` | Edição do próprio perfil (avatar, bio, línguas, social). |
 | **RecentlyViewedPage** | `/vistos-recentemente` | Lista de anúncios visualizados recentemente. |
 | **RequestQuotePage** | `/l/:slug/:id/request-quote` | Pedir orçamento numa negotiation. |
 | **SavedSearchesPage** | `/pesquisas-guardadas` | Pesquisas guardadas com gestão (remover, repetir). |
-| **SearchPage** | `/s` | Pesquisa de anúncios — filtros, mapa, sort. |
+| **SearchPage** | `/s` | Pesquisa de anúncios - filtros, mapa, sort. |
 | **StripePayoutPage** | `/account/payments` | Stripe Connect onboarding para receber pagamentos. |
 | **StyleguidePage** | `/styleguide` | Showcase de componentes para devs (cores, ícones, tipografia). |
 | **TermsOfServicePage** | `/terms-of-service` | Termos de serviço em PT/EN. |
 | **TopbarContainer** | wrapper | Topbar conectado a Redux (auth, notifications, profile menu). |
-| **TransactionPage** | `/sale/:id`, `/order/:id` | Detalhe de uma transação — mensagens, timeline, ações. |
+| **TransactionPage** | `/sale/:id`, `/order/:id` | Detalhe de uma transação - mensagens, timeline, ações. |
 
 ## Detalhes especiais
 
@@ -66,9 +66,9 @@ Quando um asset CMS aponta para `content/pages/about`, esta página redireciona 
 Página oculta de desenvolvedor, acessível em `localhost:3000/styleguide`. Mostra todos os componentes, ícones, cores, tipografia. Útil para designers e devs verem o sistema visual completo sem percorrer o site.
 
 ### Wrappers (sem rota)
-- **TopbarContainer** — renderiza Topbar em todas as páginas
-- **FooterContainer** — renderiza Footer em todas as páginas
-- **PageBuilder** — usado dentro de outros containers
+- **TopbarContainer** - renderiza Topbar em todas as páginas
+- **FooterContainer** - renderiza Footer em todas as páginas
+- **PageBuilder** - usado dentro de outros containers
 
 ## Por origem
 
@@ -87,12 +87,12 @@ Estes containers são herdados do Sharetribe Web Template e foram adaptados com 
 ### Customizados pela V1H
 Estes containers foram criados de raiz ou substituídos na totalidade para servir as necessidades específicas da plataforma Venue1Hub.
 
-- **AboutPage** — página própria sobre nós
-- **ComoFuncionaPage** — como funciona com FAQ
-- **ContactPage** — formulário V1H
-- **CookiePolicyPage**, **PrivacyPolicyPage**, **TermsOfServicePage** — atualizados PT/EN
-- **DestacaAnuncioPage** — destacar anúncio
-- **DirectMessagePage** — chat direto melhorado
-- **FavoritesPage**, **FollowingPage**, **SavedSearchesPage**, **RecentlyViewedPage** — novas features V1H
+- **AboutPage** - página própria sobre nós
+- **ComoFuncionaPage** - como funciona com FAQ
+- **ContactPage** - formulário V1H
+- **CookiePolicyPage**, **PrivacyPolicyPage**, **TermsOfServicePage** - atualizados PT/EN
+- **DestacaAnuncioPage** - destacar anúncio
+- **DirectMessagePage** - chat direto melhorado
+- **FavoritesPage**, **FollowingPage**, **SavedSearchesPage**, **RecentlyViewedPage** - novas features V1H
 
 Total: **27 vindos do Sharetribe** + **14 customizados pela V1H** = 41 containers.

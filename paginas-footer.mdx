@@ -1,6 +1,6 @@
 ---
 title: "Páginas do Footer"
-description: "Cada página linkada no footer — conteúdo, rota e funcionalidades."
+description: "Cada página linkada no footer - conteúdo, rota e funcionalidades."
 ---
 
 Detalhe individual de cada página acessível pelo footer.
@@ -19,8 +19,8 @@ A página "Como Funciona" apresenta o marketplace para as duas audiências princ
 
 **Estrutura**:
 - 2 secções principais: "Para Organizadores" e "Para Anfitriões"
-- **Steps ilustrados** — 4 passos por audiência (escolher espaço, reservar, confirmar, desfrutar)
-- **Garantias de segurança** — 3 cards (pagamento seguro, verificação, suporte)
+- **Steps ilustrados** - 4 passos por audiência (escolher espaço, reservar, confirmar, desfrutar)
+- **Garantias de segurança** - 3 cards (pagamento seguro, verificação, suporte)
 - **FAQ** integrado no fundo da página (`FAQContent.js`) com accordions expansíveis
 - **Scroll automático** para FAQ via hash `#faq` (link direto navega já aberto)
 - **CTAs** para "Pesquisar Anúncios" e "Publicar o Meu Espaço"
@@ -70,7 +70,7 @@ A página "Sobre Nós" apresenta a equipa e os valores da V1H. O conteúdo é ha
 **Estrutura**:
 - **Hero** com imagem de fundo e slogan
 - **4 cards principais**: História, Missão, Visão, Público-Alvo
-- **Equipa** — grid com 5 fotos: Beatriz, Alexandre, Anabela, Lídia, Teresa (fotos em `src/assets/images/`)
+- **Equipa** - grid com 5 fotos: Beatriz, Alexandre, Anabela, Lídia, Teresa (fotos em `src/assets/images/`)
 - **5 valores** com ícones SVG (Confiança, Inovação, Comunidade, Sustentabilidade, Qualidade)
 - **CTA final** para começar a usar
 
@@ -91,7 +91,7 @@ O formulário de contacto envia os dados via `POST /api/contact` para o email de
 - Telefone (com **seletor de país** e bandeira, biblioteca `flag-icons`)
 - Assunto
 - Mensagem
-- Submit — `POST /api/contact` — email para `admin@v1h.net`
+- Submit - `POST /api/contact` - email para `admin@v1h.net`
 
 **Países suportados** no seletor de phone prefix:
 PT, ES, FR, GB, DE, IT, NL, BE, CH, US, BR, AO, MZ
@@ -210,7 +210,7 @@ O documento cobre 15 secções RGPD e nomeia os subprocessadores de dados utiliz
 
 ### Definições de Cookies
 
-**Não é página** — é o **modal CookieConsent**.
+**Não é página** - é o **modal CookieConsent**.
 
 Carregar no link "Definições de cookies" do footer:
 1. Dispara `window.__v1hOpenCookiePrefs()`
@@ -227,7 +227,7 @@ Ver [Cookies & Privacidade](cookies-privacidade) para detalhe técnico.
 | **Modais** | 1 (Definições de cookies) |
 | **Páginas hardcoded em React** | 6 (About, ComoFunciona, Contact, TermsOfService, PrivacyPolicy, CookiePolicy) |
 | **Páginas dinâmicas** | 2 (SearchPage, EditListingPage) |
-| **Conteúdo via CMS** | 0 — todas as páginas legais e institucionais são código React direto (não dependem do Sharetribe Console) |
+| **Conteúdo via CMS** | 0 - todas as páginas legais e institucionais são código React direto (não dependem do Sharetribe Console) |
 
 **Localização**: todas em `src/containers/` com sub-pastas próprias.
 **Rotas**: definidas em `src/routing/routeConfiguration.js`.

@@ -5,8 +5,8 @@ description: "Catálogo das ~1383 chaves de tradução em pt.json organizadas po
 
 A V1H tem dois ficheiros de tradução principais. O ficheiro PT é o de referência para o desenvolvimento; o EN tem mais variantes porque inclui strings herdadas do template Sharetribe que não são usadas ativamente na V1H.
 
-- `src/translations/pt.json` — **1.383 chaves** (português europeu)
-- `src/translations/en.json` — **1.764 chaves** (inglês)
+- `src/translations/pt.json` - **1.383 chaves** (português europeu)
+- `src/translations/en.json` - **1.764 chaves** (inglês)
 
 A diferença de tamanho é porque o EN tem mais variantes do template original Sharetribe.
 
@@ -37,32 +37,32 @@ As chaves estão organizadas por **namespace** (prefixo `ComponenteName.`). Há 
 ## Namespaces por categoria
 
 ### Autenticação
-- `AuthenticationPage.*` — toda a página
-- `LoginForm.*` — login
-- `SignupForm.*` — signup
-- `ConfirmSignupForm.*` — confirmação SSO
+- `AuthenticationPage.*` - toda a página
+- `LoginForm.*` - login
+- `SignupForm.*` - signup
+- `ConfirmSignupForm.*` - confirmação SSO
 - `PasswordRecoveryForm.*` / `PasswordRecoveryPage.*`
 - `PasswordResetForm.*` / `PasswordResetPage.*`
 - `EmailVerificationForm.*` / `EmailVerificationPage.*`
-- `TermsOfService.*` — checkbox no signup
+- `TermsOfService.*` - checkbox no signup
 
 ### Listings
-- `ListingPage.*` — página do anúncio (30)
-- `ListingCard.*` — card na search/grid
-- `ListingImageGallery.*` — galeria
-- `ManageListingsPage.*` / `ManageListingCard.*` — gestão
+- `ListingPage.*` - página do anúncio (30)
+- `ListingCard.*` - card na search/grid
+- `ListingImageGallery.*` - galeria
+- `ManageListingsPage.*` / `ManageListingCard.*` - gestão
 - `EditListingPage.*` + 8 sub-panels (Details, Pricing, Location, Availability, Photos, Delivery, PricingAndStock, Style)
-- `EditListingWizard.*` — wizard wrapper (49)
+- `EditListingWizard.*` - wizard wrapper (49)
 
 ### Reservas / Transações
-- `CheckoutPage.*` — checkout (28)
-- `InboxPage.*` — inbox (67)
-- `TransactionPage.*` — detalhe de transação (114, o maior)
-- `TransactionPanel.*` — painel lateral
-- `OrderBreakdown.*` — line items
+- `CheckoutPage.*` - checkout (28)
+- `InboxPage.*` - inbox (67)
+- `TransactionPage.*` - detalhe de transação (114, o maior)
+- `TransactionPanel.*` - painel lateral
+- `OrderBreakdown.*` - line items
 - `BookingDatesForm.*` / `BookingTimeForm.*` / `BookingFixedDurationForm.*`
-- `InquiryForm.*` — inquiry sem pagamento
-- `ProductOrderForm.*` — purchase
+- `InquiryForm.*` - inquiry sem pagamento
+- `ProductOrderForm.*` - purchase
 - `NegotiationForm.*` / `MakeOfferForm.*` / `RequestQuoteForm.*`
 
 ### Pagamentos
@@ -135,7 +135,7 @@ As chaves estão organizadas por **namespace** (prefixo `ComponenteName.`). Há 
 - `BookingModeToggle.*`
 - `ImageCarousel.*`
 - `LayoutWrapperAccountSettingsSideNav.*`
-- `Corrigir.*` — provavelmente texto solto, atenção
+- `Corrigir.*` - provavelmente texto solto, atenção
 
 ### Categorias e listingTypes
 - `CategoryConfig.*`
@@ -198,14 +198,14 @@ diff <(jq -r 'keys[]' src/translations/en.json | sort) <(jq -r 'keys[]' src/tran
 **Não**. O Sharetribe `Pages` (PageBuilder) tem conteúdo em CMS que pode ser editado por idioma, mas as **strings de UI** (`pt.json`, `en.json`) são responsabilidade do dev.
 
 ### `yarn run translate`
-Script que ajuda a comparar PT vs EN e detetar chaves em falta. Não traduz automaticamente — apenas reporta.
+Script que ajuda a comparar PT vs EN e detetar chaves em falta. Não traduz automaticamente - apenas reporta.
 
 ### MyMemory (tradução automática)
 Para **conteúdo do utilizador** (descrições, reviews), usamos MyMemory via `/api/translate`. Ver [Tradução](traducao).
 
 ## Fr/Es/De
 
-Os ficheiros `fr.json`, `es.json`, `de.json` existem em `src/translations/` mas são **herdados do template Sharetribe** — nunca foram atualizados pela V1H. Não são oferecidos na UI (o language switcher só mostra PT/EN).
+Os ficheiros `fr.json`, `es.json`, `de.json` existem em `src/translations/` mas são **herdados do template Sharetribe** - nunca foram atualizados pela V1H. Não são oferecidos na UI (o language switcher só mostra PT/EN).
 
 Para suportar mais idiomas, seria preciso:
 1. Atualizar esses JSONs com strings V1H

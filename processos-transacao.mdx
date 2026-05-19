@@ -7,7 +7,7 @@ Cada transação na V1H segue um **processo Sharetribe** definido em `src/transa
 
 ## 4 processos disponíveis
 
-### `default-booking` — reservas com data/hora
+### `default-booking` - reservas com data/hora
 
 **Ficheiro**: `src/transactions/transactionProcessBooking.js`
 
@@ -16,7 +16,7 @@ Cada transação na V1H segue um **processo Sharetribe** definido em `src/transa
 | `INITIAL` | Estado inicial (não persiste) |
 | `INQUIRY` | Cliente pediu info sem pagamento (free inquiry) |
 | `PENDING_PAYMENT` | À espera do pagamento Stripe |
-| `LONG_TERM_PENDING_APPROVAL` | Reserva superior a 90 dias — host aprova primeiro |
+| `LONG_TERM_PENDING_APPROVAL` | Reserva superior a 90 dias - host aprova primeiro |
 | `PAYMENT_WINDOW_OPEN` | Janela de pagamento aberta (X horas) |
 | `PREAUTHORIZED` | Pagamento pré-autorizado, host decide |
 | `ACCEPTED` | Aceite pelo host, à espera da data |
@@ -24,15 +24,15 @@ Cada transação na V1H segue um **processo Sharetribe** definido em `src/transa
 | `REVIEWED` | Review submetida |
 
 **Transições principais**:
-- `INQUIRE` — pedir info sem pagar
-- `REQUEST_PAYMENT` — iniciar pedido com pagamento
-- `ACCEPT_LONG_TERM_RESERVATION` — host aceita long-term
-- `CONFIRM_PAYMENT` — confirmação Stripe
-- `ACCEPT` / `DECLINE` — host aceita ou recusa
-- `COMPLETE` — auto-complete após X horas
-- `REVIEW` — submeter avaliação
+- `INQUIRE` - pedir info sem pagar
+- `REQUEST_PAYMENT` - iniciar pedido com pagamento
+- `ACCEPT_LONG_TERM_RESERVATION` - host aceita long-term
+- `CONFIRM_PAYMENT` - confirmação Stripe
+- `ACCEPT` / `DECLINE` - host aceita ou recusa
+- `COMPLETE` - auto-complete após X horas
+- `REVIEW` - submeter avaliação
 
-### `default-purchase` — compras de items físicos
+### `default-purchase` - compras de items físicos
 
 **Ficheiro**: `src/transactions/transactionProcessPurchase.js`
 
@@ -49,12 +49,12 @@ Cada transação na V1H segue um **processo Sharetribe** definido em `src/transa
 | `REVIEWED` | Review submetida |
 
 **Transições importantes**:
-- `MARK_DELIVERED` — vendedor marca como enviado
-- `MARK_RECEIVED` — cliente confirma receção
-- `DISPUTE` — abre loop de disputa (resolvido por operador)
-- `AUTO_COMPLETE` — Sharetribe fecha automaticamente
+- `MARK_DELIVERED` - vendedor marca como enviado
+- `MARK_RECEIVED` - cliente confirma receção
+- `DISPUTE` - abre loop de disputa (resolvido por operador)
+- `AUTO_COMPLETE` - Sharetribe fecha automaticamente
 
-### `default-inquiry` — só pedido de info
+### `default-inquiry` - só pedido de info
 
 **Ficheiro**: `src/transactions/transactionProcessInquiry.js`
 
@@ -69,7 +69,7 @@ Este processo simplificado destina-se a mercados ou casos onde não há pagament
 
 **Uso**: para mercados ou países sem Stripe, ou para casos onde só se pretende troca de mensagens.
 
-### `default-negotiation` — orçamentos personalizados
+### `default-negotiation` - orçamentos personalizados
 
 **Ficheiro**: `src/transactions/transactionProcessNegotiation.js`
 
@@ -86,15 +86,15 @@ O processo de negociação permite que cliente e anfitrião cheguem a um preço 
 | `COMPLETED` / `REVIEWED` | Final |
 
 **Dois modos**:
-- **Forward**: cliente pede quote — host responde
-- **Reverse**: host faz offer — cliente aceita ou contra-oferta
+- **Forward**: cliente pede quote - host responde
+- **Reverse**: host faz offer - cliente aceita ou contra-oferta
 
 **Transições de negociação**:
-- `MAKE_OFFER` — host envia oferta
-- `REQUEST_QUOTE` — cliente pede orçamento
-- `CUSTOMER_MAKE_COUNTER_OFFER` — cliente contra-oferta
-- `REQUEST_CHANGES` — pedir mudanças
-- `ACCEPT_DELIVERABLE` — aceitar entregável
+- `MAKE_OFFER` - host envia oferta
+- `REQUEST_QUOTE` - cliente pede orçamento
+- `CUSTOMER_MAKE_COUNTER_OFFER` - cliente contra-oferta
+- `REQUEST_CHANGES` - pedir mudanças
+- `ACCEPT_DELIVERABLE` - aceitar entregável
 
 ## Variantes customizadas V1H
 
@@ -136,18 +136,18 @@ Cliente seleciona datas no OrderPanel
 ```
 
 ### Componentes
-- `CheckoutPage.js` — controlador principal Redux
-- `CheckoutPageWithPayment.js` — flow com Stripe
-- `CheckoutPageWithInquiryProcess.js` — flow sem pagamento (inquiry only)
-- `StripePaymentForm/` — Stripe Elements com 3D Secure
-- `DetailsSideCard` — resumo de preços ao lado
-- `MobileOrderBreakdown` — versão mobile
-- `CheckoutPageSessionHelpers` — persiste dados em sessionStorage entre refreshes
+- `CheckoutPage.js` - controlador principal Redux
+- `CheckoutPageWithPayment.js` - flow com Stripe
+- `CheckoutPageWithInquiryProcess.js` - flow sem pagamento (inquiry only)
+- `StripePaymentForm/` - Stripe Elements com 3D Secure
+- `DetailsSideCard` - resumo de preços ao lado
+- `MobileOrderBreakdown` - versão mobile
+- `CheckoutPageSessionHelpers` - persiste dados em sessionStorage entre refreshes
 
 ### Ações Redux
-- `speculateTransaction` — pre-calcula sem criar (mostra preview)
-- `initiateOrder` — cria PaymentIntent e transaction
-- `confirmPayment` — confirma Stripe e transita o estado
+- `speculateTransaction` - pre-calcula sem criar (mostra preview)
+- `initiateOrder` - cria PaymentIntent e transaction
+- `confirmPayment` - confirma Stripe e transita o estado
 
 ## TransactionPage
 
@@ -178,10 +178,10 @@ Página de uma transação individual (`/sale/:id` ou `/order/:id`). O layout ap
 
 ### Modais especializados
 
-- `ReviewForm` / `ReviewModal` — submeter review (1-5 estrelas e texto)
-- `DisputeModal` — abrir disputa com motivo
-- `MakeCounterOfferModal` — re-negociar preço
-- `RequestChangesModal` — pedir mudanças pós-entrega
+- `ReviewForm` / `ReviewModal` - submeter review (1-5 estrelas e texto)
+- `DisputeModal` - abrir disputa com motivo
+- `MakeCounterOfferModal` - re-negociar preço
+- `RequestChangesModal` - pedir mudanças pós-entrega
 
 ### State data por processo
 
@@ -198,12 +198,12 @@ Ambas dedicadas ao **processo negotiation**. São páginas independentes com for
 ### MakeOfferPage (`/l/:slug/:id/make-offer`)
 - Para **host** responder a pedido de quote
 - `MakeOfferForm` com: preço, mensagem, custom fields da transação
-- Submissão — transição `MAKE_OFFER` — cliente recebe notificação
+- Submissão - transição `MAKE_OFFER` - cliente recebe notificação
 
 ### RequestQuotePage (`/l/:slug/:id/request-quote`)
 - Para **cliente** pedir orçamento
 - `RequestQuoteForm` recolhe mensagem inicial e custom data
-- Submissão — transição `REQUEST_QUOTE` — host recebe notificação
+- Submissão - transição `REQUEST_QUOTE` - host recebe notificação
 
 Ambas têm `DetailsSideCard`, `LocationDetails`, `ResponsiveImage`.
 

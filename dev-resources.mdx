@@ -1,16 +1,16 @@
 ---
 title: "Dev Resources"
-description: "StyleguidePage, Tests, Scripts utilitários, Analytics, Service Worker — recursos técnicos para devs."
+description: "StyleguidePage, Tests, Scripts utilitários, Analytics, Service Worker - recursos técnicos para devs."
 ---
 
 Recursos técnicos para desenvolvedores que trabalham no projeto. Esta página descreve ferramentas de desenvolvimento, testes, scripts utilitários e integrações de analytics e PWA.
 
 ## StyleguidePage
 
-**URL**: `/styleguide` (não linkado — acesso direto)
+**URL**: `/styleguide` (não linkado - acesso direto)
 **Ficheiro**: `src/containers/StyleguidePage/`
 
-Página oculta de showcase de componentes — útil para devs e designers verem o sistema visual completo sem precisar percorrer o site. Não está linkada na navegação pública.
+Página oculta de showcase de componentes - útil para devs e designers verem o sistema visual completo sem precisar percorrer o site. Não está linkada na navegação pública.
 
 ### O que mostra
 - **Cores** da palette V1H (com hex)
@@ -35,7 +35,7 @@ Página oculta de showcase de componentes — útil para devs e designers verem 
 
 ## Tests
 
-Testes em `src/**/*.test.js` (Jest + React Testing Library). A cobertura é limitada — está focada nos ducks principais e em smoke tests de páginas. Os componentes customizados da V1H têm pouca cobertura de testes automatizados.
+Testes em `src/**/*.test.js` (Jest + React Testing Library). A cobertura é limitada - está focada nos ducks principais e em smoke tests de páginas. Os componentes customizados da V1H têm pouca cobertura de testes automatizados.
 
 ### O que está testado
 
@@ -50,7 +50,7 @@ Testes em `src/**/*.test.js` (Jest + React Testing Library). A cobertura é limi
 | `FieldBoolean`, `FieldSelectTree` | snapshots |
 
 ### Cobertura
-- **Limitada** — herdada do template Sharetribe
+- **Limitada** - herdada do template Sharetribe
 - Focada em ducks principais + smoke tests de páginas
 - Pouca cobertura nos componentes V1H customizados (ExtraAlerts, TranslateButton, etc.)
 
@@ -62,8 +62,8 @@ yarn test EditListing    # filtrar por nome
 ```
 
 ### Helpers
-- `src/util/testData.js` — mocks de listings, users, transactions
-- `src/util/testHelpers.js` — render wrappers (Redux store + Router + Intl)
+- `src/util/testData.js` - mocks de listings, users, transactions
+- `src/util/testHelpers.js` - render wrappers (Redux store + Router + Intl)
 
 ## Scripts utilitários
 
@@ -94,7 +94,7 @@ O Google Analytics 4 está configurado mas com gating de consentimento. Só carr
 - `REACT_APP_GOOGLE_ANALYTICS_ID` no `.env`
 - Carregado dinamicamente via `includeScripts.js`
 - **Gating cookie consent**: só carrega se categoria "analytics" aceita
-- Eventos automáticos: page views, scroll depth (via Enhanced Measurement do GA — recomendado **desativar** Enhanced Measurement)
+- Eventos automáticos: page views, scroll depth (via Enhanced Measurement do GA - recomendado **desativar** Enhanced Measurement)
 
 ### Plausible (alternativa, não usada)
 
@@ -122,9 +122,9 @@ const CACHE_NAME = 'v1hub-pwa-shell-v1';
 ```
 
 ### Handlers
-- `install` — cria cache vazio
-- `activate` — limpa caches antigos (de versões anteriores)
-- `fetch` — **network-first** (passa direto, sem pré-cache)
+- `install` - cria cache vazio
+- `activate` - limpa caches antigos (de versões anteriores)
+- `fetch` - **network-first** (passa direto, sem pré-cache)
 
 ### Por que sem pré-cache?
 Os assets do site mudam frequentemente em dev. Pré-cache levaria a versões desatualizadas. Network-first significa que vai sempre ao servidor primeiro.
@@ -164,11 +164,11 @@ Ficheiro: `server/data/pwa-counter.json`
 Conta quantos utilizadores instalaram a PWA. O contador é incrementado automaticamente após cada instalação bem-sucedida.
 
 ### Endpoints
-- `GET /api/pwa-counter` — lê
-- `POST /api/pwa-counter/increment` — incrementa
+- `GET /api/pwa-counter` - lê
+- `POST /api/pwa-counter/increment` - incrementa
 
 ### Bug conhecido
-Ficheiro está trackeado pelo git — reseta a cada `git pull`. Ver [Problemas Conhecidos](problemas-conhecidos).
+Ficheiro está trackeado pelo git - reseta a cada `git pull`. Ver [Problemas Conhecidos](problemas-conhecidos).
 
 ## Dev scripts (package.json)
 
@@ -196,7 +196,7 @@ Diretório: `.vscode/` (se tracked) ou `.vscode-local/`:
 
 ## Type checking
 
-- Sem TypeScript — projeto é JS
+- Sem TypeScript - projeto é JS
 - Usa **PropTypes** em alguns componentes
 - Type definitions em `src/util/types.js`
 
@@ -204,7 +204,7 @@ Diretório: `.vscode/` (se tracked) ou `.vscode-local/`:
 
 Atualmente o deploy é manual. Não existe pipeline de CI automático configurado.
 
-- **GitHub push** — branch main
+- **GitHub push** - branch main
 - Sem CI automático configurado (não há `.github/workflows/`)
 - Deploy manual via Heroku push ou similar
 
@@ -226,7 +226,7 @@ Pendente: adicionar GitHub Actions para:
 - Logs estruturados em `server/log.js`
 
 ### Common debug recipes
-- **Listing não aparece na search** — verificar `flex-cli search set` foi corrido para os custom fields
-- **Pagamento falha** — ver Stripe Dashboard logs + browser console
-- **Notificação não chega** — ver `metadata.unseen*Alerts` do user via Integration SDK
-- **Cron não corre** — verificar `DISABLE_*` env vars + logs do servidor
+- **Listing não aparece na search** - verificar `flex-cli search set` foi corrido para os custom fields
+- **Pagamento falha** - ver Stripe Dashboard logs + browser console
+- **Notificação não chega** - ver `metadata.unseen*Alerts` do user via Integration SDK
+- **Cron não corre** - verificar `DISABLE_*` env vars + logs do servidor

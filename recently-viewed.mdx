@@ -7,9 +7,9 @@ Carrossel que mostra os últimos anúncios que o utilizador visitou. Persistido 
 
 ## Ficheiros
 
-- `src/ducks/recentlyViewed.duck.js` — Redux slice (Redux Toolkit)
-- `src/components/RecentlyViewedSection/RecentlyViewedSection.js` — componente visual
-- `src/containers/RecentlyViewedPage/RecentlyViewedPage.js` — página dedicada com lista completa
+- `src/ducks/recentlyViewed.duck.js` - Redux slice (Redux Toolkit)
+- `src/components/RecentlyViewedSection/RecentlyViewedSection.js` - componente visual
+- `src/containers/RecentlyViewedPage/RecentlyViewedPage.js` - página dedicada com lista completa
 
 ## Onde aparece
 
@@ -25,7 +25,7 @@ A persistência funciona de forma diferente consoante o estado de autenticação
 
 | Estado do utilizador | Onde guarda |
 |---|---|
-| **Guest (não logado)** | `sessionStorage` chave `rv_session` — sobrevive a refresh mas limpa ao fechar a aba |
+| **Guest (não logado)** | `sessionStorage` chave `rv_session` - sobrevive a refresh mas limpa ao fechar a aba |
 | **Logged-in** | Server-side em `currentUser.privateData.recentlyViewed` via SDK |
 
 ### OAuth bridge
@@ -33,8 +33,8 @@ Para não perder histórico durante o login: chave temporária `rv_prelogin` sal
 
 ## Limites e expiração
 
-- **`MAX_RECENTLY_VIEWED = 20`** — máximo de entries guardadas
-- **`EXPIRY_MS = 30 dias`** — entries mais antigas são purgadas
+- **`MAX_RECENTLY_VIEWED = 20`** - máximo de entries guardadas
+- **`EXPIRY_MS = 30 dias`** - entries mais antigas são purgadas
 
 ## Lógica de adição
 
@@ -69,4 +69,4 @@ Quando o utilizador faz login num novo dispositivo, os entries locais e os do se
 Há uma nota de memória que documenta dois comportamentos a evitar na implementação do fetch:
 
 - O fetch é **incondicional ao mount**
-- Timing do Redux: gating em `recentlyViewedIds.length` quebrou em momento — não fazer isso de novo
+- Timing do Redux: gating em `recentlyViewedIds.length` quebrou em momento - não fazer isso de novo

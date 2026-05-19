@@ -26,7 +26,7 @@ Componente: `ListingImageGallery`. A galeria suporta vídeo YouTube como último
 - **Thumbnails em carrossel** abaixo com scroll automático
 - **Modal fullscreen** com grid de thumbnails à direita (estilo eBay)
 - **Navegação**: clique nas thumbs, setas laterais, teclas setas, Esc para fechar
-- **Lazy-load do iframe YouTube** — só monta quando o slide está ativo (evita som a tocar em background)
+- **Lazy-load do iframe YouTube** - só monta quando o slide está ativo (evita som a tocar em background)
 - **Aspect ratio dinâmico**: 16:9 para vídeos, calculado para fotos (máx 2:1 landscape, 4:3 portrait)
 - **Drag-to-reorder** disponível no Edit Listing, não no view público
 
@@ -44,25 +44,25 @@ O mapa começa estático para melhorar a performance inicial da página. Ao clic
 - Mostra endereço completo + nome do edifício
 
 ### SectionAuthorMaybe
-Secção "Sobre o autor" — contém o `UserCard` + modal de inquiry (mensagem ao host).
+Secção "Sobre o autor" - contém o `UserCard` + modal de inquiry (mensagem ao host).
 
 ### SectionReviews
 Lista de reviews com contagem. Mensagens fallback para "sem avaliações" ou erro de fetch.
 
 ## OrderPanel (painel direito)
 
-Ficheiro: [`src/components/OrderPanel/OrderPanel.js`](https://github.com/Gui28rod/v1h---testes-dev) (~500+ linhas). O OrderPanel é o elemento principal de conversão da página — é aqui que o cliente seleciona datas/horas e inicia a reserva.
+Ficheiro: [`src/components/OrderPanel/OrderPanel.js`](https://github.com/Gui28rod/v1h---testes-dev) (~500+ linhas). O OrderPanel é o elemento principal de conversão da página - é aqui que o cliente seleciona datas/horas e inicia a reserva.
 
 ### Mostra
 - Preço formatado + unitType ("por dia", "por hora", "fixo")
 - Tabs **"Reserva única"** vs **"Múltiplas reservas"** (quando aplicável)
 - Form dinâmico (escolhido conforme `transactionProcessAlias`):
-  - `BookingDatesForm` — datas
-  - `BookingTimeForm` — horas
-  - `BookingFixedDurationForm` — duração fixa
-  - `ProductOrderForm` — compra de produto
-  - `InquiryWithoutPaymentForm` — só pedido de info
-  - `NegotiationForm` — orçamento personalizado
+  - `BookingDatesForm` - datas
+  - `BookingTimeForm` - horas
+  - `BookingFixedDurationForm` - duração fixa
+  - `ProductOrderForm` - compra de produto
+  - `InquiryWithoutPaymentForm` - só pedido de info
+  - `NegotiationForm` - orçamento personalizado
 - Date pickers integrados com time slots; validação de disponibilidade em real-time
 - Botão submit dinâmico: "Reservar", "Comprar", "Enviar Pedido", "Fazer Oferta"
 
@@ -74,14 +74,14 @@ Custom fields tipo `enum`, `long`, `boolean` apresentados com labels formatados 
 
 ### Descrição
 - Truncada por defeito com **"Ver mais"** que expande
-- Botão **"Traduzir"** ao lado (via `/api/translate` — MyMemory)
+- Botão **"Traduzir"** ao lado (via `/api/translate` - MyMemory)
 - Botões ficam inline numa flex row, no canto inferior da descrição
 
 ## UserCard / Sobre o Autor
 
 Ficheiro: `src/containers/ListingPage/UserCard/UserCard.js`.
 
-O UserCard apresenta o perfil do anfitrião de forma compacta, com as informações mais relevantes para o cliente — tempo de resposta, avaliação e opção de seguir ou contactar.
+O UserCard apresenta o perfil do anfitrião de forma compacta, com as informações mais relevantes para o cliente - tempo de resposta, avaliação e opção de seguir ou contactar.
 
 - **Avatar grande** + nome do anfitrião + ícone de localização (pin vermelho)
 - **Meta inline**: "Esteve online há Xd · Responde em ~Yh · N seguidores · X.X (N avaliações)"
@@ -90,7 +90,7 @@ O UserCard apresenta o perfil do anfitrião de forma compacta, com as informaç�
   - A Seguir / Seguir (toggle follow)
   - Denunciar utilizador (ReportUserModal)
 - **WhatsApp button** (se host tiver número configurado)
-- **Bio expandível** — truncada a 170 caracteres com link "Ver mais"
+- **Bio expandível** - truncada a 170 caracteres com link "Ver mais"
 - **Last online formatado**: "Online agora", "há X minutos", "há X horas", "há X dias" conforme timestamp
 
 ## Reviews
@@ -105,12 +105,12 @@ Componente: `src/components/Reviews/Reviews.js`. Cada review tem botão de tradu
 
 ## Botões e Features
 
-- **Favorito** — `FavoriteButton` com contador; desabilitado em listings próprios
-- **Partilhar** — `ShareButtons` (Facebook, WhatsApp, copiar link)
-- **Denunciar anúncio** — `ReportListingModal` com formulário + attachments
-- **Lista de espera** — `WaitlistButton` quando o stock está esgotado
-- **Badge da categoria** — ícone + label no canto superior esquerdo da galeria (escondido durante slide de vídeo)
-- **Heart de favoritos** — canto superior direito da galeria
+- **Favorito** - `FavoriteButton` com contador; desabilitado em listings próprios
+- **Partilhar** - `ShareButtons` (Facebook, WhatsApp, copiar link)
+- **Denunciar anúncio** - `ReportListingModal` com formulário + attachments
+- **Lista de espera** - `WaitlistButton` quando o stock está esgotado
+- **Badge da categoria** - ícone + label no canto superior esquerdo da galeria (escondido durante slide de vídeo)
+- **Heart de favoritos** - canto superior direito da galeria
 
 ## Custom Fields (secção "Detalhes")
 
@@ -119,11 +119,11 @@ Ficheiro: `src/containers/ListingPage/CustomListingFields.js`.
 Os custom fields da secção "Detalhes" mostram automaticamente todas as informações adicionais configuradas para cada anúncio, filtradas pela categoria do espaço.
 
 Mostra automaticamente todos os custom fields configurados no Sharetribe Console:
-- `enum` — dropdowns simples (ex: tipo de espaço)
-- `multi-enum` — chips múltiplos (ex: comodidades)
-- `long` — números (ex: capacidade)
-- `boolean` — sim/não
-- `text` — texto livre
+- `enum` - dropdowns simples (ex: tipo de espaço)
+- `multi-enum` - chips múltiplos (ex: comodidades)
+- `long` - números (ex: capacidade)
+- `boolean` - sim/não
+- `text` - texto livre
 
 **Filtrados** por `listingType` + `categoryLevel1` (campos só aparecem se aplicáveis à categoria).
 
@@ -131,5 +131,5 @@ Mostra automaticamente todos os custom fields configurados no Sharetribe Console
 
 ## Bottom da página
 
-- **SimilarListingsSection** — carrossel de anúncios similares (mesma `categoryLevel1`)
-- **Recently Viewed** — adicionado via Redux (`addToRecentlyViewedAndSync` ao carregar a página)
+- **SimilarListingsSection** - carrossel de anúncios similares (mesma `categoryLevel1`)
+- **Recently Viewed** - adicionado via Redux (`addToRecentlyViewedAndSync` ao carregar a página)

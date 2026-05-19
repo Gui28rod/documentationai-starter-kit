@@ -3,7 +3,7 @@ title: "Catálogo de Redux Ducks"
 description: "Lista dos 26 ducks Redux com estado, actions principais e notas."
 ---
 
-O estado global da aplicação está dividido em 26 "ducks" (Redux Toolkit / `createSlice`). Cada duck é responsável por uma área de funcionalidade específica — autenticação, favoritos, notificações, etc. — e expõe thunks para operações assíncronas. Quinze dos 26 ducks foram criados ou significativamente customizados pela V1H.
+O estado global da aplicação está dividido em 26 "ducks" (Redux Toolkit / `createSlice`). Cada duck é responsável por uma área de funcionalidade específica - autenticação, favoritos, notificações, etc. - e expõe thunks para operações assíncronas. Quinze dos 26 ducks foram criados ou significativamente customizados pela V1H.
 
 ## Tabela completa
 
@@ -25,7 +25,7 @@ O estado global da aplicação está dividido em 26 "ducks" (Redux Toolkit / `cr
 | **paymentMethods** | Métodos de pagamento Stripe | `createStripeCustomer`, `addPaymentMethod`, `deletePaymentMethod` | Wrapper `savePaymentMethod` escolhe a operação |
 | **ratings** (V1H) | Ratings de listings e de utilizadores | `fetchListingRating`, `fetchUserRating`, `setListingRating`, `setUserRating` | User rating só `type=ofCustomer`; dedup automática |
 | **recentlyViewed** (V1H) | Anúncios visualizados (MAX 20) | `addToRecentlyViewed`, `addToRecentlyViewedAndSync`, `fetchRecentlyViewedListings` | localStorage (auth) / sessionStorage (guest); expira 30 dias |
-| **routing** | Localização atual + canonical path | `locationChanged` | Simples — só rastreia navegação |
+| **routing** | Localização atual + canonical path | `locationChanged` | Simples - só rastreia navegação |
 | **savedSearchAlerts** (V1H) | Matches novos para saved searches | `checkSavedSearchMatches`, `setMatches` | Poll 5min; filtra anúncios próprios |
 | **savedSearches** (V1H) | Pesquisas guardadas no `privateData` | `toggleSavedSearchAndSync`, `dedupeSavedSearchesAndSync`, `removeSavedSearchAndSync` | MAX 25; dedup por canonical key |
 | **similarListings** (V1H) | Anúncios similares por categoria | `fetchSimilarListings`, `setSimilarListings` | Retry exponencial em 429; MAX 20 |

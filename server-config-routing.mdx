@@ -23,7 +23,7 @@ Detalhe técnico das fundações do projeto.
 | `wellKnownRouter.js` | Rotas `/.well-known/*` (OAuth challenge, autenticação) |
 | `metricsServer.js` | Servidor de métricas (Prometheus/observabilidade) |
 
-### `server/api/` — 23 endpoints
+### `server/api/` - 23 endpoints
 
 Ver [Endpoints](endpoints) para a lista detalhada. Resumo:
 
@@ -33,15 +33,15 @@ Ver [Endpoints](endpoints) para a lista detalhada. Resumo:
 - **Sistemas custom V1H**: listing-like, dismiss-favorite-alerts, user-follow, dismiss-follow-alerts, dismiss-extra-alert, translate, recompute-listing-rating, host-stats
 - **Auth providers**: auth/facebook, auth/google (callback)
 
-### `server/jobs/` — 3 cron jobs
+### `server/jobs/` - 3 cron jobs
 
 | Job | Schedule | Função |
 |---|---|---|
 | `notifyFavoritesJob` | `0 8 * * *` (diário 08:00) | Email resumo diário de favoritos |
 | `notifySavedSearchesJob` | `*/5 * * * *` (cada 5min) | Email "novos resultados na pesquisa guardada" |
-| `notifyExtraAlertsJob` | `*/5 * * * *` (cada 5min) | Deteta edits e reviews — 4 alertas e email de review |
+| `notifyExtraAlertsJob` | `*/5 * * * *` (cada 5min) | Deteta edits e reviews - 4 alertas e email de review |
 
-### `server/api-util/` — 18 helpers
+### `server/api-util/` - 18 helpers
 
 Helpers internos do servidor que encapsulam lógica reutilizada pelos endpoints e cron jobs:
 - Cache com TTL
@@ -53,7 +53,7 @@ Helpers internos do servidor que encapsulam lógica reutilizada pelos endpoints 
 - ID tokens
 - Types (constants)
 
-### `server/resources/` — rotas de recursos
+### `server/resources/` - rotas de recursos
 
 | Ficheiro | Função |
 |---|---|
@@ -63,7 +63,7 @@ Helpers internos do servidor que encapsulam lógica reutilizada pelos endpoints 
 
 ### `server/data/`
 
-- `pwa-counter.json` — contador de instalações PWA (bug git: ver [Problemas Conhecidos](problemas-conhecidos))
+- `pwa-counter.json` - contador de instalações PWA (bug git: ver [Problemas Conhecidos](problemas-conhecidos))
 
 ## Config (`src/config/`)
 
@@ -71,7 +71,7 @@ Os ficheiros de configuração centralizam todos os parâmetros do marketplace, 
 
 | Ficheiro | Propósito |
 |---|---|
-| `configDefault.js` | Raiz de config — agrega todos os outros e define marketplaceName, URL e currency |
+| `configDefault.js` | Raiz de config - agrega todos os outros e define marketplaceName, URL e currency |
 | `configBranding.js` | Logo (24/36/48px), brand image, FB sharing (1200x630), Twitter (600x314), cor `#BAA38A` |
 | `configLayout.js` | Variant SearchPage (map/grid), variant ListingPage (carousel/coverPhoto), aspect ratio fotos |
 | `configListing.js` | **Custom fields** (enum/multi-enum/text/long/boolean), filter config, show/save labels |
@@ -140,11 +140,11 @@ Localização: `src/assets/images/`
 
 ### CSS
 
-- `assets/css/sanitize.css` — CSS reset
-- `styles/customMediaQueries.css` — media queries reutilizáveis
-- `styles/landingDark.css` — overrides modo escuro
-- `styles/marketplaceDefaults.css` — CSS variables (colors, spacing)
-- `styles/normalize.css` — normalização
+- `assets/css/sanitize.css` - CSS reset
+- `styles/customMediaQueries.css` - media queries reutilizáveis
+- `styles/landingDark.css` - overrides modo escuro
+- `styles/marketplaceDefaults.css` - CSS variables (colors, spacing)
+- `styles/normalize.css` - normalização
 
 ## .env (configuração de ambiente)
 

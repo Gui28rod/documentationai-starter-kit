@@ -7,7 +7,7 @@ Motor de renderização universal de páginas. Permite às responsáveis da V1H 
 
 ## O que é
 
-O Sharetribe Console permite **alojar "page assets"** — ficheiros JSON com estrutura de página. O PageBuilder lê esses JSON e renderiza usando componentes React mapeados.
+O Sharetribe Console permite **alojar "page assets"** - ficheiros JSON com estrutura de página. O PageBuilder lê esses JSON e renderiza usando componentes React mapeados.
 
 ## Como funciona
 
@@ -101,25 +101,25 @@ Dentro de cada block há **fields** (texto, imagem, link, etc.), mapeados em `Fi
 
 Algumas páginas são renderizadas dinamicamente pelo PageBuilder a partir dos assets do Console, enquanto outras são hardcoded em React.
 
-- **LandingPage** — `/`
-- **CMSPage** — `/p/:pageId` (Sobre Nós, Como Funciona se forem CMS)
-- **FooterContainer** — o footer todo
+- **LandingPage** - `/`
+- **CMSPage** - `/p/:pageId` (Sobre Nós, Como Funciona se forem CMS)
+- **FooterContainer** - o footer todo
 
 Páginas hardcoded (não usam PageBuilder):
-- About, Contact, Privacy, Terms, Cookie Policy — React hardcoded em PT/EN
-- ComoFunciona — híbrido (estrutura React, conteúdo hardcoded)
+- About, Contact, Privacy, Terms, Cookie Policy - React hardcoded em PT/EN
+- ComoFunciona - híbrido (estrutura React, conteúdo hardcoded)
 
 ## Estilo partilhado
 
 Ficheiro: `src/containers/PageBuilder/SectionBuilder/SectionBuilder.module.css`
 
 Classes partilhadas entre todas as sections:
-- `sectionDetails` — wrapper de info principal
-- `title` — estilo de título
-- `description` — estilo de descrição
-- `ctaButton` — botão CTA standard
-- `blockContainer` — wrapper de blocks
-- `defaultLink` — link estilizado
+- `sectionDetails` - wrapper de info principal
+- `title` - estilo de título
+- `description` - estilo de descrição
+- `ctaButton` - botão CTA standard
+- `blockContainer` - wrapper de blocks
+- `defaultLink` - link estilizado
 
 Mais overrides para modo escuro dentro deste mesmo ficheiro.
 
@@ -140,7 +140,7 @@ Para criar `SectionTestimonials`, segue os passos abaixo. O registo em `SectionB
      testimonials: { component: SectionTestimonials, ... }
    };
    ```
-6. **No Sharetribe Console** — criar asset com `sectionType: 'testimonials'`
+6. **No Sharetribe Console** - criar asset com `sectionType: 'testimonials'`
 
 ## Como adicionar uma nova primitive (field)
 
@@ -161,8 +161,8 @@ Se o asset falhar a carregar:
 
 A V1H adicionou processamento extra antes de passar o asset ao PageBuilder, garantindo consistência ortográfica e integridade visual dos conteúdos vindos do CMS.
 
-- **Normalização PT** — converte ortografia pré-1990 para moderna nos textos vindos do CMS
-- **Em-dash cleanup** — substitui `" — "` por `", "` em textos
+- **Normalização PT** - converte ortografia pré-1990 para moderna nos textos vindos do CMS
+- **Em-dash cleanup** - substitui `" - "` por `", "` em textos
 - **Injeção programática** de Highlighted Listing após hero
 - **Scroll automático** para âncoras especiais (`#espacos-disponiveis`)
 
@@ -174,7 +174,7 @@ Para editar a Landing Page:
 1. Login no Sharetribe Console
 2. Pages, Landing Page
 3. Edita sections e blocks via UI
-4. Save — publica em produção
+4. Save - publica em produção
 5. Frontend faz fetch do novo asset em cerca de 1 minuto (cache)
 
 **Para testar local**: alterar asset via Console e fazer reload em `localhost:3000`.

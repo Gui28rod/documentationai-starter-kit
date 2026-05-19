@@ -1,14 +1,14 @@
 ---
 title: "Footer"
-description: "Rodapé do site — links, newsletter, social, PWA install."
+description: "Rodapé do site - links, newsletter, social, PWA install."
 ---
 
 Rodapé fixo no fundo de todas as páginas. O footer é gerido via PageBuilder com asset hosted no Sharetribe Console, o que permite às chefes editar texto e links sem necessidade de programador.
 
 ## Ficheiros principais
 
-- `src/containers/FooterContainer/FooterContainer.js` — lazy-loads o SectionBuilder com asset `pageAsset.footer`
-- `src/containers/PageBuilder/SectionBuilder/SectionFooter/SectionFooter.js` — renderização real
+- `src/containers/FooterContainer/FooterContainer.js` - lazy-loads o SectionBuilder com asset `pageAsset.footer`
+- `src/containers/PageBuilder/SectionBuilder/SectionFooter/SectionFooter.js` - renderização real
 
 ## Estrutura
 
@@ -31,7 +31,7 @@ O footer tem três colunas de links organizadas por tema. A coluna "Empresa" est
 O formulário de newsletter envia o email para a API da V1H, que pode integrar com Resend ou Substack. O botão tem três estados visuais para dar feedback imediato ao utilizador.
 
 - Input de email + botão "Subscrever" / "Subscribe"
-- Estados visuais: idle — loading — success / error
+- Estados visuais: idle - loading - success / error
 - Endpoint: `POST /api/newsletter` com `{email}` em JSON
 - Success: mostra confirmação "Subscrito com sucesso! Obrigado."
 
@@ -52,7 +52,7 @@ Componente `<PwaInstallButton />`. Posicionado no bottom, ao lado do copyright. 
 
 Aparece no canto inferior direito após scroll. Comportamento `scroll-to-top`.
 
-## Newsletter externa — Substack
+## Newsletter externa - Substack
 
 Em paralelo à newsletter integrada, a V1H tem **conta Substack** em `venue1hub.substack.com`. Pendente: adicionar link no footer apontando para lá.
 

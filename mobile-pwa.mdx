@@ -5,7 +5,7 @@ description: "Design responsivo, mobile category ticker, service worker e instal
 
 ## Design responsivo
 
-A V1H usa **CSS Modules** com media queries para adaptar entre desktop e mobile. A abordagem de design não é consistente — alguns componentes são mobile-first e outros são desktop-first, reflexo da herança do template Sharetribe.
+A V1H usa **CSS Modules** com media queries para adaptar entre desktop e mobile. A abordagem de design não é consistente - alguns componentes são mobile-first e outros são desktop-first, reflexo da herança do template Sharetribe.
 
 ### Breakpoints principais
 
@@ -19,7 +19,7 @@ A V1H usa **CSS Modules** com media queries para adaptar entre desktop e mobile.
 
 - **Mobile-first** em alguns componentes (CSS base aplica a mobile, media query adiciona desktop)
 - **Desktop-first** noutros (CSS base aplica a desktop, media query reduce para mobile)
-- Inconsistente — herdado do Sharetribe Web Template
+- Inconsistente - herdado do Sharetribe Web Template
 
 ## Mobile Category Ticker
 
@@ -31,7 +31,7 @@ O Mobile Category Ticker é um carrossel horizontal acima da topbar mobile que m
 - Drag horizontal + momentum scroll
 - Ícones de categorias dinâmicos
 - Mapas PT/EN embutidos (`PT_LABELS`, `EN_LABELS`)
-- Click em categoria — search page filtrada
+- Click em categoria - search page filtrada
 
 ## TopbarMobileNav
 
@@ -58,11 +58,11 @@ const CACHE_NAME = 'v1hub-pwa-shell-v1';
 ```
 
 **Handlers**:
-- `install` — cria cache
-- `activate` — limpa caches antigos (de versões anteriores)
-- `fetch` — **network-first** (não pre-cache, porque assets mudam frequentemente em dev)
+- `install` - cria cache
+- `activate` - limpa caches antigos (de versões anteriores)
+- `fetch` - **network-first** (não pre-cache, porque assets mudam frequentemente em dev)
 
-**Razão de ser**: o service worker é **requisito para o browser permitir "Install App"**. Não tem grandes funcionalidades offline ainda — pode ser estendido no futuro.
+**Razão de ser**: o service worker é **requisito para o browser permitir "Install App"**. Não tem grandes funcionalidades offline ainda - pode ser estendido no futuro.
 
 ### Web Manifest
 
@@ -72,7 +72,7 @@ Define:
 - Nome ("Venue1Hub")
 - Ícones (192px, 512px, etc.)
 - Theme color
-- Display mode (`standalone` — abre sem chrome do browser)
+- Display mode (`standalone` - abre sem chrome do browser)
 - Start URL
 
 ### Install Prompt
@@ -81,7 +81,7 @@ Componente `PwaInstallButton` no footer. O botão só aparece quando o browser d
 
 - Escuta `beforeinstallprompt` event do browser
 - Quando disparado, mostra botão "Instalar App"
-- Click — mostra prompt nativo do browser
+- Click - mostra prompt nativo do browser
 - Após instalação, incrementa contador `/api/pwa-counter/increment`
 
 ## PWA Counter
@@ -92,8 +92,8 @@ Ficheiro: `server/data/pwa-counter.json`
 ```
 
 Endpoint:
-- `GET /api/pwa-counter` — devolve o número
-- `POST /api/pwa-counter/increment` — soma 1
+- `GET /api/pwa-counter` - devolve o número
+- `POST /api/pwa-counter/increment` - soma 1
 
 ### Bug conhecido
 Este ficheiro está **trackeado pelo git**, o que faz com que o contador resete a cada `git pull`. Soluções propostas:

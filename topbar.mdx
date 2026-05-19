@@ -1,16 +1,16 @@
 ---
 title: "Topbar"
-description: "Barra superior — logo, busca, idioma, modo escuro, perfil, notificações."
+description: "Barra superior - logo, busca, idioma, modo escuro, perfil, notificações."
 ---
 
 Barra superior fixa presente em todas as páginas (exceto algumas legais/auth).
 
 ## Ficheiros principais
 
-- `src/containers/TopbarContainer/TopbarContainer.js` — connector Redux
-- `src/containers/TopbarContainer/Topbar/Topbar.js` — renderização condicional mobile/desktop
-- `src/containers/TopbarContainer/Topbar/TopbarDesktop/TopbarDesktop.js` — layout desktop
-- `src/containers/TopbarContainer/Topbar/TopbarMobileNav/TopbarMobileNav.js` — nav mobile
+- `src/containers/TopbarContainer/TopbarContainer.js` - connector Redux
+- `src/containers/TopbarContainer/Topbar/Topbar.js` - renderização condicional mobile/desktop
+- `src/containers/TopbarContainer/Topbar/TopbarDesktop/TopbarDesktop.js` - layout desktop
+- `src/containers/TopbarContainer/Topbar/TopbarMobileNav/TopbarMobileNav.js` - nav mobile
 
 **Breakpoint**: `MAX_MOBILE_SCREEN_WIDTH = 1024px`.
 
@@ -18,14 +18,14 @@ Barra superior fixa presente em todas as páginas (exceto algumas legais/auth).
 
 Layout horizontal (flex), da esquerda para a direita. Cada elemento tem função específica na navegação e personalização do utilizador.
 
-1. **Logo** — `V1H-LOGO-BLACK.png`, clicável para a homepage
-2. **TopbarSearchForm** — campo de busca com autocomplete
-3. **Language Switcher (PT/EN)** — dropdown que preserva query params
-4. **Dark Mode Toggle** — alterna entre modo claro e escuro
-5. **Help Link** — ícone (?) para `ContactPage`
-6. **Inbox Link** — ícone com **badge vermelho** (mostra "4+" se contagem > 4)
-7. **Publish Button** — "Publicar Anúncio" — `NewListingPage`
-8. **Profile Menu Dropdown** — avatar clicável
+1. **Logo** - `V1H-LOGO-BLACK.png`, clicável para a homepage
+2. **TopbarSearchForm** - campo de busca com autocomplete
+3. **Language Switcher (PT/EN)** - dropdown que preserva query params
+4. **Dark Mode Toggle** - alterna entre modo claro e escuro
+5. **Help Link** - ícone (?) para `ContactPage`
+6. **Inbox Link** - ícone com **badge vermelho** (mostra "4+" se contagem > 4)
+7. **Publish Button** - "Publicar Anúncio" - `NewListingPage`
+8. **Profile Menu Dropdown** - avatar clicável
 
 ## Profile Menu Dropdown
 
@@ -48,10 +48,10 @@ Os items do dropdown variam consoante o estado do utilizador. Um utilizador sem 
 
 Em mobile, o topbar adapta-se a um layout mais compacto. O `MobileCategoryTicker` aparece acima da topbar, dando acesso direto às 9 categorias.
 
-- **Menu hambúrguer** (`TopbarMobileMenu`) — abre side panel com mesmos itens do profile dropdown
-- **Bottom action bar** — botões fixos no fundo do ecrã
-- **MobileCategoryTicker** — carrossel horizontal de categorias (Cultura, Trabalho, etc.) acima da topbar
-- **Search card modal** — modal cheio que abre quando carregas no ícone de busca
+- **Menu hambúrguer** (`TopbarMobileMenu`) - abre side panel com mesmos itens do profile dropdown
+- **Bottom action bar** - botões fixos no fundo do ecrã
+- **MobileCategoryTicker** - carrossel horizontal de categorias (Cultura, Trabalho, etc.) acima da topbar
+- **Search card modal** - modal cheio que abre quando carregas no ícone de busca
 
 ## Inbox badge
 
@@ -70,7 +70,7 @@ O badge agrega três contadores distintos num único número visível. O cap vis
 Dropdown PT / EN com persistência via `localeContext` e `localStorage`. Ao mudar, todas as strings da UI são re-renderizadas via `react-intl`, sem reload de página.
 
 - Re-renderiza todas as strings da UI (via `react-intl`)
-- Persiste no servidor (em curso — ver pendência email i18n)
+- Persiste no servidor (em curso - ver pendência email i18n)
 - Preserva URL e query params
 
 ## Dark Mode Toggle
@@ -83,7 +83,7 @@ Componente `DarkModeToggle`. Ao alternar, dois atributos são adicionados ou rem
 
 ## CSS principal
 
-- `src/containers/TopbarContainer/Topbar/Topbar.module.css` — root, container, skip-to-main link
+- `src/containers/TopbarContainer/Topbar/Topbar.module.css` - root, container, skip-to-main link
 - `src/containers/TopbarContainer/Topbar/TopbarDesktop/TopbarDesktop.module.css`
 - `src/containers/TopbarContainer/Topbar/TopbarMobileNav/TopbarMobileNav.module.css`
 - `src/containers/TopbarContainer/Topbar/MobileCategoryTicker/MobileCategoryTicker.module.css`

@@ -3,7 +3,7 @@ title: "Checkout & Negotiation Flow"
 description: "Flow de pagamento Stripe step-by-step + flow de negotiation (orçamentos personalizados)."
 ---
 
-## CheckoutPage — Flow de Pagamento
+## CheckoutPage - Flow de Pagamento
 
 Ficheiro: `src/containers/CheckoutPage/`
 
@@ -21,9 +21,9 @@ O checkout é o processo pelo qual um cliente finaliza uma reserva e efetua o pa
 6. Calcula line items (preço + comissão + total)
 7. Mostra resumo (DetailsSideCard) + StripePaymentForm
 8. Cliente preenche cartão (ou seleciona cartão guardado)
-9. Confirma — confirmCardPayment (Stripe.js)
+9. Confirma - confirmCardPayment (Stripe.js)
    (se necessário 3D Secure)
-10. Stripe valida — transição CONFIRM_PAYMENT
+10. Stripe valida - transição CONFIRM_PAYMENT
 11. Sharetribe cria transaction
 12. Redirect para /sale/:id ou /order/:id (TransactionPage)
 ```
@@ -85,9 +85,9 @@ Para cartões europeus, alguns pagamentos exigem 3D Secure. O Stripe Elements tr
 
 ### Métodos de pagamento
 
-- **Novo cartão** — Stripe Elements card input
-- **Cartão guardado** — radio button entre cartões existentes (se houver)
-- **Save card for future use** — checkbox (cria `SetupIntent`)
+- **Novo cartão** - Stripe Elements card input
+- **Cartão guardado** - radio button entre cartões existentes (se houver)
+- **Save card for future use** - checkbox (cria `SetupIntent`)
 
 ### Erros comuns
 
@@ -101,7 +101,7 @@ Para cartões europeus, alguns pagamentos exigem 3D Secure. O Stripe Elements tr
 
 ## Negotiation Flow
 
-Processo `default-negotiation` — permite orçamento personalizado. Este fluxo é adequado quando o preço não é fixo e as partes precisam de negociar antes de fechar a reserva.
+Processo `default-negotiation` - permite orçamento personalizado. Este fluxo é adequado quando o preço não é fixo e as partes precisam de negociar antes de fechar a reserva.
 
 ### 2 modos
 
@@ -112,15 +112,15 @@ Processo `default-negotiation` — permite orçamento personalizado. Este fluxo 
 2. Click "Pedir Orçamento"
 3. Redirect para /l/:slug/:id/request-quote
 4. RequestQuoteForm: preenche mensagem + custom fields
-5. Submit — transição REQUEST_QUOTE
+5. Submit - transição REQUEST_QUOTE
 6. Transaction criada em estado QUOTE_REQUESTED
 7. Provider recebe notificação inbox + email
-8. Provider abre transação — vê o pedido
+8. Provider abre transação - vê o pedido
 9. Provider responde com offer (preço + mensagem)
-10. Transição MAKE_OFFER — estado OFFER_PENDING
-11. Cliente vê oferta — ACCEPT ou CUSTOMER_MAKE_COUNTER_OFFER
-12. Se aceita — PENDING_PAYMENT — pagamento — CONFIRM_PAYMENT
-13. ACCEPTED — DELIVERED — COMPLETED — REVIEWED
+10. Transição MAKE_OFFER - estado OFFER_PENDING
+11. Cliente vê oferta - ACCEPT ou CUSTOMER_MAKE_COUNTER_OFFER
+12. Se aceita - PENDING_PAYMENT - pagamento - CONFIRM_PAYMENT
+13. ACCEPTED - DELIVERED - COMPLETED - REVIEWED
 ```
 
 #### Reverse (provider inicia)
@@ -128,7 +128,7 @@ Processo `default-negotiation` — permite orçamento personalizado. Este fluxo 
 ```
 1. Provider envia DM/proposta unsolicited
 2. Cria transação em estado OFFER_PENDING
-3. Cliente recebe — aceita ou contra-oferta
+3. Cliente recebe - aceita ou contra-oferta
 4. Continua como acima
 ```
 

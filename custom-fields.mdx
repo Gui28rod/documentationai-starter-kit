@@ -9,21 +9,21 @@ A configuração de anúncios da V1H está em `src/config/configListing.js`. Def
 
 ```
 configListing.js exporta:
-- listingTypes — array de tipos de listing (com process + unit)
-- listingFields — array de custom fields (com schema + filter + show + save config)
-- categoryConfiguration — 9 categorias V1H
+- listingTypes - array de tipos de listing (com process + unit)
+- listingFields - array de custom fields (com schema + filter + show + save config)
+- categoryConfiguration - 9 categorias V1H
 ```
 
 ## Listing Types
 
 Cada listing type define o processo de transação associado e as opções de disponibilidade. A combinação de processo e unidade determina como o calendário e os preços funcionam para cada tipo de anúncio.
 
-- **`process`** — qual processo Sharetribe usar (booking, purchase, etc.)
-- **`alias`** — versão do processo
-- **`unit`** — unidade (day, night, hour, fixed, item, inquiry)
-- **`availabilityType`** — `oneSeat` ou `multipleSeats`
-- **`stockType`** — `oneItem` / `multipleItems` / `infiniteOneItem` / `infiniteMultipleItems`
-- **`transactionFields`** — custom fields da transação
+- **`process`** - qual processo Sharetribe usar (booking, purchase, etc.)
+- **`alias`** - versão do processo
+- **`unit`** - unidade (day, night, hour, fixed, item, inquiry)
+- **`availabilityType`** - `oneSeat` ou `multipleSeats`
+- **`stockType`** - `oneItem` / `multipleItems` / `infiniteOneItem` / `infiniteMultipleItems`
+- **`transactionFields`** - custom fields da transação
 
 **Exemplos típicos** (configurados/possíveis na V1H):
 
@@ -56,7 +56,7 @@ Definidas no `categoryConfiguration`:
 
 Cada categoria tem ícone SVG próprio em `src/components/CategoryIcons/CategoryIcons.js`.
 
-## Custom Fields — Schema
+## Custom Fields - Schema
 
 Cada custom field define onde aparece na interface (filtros, detalhes do listing, wizard de edição), que tipo de dado aceita e quais as validações. A configuração em código deve refletir exatamente o que está definido no Sharetribe Console.
 
@@ -108,21 +108,21 @@ Cada custom field define onde aparece na interface (filtros, detalhes do listing
 A V1H tem campos extra configurados no Sharetribe Console. Os exemplos abaixo ilustram os tipos de campos mais comuns por categoria.
 
 ### Para todas as categorias
-- **Comodidades** (`amenities`) — multi-enum (Wi-Fi, Casa de Banho, Acessibilidade, Climatização, Estacionamento)
-- **Capacidade** (`numberOfPeople`) — long (número máximo de pessoas)
-- **Notas adicionais** (`notes`) — text
+- **Comodidades** (`amenities`) - multi-enum (Wi-Fi, Casa de Banho, Acessibilidade, Climatização, Estacionamento)
+- **Capacidade** (`numberOfPeople`) - long (número máximo de pessoas)
+- **Notas adicionais** (`notes`) - text
 
 ### Específicos por categoria
-- **Tipo de espaço** (`spaceType`) — enum específico por categoria
-- **Equipamento incluído** — multi-enum
-- **Restrições** — multi-enum (sem música alta, sem pets, etc.)
+- **Tipo de espaço** (`spaceType`) - enum específico por categoria
+- **Equipamento incluído** - multi-enum
+- **Restrições** - multi-enum (sem música alta, sem pets, etc.)
 
 ## Configuração no Sharetribe Console
 
 Os custom fields devem ser configurados em duas partes independentes. A omissão de qualquer uma delas resulta em comportamento incorreto na interface.
 
-1. **Sharetribe Console** — Listing types + Listing fields (define o schema lá)
-2. **`configListing.js`** no código — mostra como renderizar na UI
+1. **Sharetribe Console** - Listing types + Listing fields (define o schema lá)
+2. **`configListing.js`** no código - mostra como renderizar na UI
 
 **Importante**: se mudares no Console, é preciso refletir no `configListing.js` para que a UI saiba como mostrar.
 
@@ -130,15 +130,15 @@ Os custom fields devem ser configurados em duas partes independentes. A omissão
 
 Cada custom field aparece em até **3 sítios** consoante a sua configuração.
 
-1. **Edit Listing Wizard** (tab Details) — `EditListingDetailsForm`:
+1. **Edit Listing Wizard** (tab Details) - `EditListingDetailsForm`:
    - Renderiza componente apropriado (`FieldSelect`, `FieldCheckbox`, etc.)
    - Aplica validação `saveConfig.isRequired`
 
-2. **Search Page filters** — `FilterComponent`:
+2. **Search Page filters** - `FilterComponent`:
    - Se `filterConfig.indexForSearch: true`
    - Aparece em "primary" (sempre visível) ou "secondary" (em "Mais filtros")
 
-3. **Listing Page** — `CustomListingFields`:
+3. **Listing Page** - `CustomListingFields`:
    - Se `showConfig.isDetail: true`
    - Mostra na secção "Detalhes" da página
 
@@ -147,11 +147,11 @@ Cada custom field aparece em até **3 sítios** consoante a sua configuração.
 Ficheiro: `src/containers/ListingPage/CustomListingFields.js`
 
 Lê os fields configurados, filtra por `listingType` + `categoryLevel1`, e renderiza:
-- **enum** — label + valor (ex: "Tipo de espaço: Sala de reuniões")
-- **multi-enum** — chips visuais (Wi-Fi / Café / etc.)
-- **long** — label + número (ex: "Número de pessoas: 79")
-- **boolean** — checkmark ou cross
-- **text** — label + texto
+- **enum** - label + valor (ex: "Tipo de espaço: Sala de reuniões")
+- **multi-enum** - chips visuais (Wi-Fi / Café / etc.)
+- **long** - label + número (ex: "Número de pessoas: 79")
+- **boolean** - checkmark ou cross
+- **text** - label + texto
 
 **Exclusões**: `averageRating` e `reviewCount` são backend-only mesmo se `isDetail: true`.
 
@@ -191,7 +191,7 @@ Sem o segundo passo, o campo existe mas não dá para filtrar por ele (busca dev
 
 ### Adicionar "Tipo de espaço" como filtro
 
-1. No Sharetribe Console — adicionar enum field `spaceType`
+1. No Sharetribe Console - adicionar enum field `spaceType`
 2. No `configListing.js`:
    ```js
    {

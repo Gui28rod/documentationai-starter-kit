@@ -7,15 +7,15 @@ A V1H tem **modo claro** (default) e **modo escuro** alternável pelo topbar. A 
 
 ## Ficheiro principal
 
-`src/styles/landingDark.css` (~200+ linhas) — overrides globais para modo escuro.
+`src/styles/landingDark.css` (~200+ linhas) - overrides globais para modo escuro.
 
 ## Toggle
 
 Componente `DarkModeToggle` no `TopbarDesktop`. Ao clicar:
 1. Alterna estado em `useDarkMode()` context
 2. Adiciona/remove **2 atributos** no `<body>`:
-   - `data-landing-dark="true"` — overrides de **CSS variables**
-   - `data-dark-mode="true"` — overrides **hardcoded patches**
+   - `data-landing-dark="true"` - overrides de **CSS variables**
+   - `data-dark-mode="true"` - overrides **hardcoded patches**
 3. Persiste preferência via `localStorage` (se consent "preferences" dado)
 
 ## Estratégia dual-attribute
@@ -72,7 +72,7 @@ Lista resumida de componentes com overrides em `landingDark.css`. Estes override
 
 A barra de busca do hero mantém inputs brancos em modo escuro por decisão visual. Esta exceção melhora a legibilidade sobre o background da imagem do hero.
 
-**Exceção**: a barra de busca do hero mantém inputs brancos em modo escuro — fica mais legível sobre o background.
+**Exceção**: a barra de busca do hero mantém inputs brancos em modo escuro - fica mais legível sobre o background.
 
 ## Logo em modo escuro
 
@@ -91,7 +91,7 @@ A maioria dos componentes usa **CSS Modules** (`*.module.css`) com classes hashe
 
 Para o `landingDark.css` (global) referenciar essas classes, usa o seletor `[class*="MyComponent_root"]` (matches qualquer hash).
 
-Cuidado: `[class*="X"]` matches **substring** — pode apanhar classes não desejadas. Para precisão, usa `[class*="X__"]` (com duplo underscore antes do hash) ou `[class*="X_root"]`.
+Cuidado: `[class*="X"]` matches **substring** - pode apanhar classes não desejadas. Para precisão, usa `[class*="X__"]` (com duplo underscore antes do hash) ou `[class*="X_root"]`.
 
 ## Adicionar suporte dark a um novo componente
 
@@ -110,4 +110,4 @@ Para adicionar suporte a modo escuro num componente novo, segue estes passos. O 
 
 ## Pendência
 
-Há vários componentes que ainda não foram patched para modo escuro — visíveis ao testar página por página. Pode ser melhorado iterativamente.
+Há vários componentes que ainda não foram patched para modo escuro - visíveis ao testar página por página. Pode ser melhorado iterativamente.

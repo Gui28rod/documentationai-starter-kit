@@ -1,6 +1,6 @@
 ---
 title: "Reservas e Inbox"
-description: "InboxPage, waitlist, multi-booking, partilha de orçamento, calendar export — perspetiva do utilizador."
+description: "InboxPage, waitlist, multi-booking, partilha de orçamento, calendar export - perspetiva do utilizador."
 ---
 
 Esta página descreve a **experiência do utilizador** ao gerir reservas. Para os processos Sharetribe, estados e transições em detalhe técnico, ver [Processos de Transação](processos-transacao).
@@ -23,10 +23,10 @@ A InboxPage centraliza toda a gestão de transações, com filtros e ordenação
 
 - **Lista** ordenada por data (mais recente primeiro)
 - **Filtros**:
-  - `InboxSearchForm` — busca por texto
-  - `InboxSortBy` — ordenar por data, estado, valor
+  - `InboxSearchForm` - busca por texto
+  - `InboxSortBy` - ordenar por data, estado, valor
 - **Badge de estado** em cada transação (Pendente, Aceite, Concluída, etc.)
-- **Mensagens integradas** — chat entre cliente e anfitrião dentro de cada transação
+- **Mensagens integradas** - chat entre cliente e anfitrião dentro de cada transação
 - **Botão de ação contextual** ao clicar numa transação (Aceitar, Recusar, Pagar, Cancelar conforme estado)
 
 ### Badge no Topbar
@@ -57,7 +57,7 @@ Para o processo customizado **`default-multi-booking-v10`**, o cliente pode rese
 
 - Cliente seleciona múltiplas datas/horas no OrderPanel
 - Cria **batch de transactions simultaneamente** (uma por slot)
-- Anfitrião configurado com **auto-aceitação** — não precisa aprovar cada uma manualmente
+- Anfitrião configurado com **auto-aceitação** - não precisa aprovar cada uma manualmente
 - Cliente recebe confirmação imediata após pagamento
 
 Ver [Processos de Transação](processos-transacao) para detalhe técnico.
@@ -66,7 +66,7 @@ Ver [Processos de Transação](processos-transacao) para detalhe técnico.
 
 Para reservas de meses/anos (processo `default-long-term-booking-v10`), há um estado intermédio de aprovação com timer de 90 dias.
 
-- Estado adicional `LONG_TERM_PENDING_APPROVAL` — anfitrião tem 90 dias para confirmar
+- Estado adicional `LONG_TERM_PENDING_APPROVAL` - anfitrião tem 90 dias para confirmar
 - Timer no inbox indica quanto falta
 - Estados finais especiais (RESERVED, DECLINED, EXPIRED, CANCELLED)
 
@@ -74,8 +74,8 @@ Para reservas de meses/anos (processo `default-long-term-booking-v10`), há um e
 
 Após uma reserva ficar `ACCEPTED`, aparece botão na TransactionPage para exportar o evento para o calendário pessoal.
 
-- **Google Calendar** — ativo, abre nova aba com evento pré-preenchido
-- **Apple Calendar e Outlook** — ocultos via flag `SHOW_APPLE_OUTLOOK=false`
+- **Google Calendar** - ativo, abre nova aba com evento pré-preenchido
+- **Apple Calendar e Outlook** - ocultos via flag `SHOW_APPLE_OUTLOOK=false`
 - Componente: `src/components/AddToCalendarButton/`
 
 ### Partilha de orçamento

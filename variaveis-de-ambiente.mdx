@@ -1,6 +1,6 @@
 ---
 title: "Variáveis de Ambiente"
-description: "Todas as variáveis de ambiente — descrição, exemplo e onde se usam."
+description: "Todas as variáveis de ambiente - descrição, exemplo e onde se usam."
 ---
 
 Configuração da aplicação via `.env` (em dev) ou variáveis no servidor (Heroku/AWS em produção).
@@ -12,7 +12,7 @@ Configuração da aplicação via `.env` (em dev) ou variáveis no servidor (Her
 | `.env` | Base, sempre carregado |
 | `.env.development` | Quando `REACT_APP_ENV=development` |
 | `.env.test` | Quando `REACT_APP_ENV=test` (npm test) |
-| `.env-template` | Template para copy — não usado em runtime |
+| `.env-template` | Template para copy - não usado em runtime |
 
 ## Sharetribe Marketplace SDK
 
@@ -147,4 +147,4 @@ const MANDATORY_ENV_VARIABLES = [
 ];
 ```
 
-Se alguma faltar — `process.exit(9)`. As outras são opcionais (com fallback ou feature flag).
+Se alguma faltar - `process.exit(9)`. As outras são opcionais (com fallback ou feature flag).
