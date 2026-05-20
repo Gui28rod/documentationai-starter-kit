@@ -1,11 +1,11 @@
 ---
-title: "Checkout & Negotiation Flow"
-description: "Flow de pagamento Stripe step-by-step + flow de negotiation (orçamentos personalizados)."
+title: "Checkout e Negotiation Flow"
+description: "Fluxo de pagamento Stripe passo a passo, mais o fluxo de negotiation (orçamentos personalizados)."
 ---
 
-## CheckoutPage - Flow de Pagamento
+Página explica os dois fluxos financeiros do site. O **Checkout** é o processo standard pelo qual o cliente finaliza uma reserva e paga via Stripe (com 3D Secure se necessário). A **Negotiation** é o fluxo onde cliente e anfitrião trocam ofertas e contra-propostas até chegarem a um preço ou condições antes de confirmar a reserva, útil para reservas longas ou eventos com orçamentos personalizados.
 
-Ficheiro: `src/containers/CheckoutPage/`
+## CheckoutPage (Fluxo de Pagamento)
 
 O checkout é o processo pelo qual um cliente finaliza uma reserva e efetua o pagamento. O fluxo integra o Stripe para processamento seguro, incluindo suporte a 3D Secure para cartões europeus.
 

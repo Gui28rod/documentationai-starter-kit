@@ -5,10 +5,11 @@ description: "Email, palavra-passe, dados de contacto, métodos de pagamento, el
 
 ## O que é
 
-Painel com as **definições privadas** da conta, não visíveis ao público. Aqui o utilizador pode alterar credenciais de acesso, gerir métodos de pagamento e, se necessário, eliminar a conta.
+Painel com as **definições privadas** da conta, não visíveis ao público. Aqui o utilizador altera credenciais de acesso (email, password), gere métodos de pagamento, configura o recebimento de pagamentos (no caso de anfitriões) e, se necessário, elimina a conta.
 
 **URL**: `/account`
-**Onde aceder**: dropdown do avatar, "Configurações da conta"
+
+**Onde aceder**: no dropdown do avatar, opção "Configurações da conta".
 
 ## Sub-páginas dentro de "Configurações da conta"
 
@@ -63,8 +64,9 @@ Esta secção é relevante para anfitriões que querem receber pagamentos das re
 A eliminação de conta é uma operação irreversível. Todos os anúncios do utilizador são fechados e os dados são removidos permanentemente do sistema.
 
 - Confirmação com **password**
-- `POST /api/delete-account` - Sharetribe SDK `deleteUser`
-- **Irreversível** - listings do user também são fechados
+- Internamente faz `POST /api/delete-account` (Sharetribe SDK `deleteUser`)
+- **Irreversível**. Os anúncios do utilizador também são fechados
+
 - Logout automático após sucesso
 
 ## Diferença para "Configurações do perfil"

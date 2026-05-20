@@ -3,16 +3,7 @@ title: "Autenticação"
 description: "Login, signup, recuperação de password e logins sociais."
 ---
 
-Sistema de login, signup, recuperação de password e logins sociais (Google). A autenticação é gerida pelo Sharetribe SDK, com páginas e formulários customizados pela V1H.
-
-## Ficheiros principais
-
-- `src/containers/AuthenticationPage/` - páginas e forms
-  - `LoginForm/` - login tradicional
-  - `SignupForm/` - registo de novo utilizador
-  - `ConfirmSignupForm/` - confirmação após signup
-  - `EmailVerificationInfo/` - info sobre verificação de email
-  - `TermsAndConditions/` - modal de Termos + Privacidade
+Conjunto de fluxos pelos quais o utilizador cria conta, entra na conta e recupera o acesso quando perde a password. Inclui login tradicional (email + password), criação de conta nova com confirmação por email, recuperação de palavra-passe e login social via Google. A autenticação propriamente dita é gerida pelo Sharetribe SDK, enquanto as páginas e formulários são customizados pela V1H.
 - `src/ducks/auth.duck.js` - Redux state + thunks
 
 ## Login tradicional

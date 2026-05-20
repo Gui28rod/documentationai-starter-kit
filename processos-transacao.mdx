@@ -3,7 +3,7 @@ title: "Processos de Transação"
 description: "Os 4 processos Sharetribe (booking, purchase, inquiry, negotiation) com estados e transições."
 ---
 
-Cada transação na V1H segue um **processo Sharetribe** definido em `src/transactions/`. Cada processo é uma máquina de estados com transições válidas que determinam o que cliente e anfitrião podem fazer em cada momento.
+Cada transação (reserva, compra, pedido de informação) segue um **processo Sharetribe**. Um processo é uma máquina de estados, ou seja, uma série de fases pelas quais a transação passa (por exemplo: pedido enviado, aceite, paga, concluída) e as transições permitidas entre elas. Define o que cliente e anfitrião podem fazer em cada momento da reserva.
 
 ## 4 processos disponíveis
 

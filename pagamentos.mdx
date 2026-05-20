@@ -3,14 +3,7 @@ title: "Pagamentos (Stripe Connect)"
 description: "Stripe Connect, comissões, payouts e onboarding de anfitriões."
 ---
 
-A V1H usa **Stripe Connect** (modelo "Express"). O Stripe trata de toda a complexidade de KYC, anti-fraude e payouts; a V1H apenas medeia as transações entre clientes e anfitriões.
-
-## Ficheiros principais
-
-- `src/containers/StripePayoutPage/StripePayoutPage.js` - página principal
-- `src/containers/StripePayoutPage/StripePayoutPage.duck.js` - Redux slice
-- `src/containers/StripePayoutPage/StripePayoutPage.module.css`
-- Componentes: `StripeConnectAccountStatusBox`, `StripeConnectAccountForm`
+A V1H usa **Stripe Connect** (modelo "Express") para processar todos os pagamentos. O Stripe trata de toda a complexidade técnica (verificação de identidade do anfitrião, anti-fraude, conformidade PSD2, payouts para o IBAN). A V1H apenas medeia as transações entre clientes e anfitriões e retém uma comissão automática por cada reserva concluída.
 
 ## Modelo
 

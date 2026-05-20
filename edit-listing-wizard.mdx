@@ -3,13 +3,7 @@ title: "Edit Listing Wizard"
 description: "Flow de criação e edição de anúncios - todos os passos."
 ---
 
-Flow multi-step que o anfitrião usa para **criar** ou **editar** um anúncio (`/publicar-anuncio` e `/l/:slug/:id/edit/...`). O wizard guia o anfitrião por vários tabs sequenciais, cada um com a sua própria validação, garantindo que o anúncio fica completo antes de ser publicado.
-
-## Ficheiros principais
-
-- `src/containers/EditListingPage/EditListingWizard/EditListingWizard.js` - orquestrador dos tabs
-- `src/containers/EditListingPage/EditListingWizard/EditListingWizardTab.js` - wrapper de cada tab
-- `src/containers/EditListingPage/EditListingPage.duck.js` - Redux state
+Fluxo multi-step que o anfitrião usa para **criar** ou **editar** um anúncio (`/publicar-anuncio` e `/l/:slug/:id/edit/...`). O wizard guia o anfitrião por vários tabs sequenciais (Detalhes, Localização, Preço, Disponibilidade, Fotos, etc.), cada um com a sua própria validação, garantindo que o anúncio fica completo antes de ser publicado.
 
 ## Passos (tabs) configuráveis
 

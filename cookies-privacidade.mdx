@@ -1,13 +1,9 @@
 ---
-title: "Cookies & Privacidade"
-description: "Banner GDPR, modal de preferências, e gating de trackers."
+title: "Cookies e Privacidade"
+description: "Banner RGPD, modal de preferências e gating de trackers como o Google Analytics."
 ---
 
-A V1H tem banner e modal GDPR-ready com 4 categorias separadas. O sistema permite ao utilizador aceitar ou recusar cada categoria individualmente, e o consentimento é persistido em localStorage para não ser pedido em cada visita.
-
-## Ficheiro principal
-
-`src/components/CookieConsent/CookieConsent.js` (~320 linhas).
+A V1H tem um sistema de consentimento de cookies em conformidade com o RGPD europeu. Mostra um banner ao novo visitante a pedir aceitação, e um modal de preferências detalhado onde se pode aceitar ou recusar 4 categorias de cookies de forma independente. Componentes como o Google Analytics só são carregados se o utilizador aceitar a categoria correspondente, ou seja, há **gating** real do código de tracking conforme o consentimento. O consentimento fica guardado em localStorage para não ser pedido a cada visita.
 
 ## 4 categorias
 
@@ -108,6 +104,3 @@ O banner tem slide-in animado a partir do fundo, com fundo escuro e texto branco
 Banner: slide-in bottom, fundo escuro com texto branco, botões à direita.
 Modal: centrado, fundo branco/escuro consoante modo, lista vertical de categorias.
 
-## CSS
-
-`src/components/CookieConsent/CookieConsent.module.css` - animações slide-in, modal overlay, toggles.

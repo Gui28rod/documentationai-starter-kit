@@ -1,16 +1,16 @@
 ---
 title: "Avaliações (Reviews)"
-description: "Sistema de reviews - rating por listing, por utilizador, e tradução."
+description: "Sistema de reviews. Rating por listing, por utilizador, com opção de tradução."
 ---
 
-A V1H usa o sistema nativo de reviews do Sharetribe, com adições próprias. As avaliações são bidirecionais - tanto o cliente avalia o anfitrião como o anfitrião avalia o cliente - e ficam visíveis nos perfis e nas páginas dos anúncios.
+A V1H usa o sistema nativo de reviews do Sharetribe com adições próprias. As avaliações são bidirecionais, ou seja, tanto o cliente avalia o anfitrião como o anfitrião avalia o cliente. Ficam visíveis nos perfis dos utilizadores e nas páginas de cada anúncio. Inclui também tradução automática das reviews entre PT e EN, e regras específicas da V1H sobre que reviews contam para a média visível.
 
 ## Quando aparecem
 
 Depois de uma transação chegar ao estado `COMPLETED`, **ambas as partes** podem deixar review. O período de tempo para submeter avaliação é configurado no Sharetribe Console.
 
-- **Customer para Provider** (tipo `ofProvider`) - review do anfitrião/serviço
-- **Provider para Customer** (tipo `ofCustomer`) - review do guest
+- **Customer para Provider** (tipo `ofProvider`), ou seja, review do anfitrião e do serviço
+- **Provider para Customer** (tipo `ofCustomer`), ou seja, review do cliente/guest
 
 Período: até X dias após a transação terminar (configurado no Sharetribe Console).
 
