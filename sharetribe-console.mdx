@@ -9,33 +9,39 @@ O **Sharetribe Console** é o painel admin web onde as responsáveis da V1H gere
 
 ## Estrutura geral
 
-A sidebar divide-se em quatro zonas principais. As zonas "Manage" e "Build" são as mais usadas no dia-a-dia.
+A sidebar do Console divide-se em quatro zonas principais. As zonas "Manage" e "Build" são as mais usadas no dia-a-dia.
 
 ### 1. Home (top)
-- V1H - Venue1Hub (nome do marketplace)
-- Toggle `test` e `live` (ambientes separados)
-- Botões: **View marketplace**, **Copy changes to...**, **Go live**
+Bloco no topo da sidebar onde o admin escolhe o ambiente em que está a trabalhar e tem acesso às acções globais.
+- **V1H - Venue1Hub** — nome do marketplace que aparece no topo; identifica em qual marketplace o admin está logado caso tenha vários
+- **Toggle `test` / `live`** — alterna entre os dois ambientes completamente isolados; tudo o que faz em `test` não toca em `live` e vice-versa
+- **View marketplace** — abre o site público numa aba nova para ver como os utilizadores veem
+- **Copy changes to...** — copia a configuração (cores, custom fields, templates de email, etc.) do ambiente actual para outro
+- **Go live** — promove o ambiente test para produção real (acção irreversível, usar com cuidado)
 
 ### 2. Manage (gestão diária)
-- Users
-- Listings
-- Transactions
-- Reviews
+Zona usada todos os dias para mexer nos dados que os utilizadores vão criando. É aqui que se aprovam anúncios, se respondem a reservas problemáticas e se moderam reviews.
+- **Users** — lista de todos os utilizadores registados; permite ver perfis, banir, fazer login como suporte, exportar para CSV
+- **Listings** — lista de todos os anúncios publicados; permite aprovar, fechar, eliminar ou ver como o anfitrião vê
+- **Transactions** — lista de todas as reservas/compras feitas; permite ver detalhes, forçar transições (aceitar/cancelar) e adicionar reviews manualmente
+- **Reviews** — lista de todas as avaliações deixadas entre utilizadores; permite ler na íntegra e apagar (não dá para editar)
 
 ### 3. Build (configuração do produto)
-- General
-- Content
-- Design
-- Users
-- Listings
-- Transactions
-- Monetization
-- Integrations
-- Advanced
+Zona onde se decide **como** o marketplace funciona — tipos de utilizador, processos de transação, comissão, design, integrações. Mexe-se aqui quando se quer mudar a forma como o site se comporta, não os dados nele.
+- **General** — nome do marketplace, moeda, URL, logo, telefone de suporte; configurações básicas
+- **Content** — gestão de páginas estáticas via CMS da Sharetribe (Landing, About, etc.) e textos sistémicos ("microcopy")
+- **Design** — cores da marca, tipografia, variantes de layout (qual aparência usar para a search page e para a listing page)
+- **Users** — define os tipos de utilizador (ex.: Cliente, Anfitrião, Ambos) e quais campos extras pedir no perfil (Línguas, Tipo de utilizador, etc.)
+- **Listings** — define os tipos de anúncio (hourly-booking, daily-booking, etc.), campos extras por categoria, categorias disponíveis e regras de aprovação
+- **Transactions** — define os processos de transação (booking, purchase, negotiation), templates de email enviados pelo Sharetribe e percentagens de comissão
+- **Monetization** — percentagem que a V1H cobra por reserva, setup do Stripe Connect, configuração de IVA quando aplicável
+- **Integrations** — webhooks para notificar URLs externas em eventos, Zapier para automações, Plausible Analytics, entre outras
+- **Advanced** — acessos de API, privileged transitions, CLI access e definições para developers
 
 ### 4. Suporte (bottom)
-- Help Center
-- Contact support
+Bloco fixo no fundo da sidebar com ajuda da Sharetribe.
+- **Help Center** — base de conhecimento oficial da Sharetribe (artigos sobre como configurar tudo)
+- **Contact support** — formulário/email para falar com a equipa de suporte da Sharetribe
 
 ## Ambientes (test vs live)
 
@@ -59,24 +65,26 @@ Os dois ambientes estão completamente isolados em termos de dados. A configura�
 Lista todos os utilizadores (atualmente 19 em test). Mostra avatar, nome, número de listings e data de criação.
 
 ### Filtros
-- Search por nome, email ou ID
-- Filter por estado, role, etc.
+Barra de pesquisa e filtros para encontrar utilizadores rapidamente.
+- **Search** — caixa de texto que aceita nome, email completo ou User ID
+- **Filter** — restringe por estado da conta (activa/banida/pendente), por role (cliente/anfitrião) e por outros critérios disponíveis
 
 ### Ações por utilizador
-Click num user - modal/página com:
-- **Overview**: Bio, Nome, Email, Stripe account ID, User ID
-- **Botão "Email {User}"** - manda email manualmente
-- **Listings** count e link
-- **Transactions** count e link
+Ao clicar num user da lista, abre um modal com a informação detalhada da conta dele:
+- **Overview** — Bio, Nome, Email, Stripe account ID (ligação à conta Stripe Connect dele), User ID interno
+- **Email {User}** — botão que abre um modal para enviar email manualmente a esse utilizador específico (útil para suporte)
+- **Listings** — contador de anúncios desse utilizador + link para a lista dos anúncios dele
+- **Transactions** — contador de reservas em que ele participou + link para a lista das transações
 
 ### Menu de ações (3 pontos)
-- **Verify email** - força verificação manual
-- **Log in as user** - entra como o user (suporte). Mostra `LimitedAccessBanner` no v1h durante a sessão
-- **Ban user** - bloqueia conta
-- **Delete user** - elimina permanentemente
+Botão com três pontos verticais que abre acções administrativas mais sensíveis.
+- **Verify email** — força a verificação do email do utilizador sem ele ter de clicar no link de confirmação (útil quando o email de verificação se perde)
+- **Log in as user** — entra na sessão como esse utilizador para investigar problemas; o site mostra um `LimitedAccessBanner` no topo a avisar que se está em sessão administrativa
+- **Ban user** — bloqueia a conta; o utilizador deixa de conseguir entrar no site mas os dados ficam guardados
+- **Delete user** — elimina a conta permanentemente; usado em casos extremos (fraude, pedido RGPD de eliminação total)
 
 ### Download .csv
-Exporta lista completa de users para Excel.
+Exporta toda a lista de utilizadores (com todos os campos visíveis) para um ficheiro Excel, útil para análise externa ou backup.
 
 ## Manage - Listings
 
@@ -85,19 +93,20 @@ Exporta lista completa de users para Excel.
 Lista todos os anúncios (atualmente 40 em test). Mostra thumb, título, preço, data de criação e badge de estado: Published, Draft (cinza), Pending Approval, Closed.
 
 ### Click num listing
-Abre detalhe com:
-- **Summary**: título, descrição, preço, localização
-- **Custom fields**
-- **Photos**
-- **Author**
+Ao clicar num anúncio da lista abre o detalhe completo dele:
+- **Summary** — título, descrição completa, preço por hora/dia, localização (morada + coordenadas)
+- **Custom fields** — todos os campos extras preenchidos pelo anfitrião (capacidade, comodidades, regras, etc.)
+- **Photos** — galeria de fotos do anúncio
+- **Author** — link directo para o perfil do anfitrião que publicou
 
 ### Menu de ações
-- **Close listing** - esconde do marketplace (não apaga)
-- **View listing as the author** - vê como o anfitrião vê (preview)
-- **Delete listing** - elimina permanentemente
+Acções administrativas sobre o anúncio.
+- **Close listing** — esconde o anúncio do marketplace público sem o apagar; o anfitrião pode reactivá-lo mais tarde
+- **View listing as the author** — abre a página do anúncio na perspectiva do anfitrião (com botões "Editar" e estatísticas que só ele costuma ver)
+- **Delete listing** — elimina permanentemente o anúncio da base de dados
 
 ### Aprovar listings pending
-Se tens "Listing approval" ativo (em Build, Listings, Settings), novos listings ficam `Pending` até admin aprovar aqui.
+Se a opção **Listing approval** estiver activa (em Build → Listings → Settings), todos os anúncios novos ficam com estado `Pending` em vez de irem directo para o marketplace. O admin tem de aprovar manualmente aqui antes de ficarem públicos. Útil para evitar spam e garantir qualidade.
 
 ## Manage - Transactions
 
@@ -106,21 +115,25 @@ Se tens "Listing approval" ativo (em Build, Listings, Settings), novos listings 
 Lista todas as transações (atualmente 66 em test). Mostra thumb do listing, título do listing, Customer e Provider, preço, última transição e datas.
 
 ### Click numa transação
-Abre detalhe completo:
-- **Summary**: booking status (Pending/Accepted/Completed), booking period
-- **Participants**: avatares de Customer e Provider
-- **Timeline**: histórico de transições
-- **Next possible transitions** (com ações):
-  - Operator accept
-  - Operator decline
-  - Outros conforme processo e estado atual
+Ao clicar numa reserva da lista abre o detalhe completo:
+- **Summary** — estado actual da reserva (Pending = à espera de aceitação, Accepted = aceite mas ainda não concluída, Completed = terminada) e o período da reserva (datas de início e fim)
+- **Participants** — avatares e nomes do Customer (quem fez a reserva) e do Provider (o anfitrião que recebeu)
+- **Timeline** — histórico cronológico de todas as transições que aconteceram nesta transacção (request, accept, complete, review, etc.)
+- **Next possible transitions** — botões para o admin forçar a próxima transição manualmente:
+  - **Operator accept** — admin aceita a reserva no lugar do anfitrião
+  - **Operator decline** — admin recusa no lugar do anfitrião
+  - Outros conforme o processo de transação e estado actual
 
 ### Menu de ações
-- **Add a review** - admin pode adicionar review manualmente
-- (Outros conforme processo)
+Acções extra disponíveis sobre a transacção.
+- **Add a review** — o admin pode acrescentar uma review manualmente (útil quando o sistema falhou a enviar o convite de review aos participantes)
+- (Outras opções aparecem conforme o processo e o estado actual)
 
 ### Operator transitions
-O admin (operator) pode forçar transições. Útil para aceitar manualmente uma reserva travada, cancelar uma transação problemática ou resolver disputas.
+O **admin (operator)** pode forçar qualquer transição válida para o estado actual. É a ferramenta de "último recurso" para:
+- Aceitar manualmente uma reserva onde o anfitrião não respondeu a tempo
+- Cancelar uma transacção problemática (fraude, engano)
+- Resolver disputas entre cliente e anfitrião (decidir a quem o dinheiro deve ir)
 
 ## Manage - Reviews
 
@@ -129,71 +142,81 @@ O admin (operator) pode forçar transições. Útil para aceitar manualmente uma
 Lista todas as reviews (atualmente 23 em test). Mostra avatares (autor e subject), "X reviewed Y", rating em estrelas e badge `Pending` (se ainda não publicada).
 
 ### Click numa review
-- **Summary**: "X left a review for Y"
-- Data e hora
-- Rating
-- **Texto da review**
-- Review ID
+Ao clicar numa review da lista abre o detalhe:
+- **Summary** — frase do tipo "X left a review for Y" identificando autor e alvo
+- **Data e hora** — quando foi publicada
+- **Rating** — número de estrelas dado (1 a 5)
+- **Texto da review** — o que o autor escreveu
+- **Review ID** — identificador interno (útil para suporte)
 
 ### Menu de ações
-- **Delete review** - elimina permanentemente
+- **Delete review** — elimina permanentemente a review (não fica histórico nem rascunho)
 
-Reviews não podem ser editadas, apenas eliminadas.
+**Importante**: as reviews **não podem ser editadas** pelo admin. Só apagadas. Isto é por design — para garantir que o admin não manipula o conteúdo escrito pelos utilizadores. Se for preciso corrigir, apaga e o utilizador escreve nova.
 
 ## Build - configurar o produto
 
 ### Build - General
-- Marketplace name
-- URL
-- Currency
-- Phone number (suporte)
-- Logo, brand image
-- Cores
+Configurações básicas do marketplace.
+- **Marketplace name** — nome que aparece em emails, na tab do browser e onde a Sharetribe se refere ao marketplace
+- **URL** — domínio principal do marketplace (ex.: `venue1hub.com`)
+- **Currency** — moeda usada para todos os pagamentos (EUR no caso da V1H)
+- **Phone number (suporte)** — número que aparece nos templates de email da Sharetribe como contacto de suporte
+- **Logo, brand image** — imagens usadas nos emails e nalguns sítios do site
+- **Cores** — paleta primária usada pela Sharetribe em emails e backoffice
 
 ### Build - Content
-- **Pages** (PageBuilder assets) - Landing page, About, Footer, etc.
-- **Translations** (não usado - V1H usa pt.json/en.json no código)
-- **Microcopy** (textos sistémicos)
+Gestão de conteúdo editorial sem precisar de programador.
+- **Pages (PageBuilder assets)** — páginas estáticas montadas com blocos visuais (Landing, About, Footer, etc.); editáveis sem código
+- **Translations** — sistema de traduções da Sharetribe; **não usado pela V1H** porque temos os ficheiros `pt.json` e `en.json` no código (mais flexíveis)
+- **Microcopy** — pequenos textos sistémicos (botões padrão, mensagens de erro do Sharetribe)
 
 ### Build - Design
-- **Branding** (cores principais)
-- **Logos** (versões)
-- **Typography**
-- **Layout** (search page variant, listing page variant)
+Aparência geral do marketplace (não é o site V1H em si, mas alguns elementos que vêm da Sharetribe).
+- **Branding** — cores principais (primary, accent) usadas em backoffice e emails
+- **Logos** — diferentes versões do logo (claro, escuro, quadrado, etc.)
+- **Typography** — fonte usada (Sharetribe permite escolher)
+- **Layout** — qual variante usar para a search page (lista vs. mapa) e listing page (carrossel vs. cover photo)
 
 ### Build - Users
-- **User types** (Cliente, Anfitrião, Ambos)
-- **Custom user fields** (Línguas, Tipo de utilizador, etc.)
+Como os utilizadores são modelados no sistema.
+- **User types** — tipos de utilizador permitidos (na V1H: Cliente, Anfitrião, ou Ambos); cada tipo pode ter campos diferentes
+- **Custom user fields** — campos extras que se pedem ao utilizador no perfil; exemplos V1H: Línguas que fala, Tipo de utilizador, Localização
 
 ### Build - Listings
-- **Listing types** (daily-booking, hourly-booking, etc.)
-- **Custom listing fields** (capacidade, comodidades, etc.)
-- **Categories** (9 categorias V1H)
-- **Approval settings** (review listings before publishing)
-- **Search indexing** (que campos são indexados)
+Como os anúncios são modelados.
+- **Listing types** — tipos de anúncio possíveis (daily-booking, hourly-booking, etc.); cada tipo tem o seu processo de transacção
+- **Custom listing fields** — campos extras pedidos ao anfitrião quando cria/edita um anúncio (capacidade, comodidades, regras da casa, etc.)
+- **Categories** — categorias disponíveis (9 na V1H: Trabalho & Reuniões, Eventos & Festas, etc.)
+- **Approval settings** — se os anúncios novos têm de ser aprovados manualmente antes de aparecerem no marketplace
+- **Search indexing** — define quais campos custom são indexados (pesquisáveis) e quais são só informativos
 
 ### Build - Transactions
-- **Transaction processes** (default-booking, default-purchase, etc.)
-- **Email notifications** (templates de email enviados pelo Sharetribe)
-- **Provider commission** (configurada aqui)
-- **Customer commission** (opcional)
+Os fluxos de compra/reserva e o que acontece em cada passo.
+- **Transaction processes** — fluxos de transacção disponíveis (default-booking, default-purchase, default-negotiation); cada um define o estado e transições possíveis
+- **Email notifications** — templates de email que o Sharetribe envia automaticamente em cada transição (reserva pendente, reserva aceite, etc.)
+- **Provider commission** — % que o anfitrião perde para a plataforma em cada transacção
+- **Customer commission** — % opcional cobrada ao cliente em cima do preço base (não usada pela V1H)
 
 ### Build - Monetization
-- **Commission** (percentagem que V1H cobra por transação)
-- **Stripe Connect setup**
-- **VAT/Tax** (se aplicável)
+Configurações financeiras.
+- **Commission** — percentagem que a V1H cobra por cada reserva concluída; valor pendente de confirmação antes de go-live
+- **Stripe Connect setup** — ligação à conta Stripe que processa os pagamentos
+- **VAT/Tax** — configuração de IVA / impostos, se aplicável ao tipo de negócio
 
 ### Build - Integrations
-- **Webhooks** (notificar URLs externas em eventos)
-- **Zapier** (automações)
-- **Plausible Analytics**
-- Outros
+Conexões externas.
+- **Webhooks** — notifica URLs externas (sistemas próprios da V1H, Zapier, etc.) quando algo acontece no marketplace (nova reserva, novo user, etc.)
+- **Zapier** — integração no-code com 5000+ apps (enviar dados para Google Sheets, Slack, etc.)
+- **Plausible Analytics** — analytics alternativo ao Google, sem cookies
+- Outros conforme a Sharetribe vai adicionando
 
 ### Build - Advanced
-- **API access**
-- **Privileged transitions**
-- **CLI access**
-- **Developer settings**
+Definições técnicas para developers.
+- **API access** — chaves de API (Client ID, Client Secret) usadas pelo código V1H para falar com a Sharetribe
+- **Privileged transitions** — transições que só podem ser disparadas pelo servidor V1H (não pelo cliente), por segurança
+- **CLI access** — autoriza uso do `flex-cli` (ferramenta de linha de comando) para gerir processos de transacção e search indexing
+- **Developer settings** — outras opções low-level
 
 ## Workflow típico
 
