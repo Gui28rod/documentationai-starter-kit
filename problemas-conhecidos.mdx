@@ -3,13 +3,15 @@ title: "Problemas Conhecidos"
 description: "Issues identificados e workarounds atuais."
 ---
 
+Lista de problemas que já foram identificados na plataforma, com o impacto e a solução temporária (workaround) atualmente em uso. Alguns destes problemas têm resolução definitiva planeada, outros dependem de upgrades ou decisões pendentes. Documenta-se aqui para que a equipa e qualquer ferramenta de suporte (incluindo chatbots) saiba responder quando os utilizadores reportarem comportamentos estranhos.
+
 ## Sharetribe 429 (rate limit)
 
 A conta Sharetribe da V1H tropeça facilmente em rate limits. O polling de notificações usa cache e throttle para mitigar, mas pode acontecer em períodos de carga elevada.
 
 **Workaround atual**: padrões específicos de polling com throttle de 60 segundos e cache server-side. Para resolução definitiva seria preciso upgrade do plano Sharetribe.
 
-## PWA Counter - git issue
+## PWA Counter (problema com git)
 
 O ficheiro `server/data/pwa-counter.json` está trackeado pelo git e reseta a cada `git pull`. Isto faz com que o contador de instalações PWA fique inconsistente entre ambientes.
 

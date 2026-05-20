@@ -6,73 +6,58 @@ description: "Stack técnica completa do projeto V1H."
 A V1H foi construída sobre o **Sharetribe Web Template** (open-source). A stack técnica completa está listada abaixo.
 
 ## Frontend
-- **React 18** — biblioteca JavaScript da Meta que constrói toda a interface visual do site através de componentes reutilizáveis
-- **Redux Toolkit** — gere o estado global da aplicação (utilizador autenticado, favoritos, notificações, etc.) em 26 ducks organizados por domínio
-- **CSS Modules** — cada componente tem o seu próprio ficheiro CSS isolado, evita conflitos de nomes entre páginas
-- **React Final Form** — gere todos os formulários do site (login, criar anúncio, contacto) com validação e estado por campo
-- **react-intl** — biblioteca de internacionalização que troca textos entre Português e Inglês conforme o utilizador escolhe no topo do site
-- **Loadable Components** — divide o JavaScript em pedaços que só são descarregados quando o utilizador entra na página correspondente (mais rápido a carregar)
+- **React 18**, biblioteca JavaScript da Meta que constrói toda a interface visual do site através de componentes reutilizáveis
+- **Redux Toolkit**, gere o estado global da aplicação (utilizador autenticado, favoritos, notificações) em 26 ducks organizados por domínio
+- **CSS Modules**, cada componente tem o seu próprio ficheiro CSS isolado, o que evita conflitos de nomes entre páginas
+- **React Final Form**, gere todos os formulários do site (login, criar anúncio, contacto) com validação e estado por campo
+- **react-intl**, biblioteca de internacionalização que troca textos entre Português e Inglês conforme o utilizador escolhe no topo do site
+- **Loadable Components**, divide o JavaScript em pedaços que só são descarregados quando o utilizador entra na página correspondente (mais rápido a carregar)
 
 ## Backend
-- **Node.js + Express** — servidor que gera o HTML inicial (SSR) para SEO mais rápido e expõe endpoints próprios (`/api/contact`, `/api/translate`, etc.)
-- **Sharetribe Marketplace SDK** — cliente oficial da Sharetribe usado pelo browser e pelo servidor para falar com a API de marketplace
-- **Sharetribe Integration SDK** — versão privilegiada da SDK (operator-level) usada em scripts e cron jobs que precisam de mexer em dados de todos os utilizadores
-- **node-cron** — agendador de tarefas dentro do processo Express; usado para enviar emails diários, computar estatísticas, expirar reservas, etc.
-- **Resend** — serviço de envio de emails transacionais (verificação, recuperação de password, notificações)
-- **Helmet** — adiciona headers HTTP de segurança automáticos (CSP com nonce, XSS protection, anti-clickjacking)
+- **Node.js e Express**, servidor que gera o HTML inicial (SSR) para SEO mais rápido e expõe endpoints próprios (`/api/contact`, `/api/translate`, etc.)
+- **Sharetribe Marketplace SDK**, cliente oficial da Sharetribe usado pelo browser e pelo servidor para falar com a API de marketplace
+- **Sharetribe Integration SDK**, versão privilegiada da SDK (operator-level) usada em scripts e cron jobs que precisam de mexer em dados de todos os utilizadores
+- **node-cron**, agendador de tarefas dentro do processo Express. Usado para enviar emails diários, computar estatísticas, expirar reservas, etc.
+- **Resend**, serviço de envio de emails transacionais (verificação, recuperação de password, notificações)
+- **Helmet**, adiciona headers HTTP de segurança automáticos (CSP com nonce, XSS protection, anti-clickjacking)
 
 ## Base de dados
-- **Sharetribe Marketplace API** — toda a persistência (users, anúncios, transações, reviews, mensagens) é da responsabilidade da Sharetribe; a V1H não tem base de dados própria
-- Vantagem: zero manutenção de DB; desvantagem: dependência total da Sharetribe para schema e queries
+- **Sharetribe Marketplace API**. Toda a persistência (users, anúncios, transações, reviews, mensagens) é da responsabilidade da Sharetribe. A V1H não tem base de dados própria.
+- Vantagem: zero manutenção de DB. Desvantagem: dependência total da Sharetribe para schema e queries.
 
 ## Pagamentos
-- **Stripe Connect (modelo Express)** — plataforma de pagamentos que liga clientes a anfitriões; a Stripe trata da retenção de IBAN, divisão de comissão e payouts
-- Atualmente em **modo teste** (chaves `pk_test_*`); para produção têm de ser trocadas pelas chaves live
-- **Onboarding hosted** — quando o anfitrião quer receber dinheiro, é redireccionado para uma página da Stripe que recolhe os dados de identidade (KYC) e IBAN
-- **3D Secure** — autenticação extra de cartão (PIN/SMS) que a Stripe ativa automaticamente para cartões europeus, em conformidade com a PSD2
+- **Stripe Connect (modelo Express)**, plataforma de pagamentos que liga clientes a anfitriões. A Stripe trata da retenção de IBAN, divisão de comissão e payouts.
+- Atualmente em **modo teste** (chaves `pk_test_*`). Para produção têm de ser trocadas pelas chaves live.
+- **Onboarding hosted**. Quando o anfitrião quer receber dinheiro, é redireccionado para uma página da Stripe que recolhe os dados de identidade (KYC) e IBAN.
+- **3D Secure**, autenticação extra de cartão (PIN, SMS) que a Stripe ativa automaticamente para cartões europeus, em conformidade com a PSD2.
 
 ## Mapas
-- **Mapbox** — serviço de mapas (token configurado no `.env`) usado nos resultados de pesquisa e na página de cada anúncio para mostrar a localização
-- **Google Maps API** — alternativa preparada no código mas não ativa; pode ser trocada com 1 variável de ambiente se um dia for preciso
+- **Mapbox**, serviço de mapas (token configurado no `.env`) usado nos resultados de pesquisa e na página de cada anúncio para mostrar a localização
+- **Google Maps API**, alternativa preparada no código mas não ativa. Pode ser trocada com 1 variável de ambiente se um dia for preciso.
 
 ## Análise e Tracking
-- **Google Analytics 4** — recolhe visitas anónimas para entender comportamento dos utilizadores; ID `G-CE4QX3X8RV` configurado em ambiente de teste, pendente "Copy to live" antes do go-live
-- **Plausible Analytics** — alternativa sem cookies (mais privacy-friendly), instalada mas desativada
-- **Gating de consentimento** — GA só carrega se o utilizador aceitar a categoria "analytics" no banner de cookies, em conformidade com o RGPD
+- **Google Analytics 4**, recolhe visitas anónimas para entender comportamento dos utilizadores. ID `G-CE4QX3X8RV` configurado em ambiente de teste, pendente "Copy to live" antes do go-live.
+- **Plausible Analytics**, alternativa sem cookies (mais privacy-friendly), instalada mas desativada
+- **Gating de consentimento**. O GA só carrega se o utilizador aceitar a categoria "analytics" no banner de cookies, em conformidade com o RGPD.
 
 ## Infraestrutura PWA
-- **Service Worker** (`public/service-worker.js`) — script que corre em background no browser e permite à V1H funcionar offline, fazer cache de assets e receber notificações push
-- **Web Manifest** — ficheiro gerado dinamicamente que diz ao browser como instalar a V1H como app no telemóvel ou computador
-- **Install prompt + counter** — modal próprio com contador de quantas pessoas já instalaram a app (em vez do prompt nativo do Chrome)
+- **Service Worker** (`public/service-worker.js`), script que corre em background no browser e permite à V1H funcionar offline, fazer cache de assets e receber notificações push
+- **Web Manifest**, ficheiro gerado dinamicamente que diz ao browser como instalar a V1H como app no telemóvel ou computador
+- **Install prompt e counter**, modal próprio com contador de quantas pessoas já instalaram a app (em vez do prompt nativo do Chrome)
 
 ## Tradução
-- **react-intl** — gere as 1.383 chaves PT (e equivalentes EN) que aparecem na interface: menus, botões, mensagens, tooltips, etc.
-- **MyMemory API** — serviço gratuito (~50.000 palavras/dia) usado para traduzir conteúdo escrito pelos utilizadores (descrições de anúncios, mensagens, avaliações) entre PT e EN ao carregar no botão "Traduzir"
+- **react-intl**, gere as 1.383 chaves PT (e equivalentes EN) que aparecem na interface (menus, botões, mensagens, tooltips, etc.)
+- **MyMemory API**, serviço gratuito (~50.000 palavras por dia) usado para traduzir conteúdo escrito pelos utilizadores (descrições de anúncios, mensagens, avaliações) entre PT e EN ao carregar no botão "Traduzir"
 
 ## Hosting
-- **Qualquer host Node** — Heroku, AWS, Railway, Render, etc. (não está fechado a fornecedor específico)
-- **Mesmo processo Frontend + Backend** — o Express serve o HTML inicial e expõe a API; não há dois deploys separados
-- **Sharetribe e Stripe geridos por eles** — V1H só precisa de hospedar o código Node
+- **Qualquer host Node**, Heroku, AWS, Railway, Render, etc. (não está fechado a fornecedor específico)
+- **Mesmo processo Frontend e Backend**. O Express serve o HTML inicial e expõe a API. Não há dois deploys separados.
+- **Sharetribe e Stripe geridos por eles**. A V1H só precisa de hospedar o código Node.
 
 ## Desenvolvimento
-- **VS Code** — editor usado pelos estagiários, com extensões para React, ESLint, Prettier
-- **Yarn** — gestor de pacotes (alternativa ao npm); mantém as dependências consistentes entre máquinas
-- **Git + GitHub** — versionamento de código; cada feature é trabalhada com `git pull --rebase` antes de mexer e `git push` quando termina
-- **Jest + React Testing Library** — framework de testes automáticos (cobertura limitada na V1H — só pontos críticos)
-
-## Versões importantes
-
-| Dependência | Versão |
-|---|---|
-| React | 18.x |
-| Node | >= 18.20.1 (recomendado >= 22.22.0) |
-| Sharetribe Web Template (base) | 10.14.0+ |
-| sharetribe-flex-sdk | latest |
-| @reduxjs/toolkit | 1.x / 2.x |
-| react-intl | latest |
-| moment + moment-timezone | latest |
-| Stripe.js | latest |
-| Mapbox GL JS | latest |
-| Resend SDK | latest |
+- **VS Code**, editor usado pela equipa, com extensões para React, ESLint, Prettier
+- **Yarn**, gestor de pacotes (alternativa ao npm). Mantém as dependências consistentes entre máquinas.
+- **Git e GitHub**, versionamento de código. Cada feature é trabalhada com `git pull --rebase` antes de mexer e `git push` quando termina.
+- **Jest e React Testing Library**, framework de testes automáticos (cobertura limitada na V1H, só pontos críticos)
 
 Para mais detalhes ver [Sharetribe vs Customizações V1H](sharetribe-vs-v1h) e [Variáveis de Ambiente](variaveis-de-ambiente).
