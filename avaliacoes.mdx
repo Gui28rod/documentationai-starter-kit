@@ -35,7 +35,7 @@ Mostrado em:
 ### IMPORTANTE - só lado cliente
 A média do utilizador agrega **apenas reviews `type: 'ofCustomer'`**, ou seja, reviews recebidas como **guest**, não como anfitrião.
 
-**Razão**: as chefes V1H decidiram em 2026-05 que misturar host + customer distorce a média. Querem que o número reflita só comportamento como guest. Ver [Decisões Importantes](decisoes-importantes).
+**Razão**: a equipa de gestão da V1H decidiu em 2026-05 que misturar host + customer distorce a média. Querem que o número reflita só comportamento como guest. Ver [Decisões Importantes](decisoes-importantes).
 
 Implementação: filtro client-side em `fetchUserRating` ([`ratings.duck.js`](https://github.com/Gui28rod/v1h---testes-dev)):
 
@@ -99,6 +99,6 @@ Existe endpoint admin: `POST /api/recompute-listing-rating` - recalcula a média
 
 ## Limitações
 
-- **Não há rating de host** separado - o rating "de host" foi rejeitado pelas chefes
+- **Não há rating de host** separado — a equipa de gestão optou por não mostrar rating do lado do anfitrião, só do lado do cliente
 - **Não se pode editar review** depois de submetido
 - **Não se pode apagar review** sem ir ao Sharetribe Console (admin)

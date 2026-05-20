@@ -3,13 +3,7 @@ title: "Homepage / Landing Page"
 description: "Estrutura, secções e funcionamento da página principal da V1H."
 ---
 
-A página principal do v1h.com é renderizada via **PageBuilder** (sistema universal de páginas do Sharetribe). O conteúdo não está hardcoded no código - vem do Sharetribe Console, o que permite às chefes editar texto, imagens e secções sem programador.
-
-## Ficheiros principais
-
-- `src/containers/LandingPage/LandingPage.js` - container que orquestra a página (Redux, assets)
-- `src/containers/PageBuilder/PageBuilder.js` - motor universal de renderização
-- `src/config/landingPageConfigExamples.js` - exemplos de secções
+A página principal do v1h.com é o ponto de entrada de qualquer visitante no site. Mostra o que a V1H tem para oferecer e onde se começa a explorar espaços para reservar. O conteúdo (textos, imagens, secções) não está fixo no código — vem do **PageBuilder** do Sharetribe, e isso permite à equipa de gestão da V1H editar tudo a partir do Sharetribe Console, sem precisar de mexer em código.
 
 ## Sistema PageBuilder
 
@@ -51,9 +45,3 @@ A V1H distingue dois tipos de anúncios em destaque na homepage. O "Highlighted"
 | **Persistência** | `localStorage` chave `sharetribe_highlighted_listings` (JSON array) | Server-side via SDK query |
 | **Duck** | `src/ducks/highlightedListings.duck.js` | `src/ducks/featuredListings.duck.js` |
 
-## CSS principais
-
-- `src/containers/PageBuilder/SectionBuilder/SectionHero/SectionHero.module.css`
-- `src/containers/PageBuilder/SectionBuilder/SectionListings/SectionListings.module.css`
-- `src/containers/PageBuilder/SectionBuilder/SectionHighlightedListing/SectionHighlightedListing.module.css`
-- `src/containers/PageBuilder/PageBuilder.module.css` (wrapper universal)

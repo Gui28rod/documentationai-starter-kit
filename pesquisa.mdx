@@ -3,18 +3,7 @@ title: "Pesquisa e Filtros"
 description: "Search page com filtros, mapa, sort, paginação e save search."
 ---
 
-Página de busca de anúncios (`/s`) com filtros avançados, mapa interativo e gravação de pesquisas.
-
-## Ficheiros principais
-
-Diretório: `src/containers/SearchPage/` - mais de 60 ficheiros, arquitetura modular.
-
-Principais:
-- `SearchPageWithMap.js` - layout com mapa lateral
-- `SearchPageWithGrid.js` - layout grid (sem mapa)
-- `SearchResultsPanel.js` - painel de resultados
-- `NoSearchResultsMaybe.js` - placeholder quando 0 resultados
-- `MainPanelHeader.js` - header com contagem, sort e save button
+A página de pesquisa (`/s`) é onde o utilizador encontra espaços disponíveis. Pode pesquisar por texto, filtrar por categoria, preço, datas, lugares, comodidades, e ver os resultados em **grelha** (cards lado a lado) ou em **mapa** (com pins clicáveis). Permite ordenar resultados, guardar a pesquisa para receber alertas de novos espaços que correspondam, e tem paginação para listas grandes.
 
 ## Filtros disponíveis
 

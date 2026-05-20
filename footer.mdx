@@ -3,12 +3,7 @@ title: "Footer"
 description: "Rodapé do site - links, newsletter, social, PWA install."
 ---
 
-Rodapé fixo no fundo de todas as páginas. O footer é gerido via PageBuilder com asset hosted no Sharetribe Console, o que permite às chefes editar texto e links sem necessidade de programador.
-
-## Ficheiros principais
-
-- `src/containers/FooterContainer/FooterContainer.js` - lazy-loads o SectionBuilder com asset `pageAsset.footer`
-- `src/containers/PageBuilder/SectionBuilder/SectionFooter/SectionFooter.js` - renderização real
+O rodapé está fixo no fundo de todas as páginas. Concentra a navegação institucional do site (sobre, termos, política de cookies, FAQ), os links para as redes sociais, a subscrição da newsletter, o botão para instalar o site como app (PWA) e o botão "Voltar ao topo". O conteúdo é gerido pelo PageBuilder do Sharetribe — a equipa de gestão pode editar textos e links no Console sem precisar de programador.
 
 ## Estrutura
 
@@ -18,7 +13,7 @@ Rodapé fixo no fundo de todas as páginas. O footer é gerido via PageBuilder c
 
 ### Links em 3 colunas
 
-O footer tem três colunas de links organizadas por tema. A coluna "Empresa" está parcialmente pendente, aguardando decisão das chefes sobre que páginas adicionais incluir.
+O footer tem três colunas de links organizadas por tema. A coluna "Empresa" está parcialmente pendente, aguardando decisão da equipa de gestão sobre que páginas adicionais incluir.
 
 | Coluna | Links |
 |---|---|
@@ -60,18 +55,14 @@ Em paralelo à newsletter integrada, a V1H tem **conta Substack** em `venue1hub.
 
 O link "Definições de cookies" abre o modal `CookieConsent` em modo modal (`window.__v1hOpenCookiePrefs()`), permitindo ao utilizador rever/alterar consentimento por categoria.
 
-## CSS
+## Aspecto visual
 
-- `src/containers/PageBuilder/SectionBuilder/SectionFooter/SectionFooter.module.css`
-- Background: `#2E2E2E` (sempre escuro, mesmo em modo claro)
-- Texto: `#f5f0eb` (cream claro)
-- Grid layout:
-  - Mobile: 1 coluna
-  - Desktop: 2 colunas (520px brand + 1fr para links)
-- Newsletter em secção separada com styling próprio
+- Background sempre escuro (`#2E2E2E`), mesmo quando o utilizador está em modo claro — dá um remate visual ao site
+- Texto em creme claro para bom contraste sobre o fundo escuro
+- Em mobile fica numa coluna; em desktop divide-se em duas zonas (lado da marca + lado dos links)
 
-## Variabilidade via PageBuilder
+## Edição via PageBuilder
 
-O footer é renderizado via PageBuilder com asset hosted no Sharetribe Console. As chefes podem mudar texto e links sem programador indo ao Console, Pages, footer.
+O footer é renderizado via PageBuilder com um asset hospedado no Sharetribe Console. Para mudar textos e links basta ir ao **Sharetribe Console → Pages → footer** e guardar — não é preciso programador.
 
-A estrutura visual (3 colunas, newsletter, social, PWA) é fixa no código mas os textos vêm do CMS.
+A estrutura visual (3 colunas, newsletter, social, PWA) é fixa no código, mas todos os textos e links vêm do CMS.

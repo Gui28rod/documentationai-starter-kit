@@ -3,16 +3,7 @@ title: "Topbar"
 description: "Barra superior - logo, busca, idioma, modo escuro, perfil, notificações."
 ---
 
-Barra superior fixa presente em todas as páginas (exceto algumas legais/auth).
-
-## Ficheiros principais
-
-- `src/containers/TopbarContainer/TopbarContainer.js` - connector Redux
-- `src/containers/TopbarContainer/Topbar/Topbar.js` - renderização condicional mobile/desktop
-- `src/containers/TopbarContainer/Topbar/TopbarDesktop/TopbarDesktop.js` - layout desktop
-- `src/containers/TopbarContainer/Topbar/TopbarMobileNav/TopbarMobileNav.js` - nav mobile
-
-**Breakpoint**: `MAX_MOBILE_SCREEN_WIDTH = 1024px`.
+A barra superior está fixa no topo de todas as páginas (excepto algumas páginas legais e de autenticação). É o sítio onde o utilizador acede às acções globais do site: pesquisar, trocar idioma, alternar modo escuro, ver a caixa de entrada, publicar um anúncio e gerir a conta. Adapta-se automaticamente a desktop e a mobile (breakpoint nos 1024px).
 
 ## Topbar Desktop
 
@@ -81,9 +72,3 @@ Componente `DarkModeToggle`. Ao alternar, dois atributos são adicionados ou rem
 - CSS global em [`src/styles/landingDark.css`](https://github.com/Gui28rod/v1h---testes-dev) reage e aplica tema escuro
 - Persiste preferência via `localStorage` (apenas se cookie consent "preferences" estiver dado)
 
-## CSS principal
-
-- `src/containers/TopbarContainer/Topbar/Topbar.module.css` - root, container, skip-to-main link
-- `src/containers/TopbarContainer/Topbar/TopbarDesktop/TopbarDesktop.module.css`
-- `src/containers/TopbarContainer/Topbar/TopbarMobileNav/TopbarMobileNav.module.css`
-- `src/containers/TopbarContainer/Topbar/MobileCategoryTicker/MobileCategoryTicker.module.css`

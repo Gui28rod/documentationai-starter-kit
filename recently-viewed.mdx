@@ -3,13 +3,7 @@ title: "Recentemente Vistos"
 description: "Carrossel de últimos anúncios visitados pelo utilizador."
 ---
 
-Carrossel que mostra os últimos anúncios que o utilizador visitou. Persistido entre sessões.
-
-## Ficheiros
-
-- `src/ducks/recentlyViewed.duck.js` - Redux slice (Redux Toolkit)
-- `src/components/RecentlyViewedSection/RecentlyViewedSection.js` - componente visual
-- `src/containers/RecentlyViewedPage/RecentlyViewedPage.js` - página dedicada com lista completa
+A funcionalidade "Recentemente Vistos" mostra um carrossel com os últimos anúncios que o utilizador abriu. Ajuda a voltar a um espaço que se viu há pouco sem ter de o procurar de novo. Aparece em vários sítios do site (abaixo de cada listing, na homepage) e tem uma página própria com a lista completa. Os dados persistem entre sessões e até entre dispositivos quando o utilizador está logado.
 
 ## Onde aparece
 
@@ -55,18 +49,9 @@ Quando o utilizador faz login num novo dispositivo, os entries locais e os do se
 - Faz merge com entries pré-login (se houver)
 - Resolve duplicados por `listingId`, mantendo o timestamp **mais recente**
 
-## CSS
+## Aspecto visual
 
-- `src/components/RecentlyViewedSection/RecentlyViewedSection.module.css`
-- Setas left/right desativadas quando chega ao limite do scroll
-- Card wrapper: flex dinâmico
-  - Mobile: cerca de 1.8 cards visíveis
-  - Desktop: até 6 cards
-- Scroll suave (`scroll-behavior: smooth`)
-
-## Bug conhecido
-
-Há uma nota de memória que documenta dois comportamentos a evitar na implementação do fetch:
-
-- O fetch é **incondicional ao mount**
-- Timing do Redux: gating em `recentlyViewedIds.length` quebrou em momento - não fazer isso de novo
+- Setas left/right que se desactivam automaticamente quando chega ao fim do scroll
+- Scroll suave (suavidade nativa do browser)
+- Em mobile mostra ~1.8 cards visíveis em simultâneo
+- Em desktop pode mostrar até 6 cards consoante a largura do ecrã

@@ -9,7 +9,7 @@ Registo de decisões relevantes tomadas durante o desenvolvimento. Documentadas 
 
 A "user rating" mostrada na sidebar do perfil e no card do anfitrião agrega **apenas reviews recebidas como cliente** (tipo `ofCustomer`).
 
-**Razão**: as chefes da V1H reviram a primeira implementação (que combinava reviews como anfitrião e como cliente, estilo Wallapop) e consideraram que misturar os dois distorce a média visível. Querem que o número reflita só comportamento como guest.
+**Razão**: a equipa de gestão da V1H reviu a primeira implementação (que combinava reviews como anfitrião e como cliente, estilo Wallapop) e considerou que misturar os dois distorce a média visível. Quer que o número reflita só comportamento como guest.
 
 **Implementação**: filtragem client-side em [`ratings.duck.js`](https://github.com/Gui28rod/v1h---testes-dev) na função `fetchUserRating`.
 
@@ -31,7 +31,7 @@ A internacionalização completa dos emails (PT/EN consistente em todos os fluxo
 
 ## Mobile app pendente
 
-A decisão entre PWA (sem custo) e Capacitor (valor a confirmar, mais Apple Developer e Google Play Stores) ainda está pendente das chefes. A PWA já está implementada e funcional; a app nativa requereria trabalho adicional.
+A decisão entre PWA (sem custo) e Capacitor (valor a confirmar, mais Apple Developer e Google Play Stores) ainda está pendente da equipa de gestão. A PWA já está implementada e funcional; a app nativa requereria trabalho adicional.
 
 ## PWA counter git issue
 
