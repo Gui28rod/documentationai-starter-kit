@@ -7,6 +7,8 @@ Mapa rápido para encontrar onde está documentada cada funcionalidade do v1h.co
 
 ## Página Principal e Navegação
 
+A página inicial da V1H é o ponto de entrada para qualquer visitante. Tem o hero com a barra de pesquisa rápida, carrosséis de categorias e anúncios em destaque, e o rodapé com links institucionais e o botão para instalar a app.
+
 | Funcionalidade | Documentado em |
 |---|---|
 | Homepage / Landing | [Homepage](homepage) |
@@ -21,6 +23,8 @@ Mapa rápido para encontrar onde está documentada cada funcionalidade do v1h.co
 
 ## Topbar
 
+A barra do topo está em todas as páginas. Reúne pesquisa rápida, alternador de idioma PT/EN, modo escuro, ajuda, ícone da caixa de entrada com badge de não lidos, botão "Publicar anúncio" e o avatar do utilizador que abre o dropdown da conta.
+
 | Funcionalidade | Documentado em |
 |---|---|
 | Logo + link home | [Topbar](topbar) |
@@ -34,6 +38,8 @@ Mapa rápido para encontrar onde está documentada cada funcionalidade do v1h.co
 
 ## Caixa de Entrada (Inbox)
 
+Centro de comunicação onde o utilizador vê todas as suas reservas (como cliente e como anfitrião) e as conversas que estão a decorrer. Separada em tabs Sales (como anfitrião), Orders (como cliente) e Mensagens directas (chat sem reserva associada).
+
 | Funcionalidade | Documentado em |
 |---|---|
 | Tab **Sales** (como anfitrião) | [Reservas e Inbox](reservas) + [Processos de Transação](processos-transacao) |
@@ -44,6 +50,8 @@ Mapa rápido para encontrar onde está documentada cada funcionalidade do v1h.co
 | Filtros + sort no inbox | [Reservas e Inbox](reservas) |
 
 ## Páginas do Dropdown do Avatar
+
+Conjunto de páginas acessíveis pelo menu que se abre ao clicar na foto/avatar do utilizador no topo. Inclui o perfil público, configurações pessoais e de conta, listas pessoais (favoritos, pesquisas guardadas, contas seguidas) e logout.
 
 | Funcionalidade | Documentado em |
 |---|---|
@@ -60,6 +68,8 @@ Mapa rápido para encontrar onde está documentada cada funcionalidade do v1h.co
 
 ## Edit Listing Wizard (Publicar/Editar Anúncio)
 
+Assistente multi-passos onde o anfitrião cria ou edita um anúncio. Está dividido em tabs: Details (categoria, título, descrição), Location (morada e mapa), Pricing (preço por hora/dia), Availability (calendário e horários), Photos (galeria + vídeo YouTube) e Delivery (regras de entrega/aceitação).
+
 | Funcionalidade | Documentado em |
 |---|---|
 | Visão geral do wizard | [Edit Listing Wizard](edit-listing-wizard) |
@@ -74,6 +84,8 @@ Mapa rápido para encontrar onde está documentada cada funcionalidade do v1h.co
 | Custom fields configurados | [Custom Fields e Listing Config](custom-fields) |
 
 ## Página do Anúncio (Listing Page)
+
+Página detalhada de cada espaço — o sítio onde o cliente decide se reserva ou não. Mostra galeria de fotos, vídeo do YouTube, mapa Mapbox, descrição, painel de reserva (OrderPanel) com datas e preço, cartão "Sobre o autor", reviews, e botões de acção rápida (favorito, partilhar, WhatsApp, lista de espera, traduzir).
 
 | Funcionalidade | Documentado em |
 |---|---|
@@ -94,6 +106,8 @@ Mapa rápido para encontrar onde está documentada cada funcionalidade do v1h.co
 
 ## Pesquisa
 
+Página de resultados onde o utilizador filtra os espaços disponíveis. Permite alternar entre vista de grelha (cards) e vista de mapa, aplicar filtros (categoria, preço, datas, comodidades), ordenar resultados e guardar a pesquisa para receber alertas de novos espaços que correspondam.
+
 | Funcionalidade | Documentado em |
 |---|---|
 | Search com filtros | [Pesquisa](pesquisa) |
@@ -105,6 +119,8 @@ Mapa rápido para encontrar onde está documentada cada funcionalidade do v1h.co
 
 ## Notificações
 
+Sistema que avisa o utilizador de eventos relevantes no site. Tem dois canais: toasts in-app (banners que aparecem por cima da página, 5 tipos diferentes) e emails (enviados pelo Sharetribe ou pelos 4 cron jobs próprios da V1H).
+
 | Funcionalidade | Documentado em |
 |---|---|
 | 5 tipos de toasts in-app | [Notificações (completo)](notificacoes-completas) |
@@ -114,6 +130,8 @@ Mapa rápido para encontrar onde está documentada cada funcionalidade do v1h.co
 | Dismiss per-entry sync | [Notificações (completo)](notificacoes-completas) |
 
 ## Pagamentos
+
+Fluxo financeiro completo da plataforma. Os clientes pagam com cartão via Stripe (com 3D Secure quando necessário), a V1H retira a comissão automaticamente, e o resto é enviado ao anfitrião pelo Stripe Connect. Inclui também o processo de "negotiation" onde se podem trocar ofertas antes de confirmar a reserva.
 
 | Funcionalidade | Documentado em |
 |---|---|
@@ -125,6 +143,8 @@ Mapa rápido para encontrar onde está documentada cada funcionalidade do v1h.co
 | 3D Secure | [Checkout e Negotiation](checkout-negotiation) |
 
 ## UI / UX
+
+Funcionalidades transversais que melhoram a experiência de utilização em todas as páginas: alternar entre modo claro e escuro, gestão de consentimento de cookies (4 categorias RGPD), instalação do site como app (PWA), troca de idioma PT/EN, secção de espaços vistos recentemente, etc.
 
 | Funcionalidade | Documentado em |
 |---|---|
@@ -139,6 +159,8 @@ Mapa rápido para encontrar onde está documentada cada funcionalidade do v1h.co
 
 ## Segurança
 
+Mecanismos para proteger utilizadores e plataforma. Inclui formulários para denunciar anúncios/utilizadores problemáticos, rate-limiting no servidor para evitar abuso de endpoints, e o banner que avisa o admin quando está em "Login as user" no lugar de outro utilizador.
+
 | Funcionalidade | Documentado em |
 |---|---|
 | Reportar anúncio | [Páginas do Footer](paginas-footer) + [Endpoints](endpoints) |
@@ -147,6 +169,8 @@ Mapa rápido para encontrar onde está documentada cada funcionalidade do v1h.co
 | Limited Access Banner | [Catálogo de Componentes](catalogo-componentes) |
 
 ## Páginas Legais e Institucionais
+
+Páginas acedidas pelo rodapé: secções obrigatórias por lei portuguesa/RGPD (Termos de Serviço, Política de Privacidade, Política de Cookies) e páginas informativas/institucionais (Como Funciona, Sobre Nós, Contacto, FAQ). Inclui também o modal de definições de cookies com toggles por categoria.
 
 | Funcionalidade | Documentado em |
 |---|---|
@@ -160,6 +184,8 @@ Mapa rápido para encontrar onde está documentada cada funcionalidade do v1h.co
 | FAQ | [Páginas do Footer](paginas-footer) |
 
 ## Admin / Operador
+
+Funcionalidades só acessíveis às responsáveis da V1H (via Sharetribe Console, não no site). Permite gerir utilizadores, anúncios, transações e reviews, forçar transições em casos problemáticos, aprovar listings pendentes, configurar comissões e templates de email, gerir webhooks e fazer o "Go live" do ambiente test para produção.
 
 | Funcionalidade | Documentado em |
 |---|---|
